@@ -1,6 +1,5 @@
-# Connectivity-Tester
+# Connectivity Tester
 Aids in discovering HTTP and HTTPS connectivity issues.
-
 
 ## License
 See [LICENSE](./LICENSE.md).
