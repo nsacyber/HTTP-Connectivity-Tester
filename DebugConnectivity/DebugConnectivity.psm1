@@ -7,6 +7,9 @@ Function Get-ErrorMessage() {
    
     .DESCRIPTION
     Gets a formatted error message from an error record.
+
+    .EXAMPLE
+    Get-ErrorMessage -ErrorRecords $_
     #>
     [CmdletBinding()]
     [OutputType([string])]
@@ -112,6 +115,16 @@ Function Get-ErrorMessage() {
 # errorType : captcha  
 
 Function Get-BlueCoatSiteReview() {
+    <#
+    .SYNOPSIS
+    Gets BlueCoat Site Review data for a URL.
+
+    .DESCRIPTION
+    Gets BlueCoat Site Review data for a URL.
+
+    .EXAMPLE
+    Get-BlueCoatSiteReview -Url http://www.site.com
+    #>
     [CmdletBinding()]
     [OutputType([psobject])]
     Param (
@@ -131,7 +144,7 @@ Function Get-BlueCoatSiteReview() {
         Method = 'POST';
         ProxyUseDefaultCredentials = (([string]$proxyUri) -ne $uri);
         UseBasicParsing = $true;
-        UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+        UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
         ContentType = 'text/plain';
         Body =  @{url = $uri};
         Verbose = $false
@@ -208,6 +221,16 @@ Function Get-BlueCoatSiteReview() {
 }
 
 Function Get-IPAddress() {
+    <#
+    .SYNOPSIS
+    Gets the IP address(es) for a URL.
+
+    .DESCRIPTION
+    Gets the IP address(es) for a URL.
+
+    .EXAMPLE
+    Get-IPAddress -Url http://www.site.com
+    #>
     [CmdletBinding()]
     [OutputType([string[]])]
     Param (
@@ -228,6 +251,16 @@ Function Get-IPAddress() {
 }
 
 Function Get-IPAlias() {
+    <#
+    .SYNOPSIS
+    Gets DNS alias for a URL.
+
+    .DESCRIPTION
+    Gets DNS alias for a URL.
+
+    .EXAMPLE
+    Get-IPAlias -Url http://www.site.com
+    #>
     [CmdletBinding()]
     [OutputType([string[]])]
     Param (
@@ -243,11 +276,22 @@ Function Get-IPAlias() {
     $dnsResults = @(Resolve-DnsName -Name $Url.Host -Type CNAME -NoHostsFile -QuickTimeout -ErrorAction SilentlyContinue | Where-Object { $_.Type -eq 'CNAME' })
     
     #$aliases = [string[]]@($dnsResults | ForEach-Object { try { $_.NameHost } catch [System.Management.Automation.PropertyNotFoundException] {} }) # NameHost results in a PropertyNotFoundException when a URL is blocked upstream
-    $aliases = [string[]]@($dnsResults | ForEach-Object { $_.NameHost }) 
+    $aliases = [string[]]@($dnsResults | ForEach-Object { $_.NameHost })
+
     return ,$aliases 
 }
 
 Function Get-CertificateErrorMessage() {
+    <#
+    .SYNOPSIS
+    Gets certificate error messages for an HTTPS URL.
+
+    .DESCRIPTION
+    Gets certificate error messages for an HTTPS URL.
+
+    .EXAMPLE
+    Get-CertificateErrorMessage -Url http://www.site.com -Certificate $certificate -Chain $chain -PolicyError $policyError
+    #>
     [CmdletBinding()] 
     [OutputType([string])]
     Param(
@@ -317,8 +361,30 @@ Function Get-CertificateErrorMessage() {
 }
 
 Function Get-Connectivity() {
-    [CmdletBinding()] 
-    [OutputType([pscustomobject])]
+    <#
+    .SYNOPSIS
+    Get connectivity information for a URL.
+
+    .DESCRIPTION
+    Get connectivity information for a URL.
+
+    .EXAMPLE
+    Get-Connectivity -Url http://www.site.com
+    
+    .EXAMPLE
+    Get-Connectivity -Url http://www.site.com -Method POST
+
+    .EXAMPLE
+    Get-Connectivity -Url http://www.site.com -Method POST -ExpectedStatusCode 400
+
+    .EXAMPLE
+    Get-Connectivity -Url http://www.site.com -Method POST -ExpectedStatusCode 400 -IgnoreCertificateValidationErrors
+    
+    .EXAMPLE
+    Get-Connectivity -Url http://www.site.com -Method POST -ExpectedStatusCode 400 -IgnoreCertificateValidationErrors -PerformBluecoatLookup
+    #>
+    [CmdletBinding()]
+    [OutputType([void])]
     Param(
         [Parameter(Mandatory=$true, HelpMessage='The URL to test')]
         [ValidateNotNullOrEmpty()]
@@ -328,11 +394,30 @@ Function Get-Connectivity() {
         [ValidateNotNullOrEmpty()]
         [ValidateSet('HEAD','GET', 'POST', IgnoreCase=$true)]
         [string]$Method = 'GET',
+        
+        [Parameter(Mandatory=$false, HelpMessage='The expected HTTP status code')]
+        [ValidateNotNullOrEmpty()]
+        [int]$ExpectedStatusCode = 200,
 
         [Parameter(Mandatory=$false, HelpMessage='Whether to ignore certificate validation errors')]
-        [switch]$IgnoreCertificateValidationErrors
+        [switch]$IgnoreCertificateValidationErrors,
+        
+        [Parameter(Mandatory=$false, HelpMessage='Whether to perform a BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited.')]
+        [switch]$PerformBluecoatLookup
     )
 
+    $isVerbose = $verbosePreference -eq 'Continue'
+
+    if ($Url.OriginalString.ToLower().StartsWith('http://') -or $Url.OriginalString.ToLower().StartsWith('https://')) {
+        $uri = $Url
+    } else {
+        $uri = [Uri]('http://{0}' -f $uri.OriginalString)
+    }  
+
+    $newLine = [System.Environment]::NewLine
+
+    Write-Verbose -Message ('{0}*************************************************{1}Testing {2}{3}*************************************************{4}' -f $newLine,$newLine,$uri,$newLine,$newLine)
+    
     $script:ServerCertificate = $null
     $script:ServerCertificateChain = $null
     $script:ServerCertificateError = $null
@@ -362,18 +447,12 @@ Function Get-Connectivity() {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls11
 
-	if ($Url.OriginalString.ToLower().StartsWith('http://') -or $Url.OriginalString.ToLower().StartsWith('https://')) {
-	    $uri = $Url
-	} else {
-	    $uri = [Uri]('http://{0}' -f $uri.OriginalString)
-	}    
-
     $proxyUri = [Net.WebRequest]::GetSystemWebProxy().GetProxy($uri)
 
     $request = [Net.WebRequest]::CreateHttp($uri)
     $request.Proxy = if ($uri -ne $proxyUri) { [Net.WebRequest]::DefaultWebProxy } else { $null }
     $request.UseDefaultCredentials = ($uri -ne $proxyUri)
-    $request.UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+    $request.UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
     $request.Method = $Method
     $request.ServerCertificateValidationCallback = $RemoteCertificateValidationCallback
 
@@ -407,121 +486,50 @@ Function Get-Connectivity() {
 
     $hasServerCertificateError = if ($script:ServerCertificateError -eq $null) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
 
-    $certificateErrorMessage = ''
-	
-	if ($uri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
-	    $certificateErrorMessage = Get-CertificateErrorMessage -Url $uri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
+    $serverCertificateErrorMessage = ''
+    
+    if ($uri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
+        $serverCertificateErrorMessage = Get-CertificateErrorMessage -Url $uri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
+    }
+
+    $address = Get-IPAddress -Url $uri -Verbose:$false
+    $alias = Get-IPAlias -Url $uri -Verbose:$false
+    $actualStatusCode = [int]$statusCode
+    $isBlocked = $statusCode -eq 0
+
+    $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
+
+    $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}{21}' -f $newLine,$uri,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$newLine)
+    Write-Verbose -Message $connectivitySummary
+
+    $bluecoat = $null
+
+    if ($PerformBluecoatLookup) { 
+        try { 
+            $bluecoat = Get-BlueCoatSiteReview -Url $uri -Verbose:$isVerbose
+            $bluecoatSummary = ('{0}Rated: {1}{2}Last Rated: {3}{4}Locked: {5}{6}Lock Message: {7}{8}Pending: {9}{10}Pending Message: {11}{12}Categories: {13}{14}{15}' -f $newLine,$bluecoat.IsRated,$newLine,$bluecoat.LastedRated,$newLine,$bluecoat.IsLocked,$newLine,$bluecoat.LockMessage,$newLine,$bluecoat.IsPending,$newLine,$bluecoat.PendingMessage,$newLine,($bluecoat.Categories.Keys -join ','),$newLine,$newLine)
+            Write-Verbose -Message $bluecoatSummary
+        } catch { 
+            Write-Verbose $_
+        } 
     }
 
     $connectivity = [pscustomobject]@{
-        StatusCode = [int]$statusCode;
+        Url = $uri;
+        Addresses = [string[]]$address;
+        Aliases = [string[]]$alias;
+        ActualStatusCode = [int]$actualStatusCode;
+        ExpectedStatusCode = $ExpectedStatusCode;
+        StatusMatched = $statusMatch;
         StatusMessage = $statusMessage;
+        IsBlocked = $isBlocked;
         ServerCertificate = $script:ServerCertificate;
         ServerCertificateChain = $script:ServerCertificateChain;
         ServerCertificateError = $script:ServerCertificateError;
-        ServerCertificateErrorMessage = $certificateErrorMessage;
-		HasServerCertificateError = $hasServerCertificateError;
+        ServerCertificateErrorMessage = $serverCertificateErrorMessage;
+        HasServerCertificateError = $hasServerCertificateError;
+        BlueCoat = $bluecoat;
     }
 
     return $connectivity
-}
-
-Function Debug-Connectivity() {
-    [CmdletBinding()]
-    [OutputType([void])]
-    Param(
-	    [Parameter(Mandatory=$true, HelpMessage='The list of URLs and their associated data')]
-		[System.Collections.Generic.List[pscustomobject]]$List,
-	
-		[Parameter(Mandatory=$false, HelpMessage='Path to save the output to')]
-		[string]$OutputPath,
-	
-        [Parameter(Mandatory=$false, HelpMessage='Whether to perform a BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited.')]
-        [switch]$PerformBluecoatLookup,
-		
-		[Parameter(Mandatory=$false, HelpMessage='Compress JSON output')]
-		[switch]$Compress,
-	
-		[Parameter(Mandatory=$false, HelpMessage='Returns an object representing the connectivity information')]	
-		[switch]$PassThru
-    )
-
-	$isVerbose = $verbosePreference -eq 'Continue'
-	
-	$parameters = $PSBoundParameters
-	
-    if (-not($parameters.ContainsKey('OutputPath'))) {
-        $OutputPath = $env:USERPROFILE,'Desktop' -join [System.IO.Path]::DirectorySeparatorChar
-    }
-
-    $OutputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
-
-    if (-not(Test-Path -Path $OutputPath)) {
-        New-Item -Path $OutputPath -ItemType Directory
-    }	
-	
-    $List | ForEach-Object {
-        $item = $_	
-		$targetUrl = $item.Url
-		
-        if ($targetUrl.OriginalString.ToLower().StartsWith('http://') -or $targetUrl.OriginalString.ToLower().StartsWith('https://')) {
-	        $targetUrl = $targetUrl
-        } else {
-            $targetUrl = [Uri]('http://{0}' -f $targetUrl.OriginalString)
-        }  
-	
-        $expectedStatus = $_.ExpectedStatus
-        $connectParams = $_.ConnectivityParameters
-		
-		$newLine = [System.Environment]::NewLine
-		
-		Write-Verbose -Message ('{0}*************************************************{1}Testing {2}{3}*************************************************{4}' -f $newLine,$newLine,$targetUrl,$newLine,$newLine)
-
-        $connectivity = Get-Connectivity -Url $targetUrl -Verbose:$isVerbose @connectParams
-        $address = Get-IPAddress -Url $targetUrl -Verbose:$false
-        $alias = Get-IPAlias -Url $targetUrl -Verbose:$false
-        $hasCertificateError = $connectivity.HasServerCertificateError
-        $certificateErrorMessage = $connectivity.ServerCertificateErrorMessage
-        $statusMessage = $connectivity.StatusMessage
-        $actualStatus = $connectivity.StatusCode
-        $isBlocked = $connectivity.StatusCode -eq 0
-		
-		$statusMatch = $expectedStatus -eq $actualStatus
-
-        $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}{21}' -f $newLine,$targetUrl,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatus,$newLine,$expectedStatus,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasCertificateError,$newLine,$certificateErrorMessage,$newLine,$newLine)
-        Write-Verbose -Message $connectivitySummary
-		
-		$bluecoat = $null
-		
-		if ($PerformBluecoatLookup) { 
-		    try { 
-			    $bluecoat = Get-BlueCoatSiteReview -Url $targetUrl -Verbose:$isVerbose
-				$bluecoatSummary = ('{0}Rated: {1}{2}Last Rated: {3}{4}Locked: {5}{6}Lock Message: {7}{8}Pending: {9}{10}Pending Message: {11}{12}Categories: {13}{14}{15}' -f $newLine, $bluecoat.IsRated, $newLine, $bluecoat.LastedRated, $newLine, $bluecoat.IsLocked, $newLine, $bluecoat.LockMessage, $newLine, $bluecoat.IsPending, $newLine, $bluecoat.PendingMessage, $newLine, ($bluecoat.Categories.Keys -join ','), $newLine, $newLine)
-				Write-Verbose -Message $bluecoatSummary
-			} catch { 
-			    Write-Verbose $_
-			} 
-        }
-
-        $endpoint = [pscustomobject]@{
-            Url = $targetUrl;
-            Addresses = [string[]]$address;
-            Aliases = [string[]]$alias;
-            ActualStatus = $actualStatus;
-            ExpectedStatus = $expectedStatus;
-			StatusMatched = $statusMatch;
-            StatusMessage = $statusMessage;
-            IsBlocked = $isBlocked;
-            Connectivity = $connectivity;
-            BlueCoat = $bluecoat;
-        }
-
-		$fileName = ($targetUrl.OriginalString.Split([string[]][IO.Path]::GetInvalidFileNameChars(),[StringSplitOptions]::RemoveEmptyEntries)) -join '-'
-        $json = $endpoint | ConvertTo-Json -Depth 5 -Compress:$Compress
-        $json | Out-File -FilePath "$OutputPath\$fileName.json" -NoNewline -Force
-		
-		if ($PassThru) {
-		    $endpoint
-		}
-    }
 }
