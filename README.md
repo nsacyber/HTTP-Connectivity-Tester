@@ -45,7 +45,7 @@ If the downloaded zip file is not unblocked before extracting it, then all the i
 Get-ChildItem -Path '.\Connectivity-Tester' -Recurse -Include '*.ps1','*.psm1','*.psd1' | Unblock-File -Verbose
 ```
 
-See the [Unblock-File command's documentation](https://technet.microsoft.com/en-us/library/hh849924.aspx) for more information on how to use it.
+See the [Unblock-File command's documentation](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Utility/Unblock-File?view=powershell-5.1) for more information on how to use it.
 
 ### Loading the code
 Now extract the downloaded zip file and load the PowerShell code used for apply the policies.
