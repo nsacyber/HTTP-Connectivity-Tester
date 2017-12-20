@@ -1,5 +1,5 @@
 # Connectivity Tester
-Aids in discovering HTTP and HTTPS connectivity issues. Includes a PowerShell module named [Connectivity-Tester](./Connectivity-Tester/) along with [example PowerShell scripts](./Examples/) to use the module.
+Aids in discovering HTTP and HTTPS connectivity issues. Includes a PowerShell module named [ConnectivityTester](./ConnectivityTester/) along with [example PowerShell scripts](./Examples/) to use the module.
 
 ## Getting started
 
