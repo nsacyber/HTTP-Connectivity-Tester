@@ -533,3 +533,40 @@ Function Get-Connectivity() {
 
     return $connectivity
 }
+
+Function Save-Connectivity() {
+    [CmdletBinding()]
+    [OutputType([void])]
+    Param(
+        [Parameter(Mandatory=$true, HelpMessage='The filename without the extension')]
+        [ValidateNotNullOrEmpty()]
+        [sring]$FileName,
+
+        [Parameter(Mandatory=$true, HelpMessage='Path to save the output to')]
+        [System.Collections.Generic.List[pscustomobject]]$Results,
+
+        [Parameter(Mandatory=$false, HelpMessage='Path to save the output to')]
+        [string]$OutputPath,
+
+        [Parameter(Mandatory=$false, HelpMessage='Compress JSON output')]
+        [switch]$Compress
+    )
+
+    $parameters = $PSBoundParameters
+
+    $isVerbose = $verbosePreference -eq 'Continue'
+
+    if (-not($parameters.ContainsKey('OutputPath'))) {
+        $OutputPath = $env:USERPROFILE,'Desktop' -join [System.IO.Path]::DirectorySeparatorChar
+    }
+
+    $OutputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
+
+    if (-not(Test-Path -Path $OutputPath)) {
+        New-Item -Path $OutputPath -ItemType Directory
+    }
+
+    #$fileName = ($targetUrl.OriginalString.Split([string[]][IO.Path]::GetInvalidFileNameChars(),[StringSplitOptions]::RemoveEmptyEntries)) -join '-'
+    $json = $Results | ConvertTo-Json -Depth 3 -Compress:$Compress
+    $json | Out-File -FilePath "$OutputPath\$FileName.json" -NoNewline -Force
+}

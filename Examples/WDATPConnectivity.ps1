@@ -41,37 +41,3 @@ Function Get-WDATPConnectivity() {
 
     return $results
 }
-
-Function Save-WDATPConnectivity() {
-    [CmdletBinding()]
-    [OutputType([System.Collections.Generic.List[pscustomobject]])]
-    Param(
-        [Parameter(Mandatory=$false, HelpMessage='Path to save the output to')]
-        [System.Collections.Generic.List[pscustomobject]]$Results,
-
-        [Parameter(Mandatory=$false, HelpMessage='Path to save the output to')]
-        [string]$OutputPath,
-
-        [Parameter(Mandatory=$false, HelpMessage='Compress JSON output')]
-        [switch]$Compress
-    )
-
-    $parameters = $PSBoundParameters
-
-    $isVerbose = $verbosePreference -eq 'Continue'
-
-    if (-not($parameters.ContainsKey('OutputPath'))) {
-        $OutputPath = $env:USERPROFILE,'Desktop' -join [System.IO.Path]::DirectorySeparatorChar
-    }
-
-    $OutputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
-
-    if (-not(Test-Path -Path $OutputPath)) {
-        New-Item -Path $OutputPath -ItemType Directory
-    }
-
-    #$fileName = ($targetUrl.OriginalString.Split([string[]][IO.Path]::GetInvalidFileNameChars(),[StringSplitOptions]::RemoveEmptyEntries)) -join '-'
-    $fileName = 'ATPConnectivity'
-    $json = $Results | ConvertTo-Json -Depth 3 -Compress:$Compress
-    $json | Out-File -FilePath "$OutputPath\$fileName.json" -NoNewline -Force
-}
