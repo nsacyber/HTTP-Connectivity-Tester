@@ -8,8 +8,7 @@ To get started using the tools:
 1. [Download](#downloading-the-repository) the repository as a zip file 
 1. [Configure PowerShell](#configuring-the-powershell-environment) 
 1. [Load the code](#loading-the-code) 
-1. [Apply the policies](#applying-the-policies) 
-1. [Check compliance](#checking-compliance)
+1. [Running the code](#running-the-code) 
 
 ## Downloading the repository
 
@@ -59,8 +58,10 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 1. Inside the Connectivity-Tester folder is another folder named Connectivity-Tester which is a PowerShell module. Move this folder to a folder path in your $PSModulePath such as **C:\users\*username*\Documents\WindowsPowerShell\Modules**
 1. `mv .\Connectivity-Tester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
 1. Go to the Examples folder `cd .\Examples`
-1. Dot source one of the example files `. .\WDATPConnectivity.ps1`
-1. Run `$connectivity = Get-WDATPConnectivity -Verbose`. If using BlueCoat for a proxy, then add the `-PerformBlueCoatLookup` option
+1. Dot source one of the example files `. .\WDATPConnectivity.ps1` or `. .\TelemetryConnectivity.ps1`
+
+### Running the code
+1. Run `$connectivity = Get-WDATPConnectivity -Verbose` or `$connectivity = Get-TelemetryConnectivity -Verbose`. If using BlueCoat as a proxy, then add the `-PerformBlueCoatLookup` option
 1. Run `$connectivity | Format-List -Property Url,IsBlocked` to see if any URLs are blocked
 
 ## License
