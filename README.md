@@ -12,7 +12,7 @@ To get started using the tools:
 
 ## Downloading the repository
 
-Download the [current code](https://github.com/iadgov/Connectivity-Tester/archive/master.zip) to your **Downloads** folder. It will be saved as **Secure-Host-Baseline-master.zip** by default.
+Download the [current code](https://github.com/iadgov/Connectivity-Tester/archive/master.zip) to your **Downloads** folder. It will be saved as **Connectivity-Tester-master.zip** by default.
 
 ## Configuring the PowerShell environment
 The PowerShell commands are meant to run from a system with at least PowerShell 4.0 and .Net 4.5 installed. PowerShell may need to be configured to run the commands.
@@ -55,9 +55,9 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 1. Click the **Extract** button
 1. From the previously opened PowerShell prompt, rename the **Connectivity-Tester-master** folder to **Connectivity-Tester** `mv .\Connectivity-Tester-master\ .\Connectivity-Tester\`
 1. `cd Connectivity-Tester`
-1. Inside the Connectivity-Tester folder is another folder named Connectivity-Tester which is a PowerShell module. Move this folder to a folder path in your $PSModulePath such as **C:\users\*username*\Documents\WindowsPowerShell\Modules**
-1. `mv .\Connectivity-Tester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
-1. Go to the Examples folder `cd .\Examples`
+1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is a PowerShell module. Move this folder to a folder path in your $PSModulePath such as **C:\\users\\*username*\\Documents\\WindowsPowerShell\\Modules**
+1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
+1. Go to the **Examples folder** `cd .\Examples`
 1. Dot source one of the example files `. .\WDATPConnectivity.ps1` or `. .\TelemetryConnectivity.ps1`
 
 ### Running the code
