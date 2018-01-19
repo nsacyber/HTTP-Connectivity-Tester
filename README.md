@@ -67,7 +67,7 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 ## License
 See [LICENSE](./LICENSE.md).
 
-## License
+## Contributing
 See [CONTRIBUTING](./CONTRIBUTING.md).
 
 ## Disclaimer
