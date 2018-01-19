@@ -6,7 +6,7 @@ DocumentNamespace: https://github.com/iadgov/Connectivity-Tester
 Creator: iadgovuser1
 Created: 2017-12-22T13:00:00Z
 PackageName: ConnectivityTester
-PackageOriginator: iadgovuser1
+PackageSupplier: National Security Agency
 PackageDownloadLocation: https://github.com/iadgov/Connectivity-Tester/archive/master.zip
 PackageLicenseConcluded: CC0-1.0
 PackageHomePage: https://github.com/iadgov/Connectivity-Tester
