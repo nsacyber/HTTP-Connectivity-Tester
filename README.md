@@ -64,6 +64,9 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 1. Run `$connectivity = Get-WDATPConnectivity -Verbose` or `$connectivity = Get-TelemetryConnectivity -Verbose`. If using BlueCoat as a proxy, then add the `-PerformBlueCoatLookup` option
 1. Run `$connectivity | Format-List -Property Url,IsBlocked` to see if any URLs are blocked
 
+Save connectivity test results to a JSON file (wdatpconnectivity_20180212.json):
+`Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName wdatpconnectivity_20180212`
+
 ## License
 See [LICENSE](./LICENSE.md).
 

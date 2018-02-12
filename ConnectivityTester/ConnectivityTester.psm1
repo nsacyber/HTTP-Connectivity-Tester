@@ -476,7 +476,7 @@ Function Get-Connectivity() {
         try {
             $statusCode = [int]$_.Exception.Response.StatusCode # StatusCode property results in a PropertyNotFoundException exception when the URL is blocked upstream
         } catch [System.Management.Automation.PropertyNotFoundException] {
-            Write-Debug -Message ('Unable to access {0} due to {1}' -f $uri,$statusMessage)
+            Write-Verbose -Message ('Unable to access {0} due to {1}' -f $uri,$statusMessage)
         }
     } finally {
         if ($response -ne $null) {
@@ -540,7 +540,7 @@ Function Save-Connectivity() {
     Param(
         [Parameter(Mandatory=$true, HelpMessage='The filename without the extension')]
         [ValidateNotNullOrEmpty()]
-        [sring]$FileName,
+        [string]$FileName,
 
         [Parameter(Mandatory=$true, HelpMessage='Path to save the output to')]
         [System.Collections.Generic.List[pscustomobject]]$Results,

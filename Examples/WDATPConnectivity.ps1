@@ -23,7 +23,7 @@ Function Get-WDATPConnectivity() {
 
     $data.Add([pscustomobject]@{ Url = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; })
     $data.Add([pscustomobject]@{ Url = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ Url = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; })
+    $data.Add([pscustomobject]@{ Url = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; }) #https://us.vortex-win.data.microsoft.com/health/keepalive
     $data.Add([pscustomobject]@{ Url = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; })
     $data.Add([pscustomobject]@{ Url = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; })
     $data.Add([pscustomobject]@{ Url = 'http://crl.microsoft.com'; StatusCode = 400; })
