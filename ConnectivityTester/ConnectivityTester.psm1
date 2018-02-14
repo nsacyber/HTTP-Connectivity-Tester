@@ -499,7 +499,7 @@ Function Get-Connectivity() {
 
     $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
 
-    $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}{21}' -f $newLine,$uri,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$newLine)
+    $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}Ignore Certificate Validation Errors: {21}{22}{23}' -f $newLine,$uri,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
 
     $bluecoat = $null
@@ -528,6 +528,7 @@ Function Get-Connectivity() {
         ServerCertificateError = $script:ServerCertificateError;
         ServerCertificateErrorMessage = $serverCertificateErrorMessage;
         HasServerCertificateError = $hasServerCertificateError;
+        IgnoreCertificateValidationErrors = $IgnoreCertificateValidationErrors;
         BlueCoat = $bluecoat;
     }
 
