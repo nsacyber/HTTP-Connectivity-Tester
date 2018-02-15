@@ -61,7 +61,7 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 1. Dot source one of the [example files](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
 
 ### Running the code
-Call the main command after loading the file via dot sourcing method. The main command to execute for each file in the examples folder is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. Get-__FileName__). For the WindowsTelemetryConnectivity.ps1 file the main command is Get-WindowsTelemetryConnectivity.ps1. For the WDATPConnectivity.ps1 file the main command is Get-WDATPConnectivity.
+Call the main command after loading the file via dot sourcing. The main command to execute for each file in the [examples folder](./Examples) is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. **Get-_FileName_**). The main command is **Get-WindowsTelemetryConnectivity** for the WindowsTelemetryConnectivity.ps1 file. The main command is **Get-WDATPConnectivity** for the WDATPConnectivity.ps1 file.
 
 
 The main Get command supports the same options for each file:
@@ -74,9 +74,11 @@ The main command returns a connectivity object that contains properties about th
 * **-OutputPath** - the path to a folder to save the JSON file to
 * **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to 
 
-Example:
+**Example**
 
 ```
+cd Examples
+. .\WindowsTelemetryConnectivity.ps1
 $connectivity = Get-WindowsTelemetryConnectivity -Verbose
 $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,Url
 Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
