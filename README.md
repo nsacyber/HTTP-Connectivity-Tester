@@ -58,14 +58,29 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is a PowerShell module. Move this folder to a folder path in your $PSModulePath such as **C:\\users\\*username*\\Documents\\WindowsPowerShell\\Modules**
 1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
 1. Go to the **Examples folder** `cd .\Examples`
-1. Dot source one of the example files `. .\WDATPConnectivity.ps1` or `. .\TelemetryConnectivity.ps1`
+1. Dot source one of the [example files](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
 
 ### Running the code
-1. Run `$connectivity = Get-WDATPConnectivity -Verbose` or `$connectivity = Get-TelemetryConnectivity -Verbose`. If using BlueCoat as a proxy, then add the `-PerformBlueCoatLookup` option
-1. Run `$connectivity | Format-List -Property Url,IsBlocked` to see if any URLs are blocked
+Call the main command after loading the file via dot sourcing method. The main command to execute for each file in the examples folder is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. Get-__FileName__). For the WindowsTelemetryConnectivity.ps1 file the main command is Get-WindowsTelemetryConnectivity.ps1. For the WDATPConnectivity.ps1 file the main command is Get-WDATPConnectivity.
 
-Save connectivity test results to a JSON file (wdatpconnectivity_20180212.json):
-`Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName wdatpconnectivity_20180212`
+
+The main Get command supports the same options for each file:
+* **-Verbose** - prints verbose output to the console
+* **-PerformBlueCoatLookup** - useful for looking up the rating of a URL when a BlueCoat proxy is being used. A rate limit is enforced for accessing the BlueCoat SiteReview REST API so use this option only when behind a BlueCoat proxy and use it sparingly.
+
+The main command returns a connectivity object that contains properties about the connectivity test. The connectivity object can be saved to a JSON file using the **Save-Connectivity** command from the ConnectivityTester PowerShell module. The Save-Connectivity command supports the following options:
+* **-Verbose** - prints verbose output to the console
+* **-Results** - the connectivity object, or an array of connectivity objects, to save to a JSON file
+* **-OutputPath** - the path to a folder to save the JSON file to
+* **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to 
+
+Example:
+
+```
+$connectivity = Get-WindowsTelemetryConnectivity -Verbose
+$connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,Url
+Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+```
 
 ## License
 See [LICENSE](./LICENSE.md).
