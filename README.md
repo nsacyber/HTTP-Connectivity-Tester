@@ -58,7 +58,7 @@ Now extract the downloaded zip file and load the PowerShell code used for apply 
 1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is a PowerShell module. Move this folder to a folder path in your $PSModulePath such as **C:\\users\\*username*\\Documents\\WindowsPowerShell\\Modules**
 1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
 1. Go to the **Examples folder** `cd .\Examples`
-1. Dot source one of the [example files](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
+1. Dot source one of the files from [examples folder](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
 
 ### Running the code
 Call the main command after loading the file via dot sourcing. The main command to execute for each file in the [examples folder](./Examples) is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. **Get-_FileName_**). The main command is **Get-WindowsTelemetryConnectivity** for the WindowsTelemetryConnectivity.ps1 file. The main command is **Get-WDATPConnectivity** for the WDATPConnectivity.ps1 file.
@@ -77,7 +77,7 @@ The main command returns a connectivity object that contains properties about th
 **Example**
 
 ```
-cd Examples
+cd .\Examples
 . .\WindowsTelemetryConnectivity.ps1
 $connectivity = Get-WindowsTelemetryConnectivity -Verbose
 $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,Url
