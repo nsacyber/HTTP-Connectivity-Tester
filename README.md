@@ -80,7 +80,7 @@ The main command returns a connectivity object that contains properties about th
 cd .\Examples
 . .\WindowsTelemetryConnectivity.ps1
 $connectivity = Get-WindowsTelemetryConnectivity -Verbose
-$connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,Url
+$connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,TestUrl
 Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 

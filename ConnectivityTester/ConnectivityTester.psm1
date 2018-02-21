@@ -1,5 +1,8 @@
 Set-StrictMode -Version 4
 
+$global:rateLimitCount = 0
+$global:sleepSeconds = 5 * 60
+
 Function Get-ErrorMessage() {
 <#
     .SYNOPSIS  
@@ -52,7 +55,6 @@ Function Get-ErrorMessage() {
        return $msg
     }
 }
-
 
 # locked URL result
 # --------------------------------------------------------------------------------------------------------------------
@@ -144,7 +146,7 @@ Function Get-BlueCoatSiteReview() {
         Method = 'POST';
         ProxyUseDefaultCredentials = (([string]$proxyUri) -ne $uri);
         UseBasicParsing = $true;
-        UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
+        UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.168 Safari/537.36'
         ContentType = 'text/plain';
         Body =  @{url = $uri};
         Verbose = $false
@@ -172,7 +174,7 @@ Function Get-BlueCoatSiteReview() {
         Write-Debug -Message ('JSON: {0}' -f $returnedJson)
 
         if ($returnedJson.PSObject.Properties.Name -contains 'errorType') {
-            $m = 'Error retrieving Blue Coat data. Error Type: {0} Error Message: {1}' -f $returnJson.errorType, $returnedJson.error
+            $m = 'Error retrieving Blue Coat data. Error Type: {0} Error Message: {1}' -f $returnedJson.errorType, $returnedJson.error
             throw $m
         } else {
 
@@ -388,7 +390,7 @@ Function Get-Connectivity() {
     Param(
         [Parameter(Mandatory=$true, HelpMessage='The URL to test')]
         [ValidateNotNullOrEmpty()]
-        [Uri]$Url,
+        [Uri]$TestUrl,
 
         [Parameter(Mandatory=$false, HelpMessage='The HTTP method to use to test the URL')]
         [ValidateNotNullOrEmpty()]
@@ -408,15 +410,15 @@ Function Get-Connectivity() {
 
     $isVerbose = $verbosePreference -eq 'Continue'
 
-    if ($Url.OriginalString.ToLower().StartsWith('http://') -or $Url.OriginalString.ToLower().StartsWith('https://')) {
-        $uri = $Url
+    if ($TestUrl.OriginalString.ToLower().StartsWith('http://') -or $TestUrl.OriginalString.ToLower().StartsWith('https://')) {
+        $testUri = $TestUrl
     } else {
-        $uri = [Uri]('http://{0}' -f $uri.OriginalString)
+        $testUri = [Uri]('http://{0}' -f $testUri.OriginalString)
     }  
 
     $newLine = [System.Environment]::NewLine
 
-    Write-Verbose -Message ('{0}*************************************************{1}Testing {2}{3}*************************************************{4}' -f $newLine,$newLine,$uri,$newLine,$newLine)
+    Write-Verbose -Message ('{0}*************************************************{1}Testing {2}{3}*************************************************{4}' -f $newLine,$newLine,$testUri,$newLine,$newLine)
     
     $script:ServerCertificate = $null
     $script:ServerCertificateChain = $null
@@ -447,11 +449,11 @@ Function Get-Connectivity() {
 
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls11
 
-    $proxyUri = [Net.WebRequest]::GetSystemWebProxy().GetProxy($uri)
+    $proxyUri = [Net.WebRequest]::GetSystemWebProxy().GetProxy($testUri)
 
-    $request = [Net.WebRequest]::CreateHttp($uri)
-    $request.Proxy = if ($uri -ne $proxyUri) { [Net.WebRequest]::DefaultWebProxy } else { $null }
-    $request.UseDefaultCredentials = ($uri -ne $proxyUri)
+    $request = [Net.WebRequest]::CreateHttp($testUri)
+    $request.Proxy = if ($testUri -ne $proxyUri) { [Net.WebRequest]::DefaultWebProxy } else { $null }
+    $request.UseDefaultCredentials = ($testUri -ne $proxyUri)
     $request.UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
     $request.Method = $Method
     $request.ServerCertificateValidationCallback = $RemoteCertificateValidationCallback
@@ -476,7 +478,7 @@ Function Get-Connectivity() {
         try {
             $statusCode = [int]$_.Exception.Response.StatusCode # StatusCode property results in a PropertyNotFoundException exception when the URL is blocked upstream
         } catch [System.Management.Automation.PropertyNotFoundException] {
-            Write-Verbose -Message ('Unable to access {0} due to {1}' -f $uri,$statusMessage)
+            Write-Verbose -Message ('Unable to access {0} due to {1}' -f $testUri,$statusMessage)
         }
     } finally {
         if ($response -ne $null) {
@@ -488,34 +490,53 @@ Function Get-Connectivity() {
 
     $serverCertificateErrorMessage = ''
     
-    if ($uri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
-        $serverCertificateErrorMessage = Get-CertificateErrorMessage -Url $uri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
+    if ($testUri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
+        $serverCertificateErrorMessage = Get-CertificateErrorMessage -Url $testUri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
     }
 
-    $address = Get-IPAddress -Url $uri -Verbose:$false
-    $alias = Get-IPAlias -Url $uri -Verbose:$false
+    $address = Get-IPAddress -Url $testUri -Verbose:$false
+    $alias = Get-IPAlias -Url $testUri -Verbose:$false
     $actualStatusCode = [int]$statusCode
     $isBlocked = $statusCode -eq 0
 
     $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
 
-    $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}Ignore Certificate Validation Errors: {21}{22}{23}' -f $newLine,$uri,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
+    $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}Ignore Certificate Validation Errors: {21}{22}{23}' -f $newLine,$testUri,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
-
+   
     $bluecoat = $null
 
     if ($PerformBluecoatLookup) { 
-        try { 
-            $bluecoat = Get-BlueCoatSiteReview -Url $uri -Verbose:$isVerbose
+        try {
+
+            $global:rateLimitCount++
+
+            if($global:rateLimitCount -gt 10) {
+                $nowTime = [DateTime]::Now
+                $resumeTime = $nowTime.AddSeconds($global:sleepSeconds)
+
+                Write-Verbose -Message ('Paused for {0} seconds. Current time: {1} Resume time: {2}' -f $global:sleepSeconds,$nowTime,$resumeTime)
+
+                Start-Sleep -Seconds $global:sleepSeconds
+                
+                $nowTime = [DateTime]::Now
+                
+                Write-Verbose -Message ('Resumed at {0}' -f $nowTime)
+
+                $global:rateLimitCount = 1 # needs to be 1 since BlueCoat Site Review API is called when exiting this if statement. If left at 0, then will hit the rate limit on successive calls to this cmdlet
+            }
+
+            $bluecoat = Get-BlueCoatSiteReview -Url $testUri -Verbose:$isVerbose
             $bluecoatSummary = ('{0}Rated: {1}{2}Last Rated: {3}{4}Locked: {5}{6}Lock Message: {7}{8}Pending: {9}{10}Pending Message: {11}{12}Categories: {13}{14}{15}' -f $newLine,$bluecoat.IsRated,$newLine,$bluecoat.LastedRated,$newLine,$bluecoat.IsLocked,$newLine,$bluecoat.LockMessage,$newLine,$bluecoat.IsPending,$newLine,$bluecoat.PendingMessage,$newLine,($bluecoat.Categories.Keys -join ','),$newLine,$newLine)
+
             Write-Verbose -Message $bluecoatSummary
         } catch { 
-            Write-Verbose $_
+            Write-Verbose -Message $_
         } 
     }
 
     $connectivity = [pscustomobject]@{
-        Url = $uri;
+        TestUrl = $testUri;
         Addresses = [string[]]$address;
         Aliases = [string[]]$alias;
         ActualStatusCode = [int]$actualStatusCode;
