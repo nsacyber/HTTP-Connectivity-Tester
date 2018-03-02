@@ -36,9 +36,9 @@ Function Get-WindowsAnalyticsUpdateComplianceConnectivity() {
     # https://docs.microsoft.com/en-us/windows/deployment/update/update-compliance-get-started#update-compliance-prerequisites
 
     $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com'; StatusCode = 404; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 200; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 404; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 404; })
     
     # https://docs.microsoft.com/en-us/windows/configuration/configure-windows-diagnostic-data-in-your-organization#endpoints
     

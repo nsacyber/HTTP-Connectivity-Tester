@@ -34,9 +34,9 @@ Function Get-WindowsTelemetryConnectivity() {
     # https://docs.microsoft.com/en-us/windows/configuration/configure-windows-diagnostic-data-in-your-organization#endpoints
 
     $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com'; StatusCode = 404; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 200; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 404; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 404; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://vortex.data.microsoft.com/collect/v1'; StatusCode = 400; }) # OneDrive app for Windows 10 so might not really be necessary
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]

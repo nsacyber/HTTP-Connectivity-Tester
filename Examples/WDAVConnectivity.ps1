@@ -31,13 +31,13 @@ Function Get-WDAVConnectivity() {
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
 
-    # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
+    # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus
 
     $data.Add([pscustomobject]@{ TestUrl = 'https://wdcp.microsoft.com'; StatusCode = 503; }) # cloud-delivered protection service aka MAPS https://cloudblogs.microsoft.com/enterprisemobility/2016/05/31/important-changes-to-microsoft-active-protection-service-maps-endpoint/
     $data.Add([pscustomobject]@{ TestUrl = 'https://wdcpalt.microsoft.com'; StatusCode = 503; }) # cloud-delivered protection service aka MAPS https://cloudblogs.microsoft.com/enterprisemobility/2016/05/31/important-changes-to-microsoft-active-protection-service-maps-endpoint/
     $data.Add([pscustomobject]@{ TestUrl = 'https://updates.microsoft.com'; StatusCode = 400; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://download.microsoft.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net'; StatusCode = 400; }) # need to change to different URL to represent upload location for https://www.microsoft.com/en-us/wdsi/filesubmission
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net' ; StatusCode = 400; }) # need to change to different URL to represent upload location for https://www.microsoft.com/en-us/wdsi/filesubmission
     $data.Add([pscustomobject]@{ TestUrl = 'http://www.microsoft.com/pkiops/crl'; StatusCode = 404; })
     $data.Add([pscustomobject]@{ TestUrl = 'http://www.microsoft.com/pkiops/certs'; StatusCode = 404; })
     $data.Add([pscustomobject]@{ TestUrl = 'http://crl.microsoft.com/pki/crl/products'; StatusCode = 404; })
@@ -49,8 +49,6 @@ Function Get-WDAVConnectivity() {
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $statusCode = $_.StatusCode
-
         $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }  
