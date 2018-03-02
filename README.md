@@ -84,6 +84,15 @@ $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusC
 Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 
+## Connectivity Tests
+| Vendor | Product / Service | File | Command |
+| -- | -- | -- | -- |
+| Microsoft | Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.ps1](./Examples/WindowsAnalyticsUpdateComplianceConnectivity.ps1) | Get-WindowsAnalyticsUpdateComplianceConnectivity |
+| Microsoft | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.ps1](./Examples/WindowsAnalyticsUpgradeReadinessConnectivity.ps1) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
+| Microsoft | Windows Defender Antivirus | [WDAVConnectivity.ps1](./Examples/WDAVConnectivity.ps1) | Get-WDAVConnectivity |
+| Microsoft | Windows Defender Advanced Threat Protection | [WDATPConnectivity.ps1](./Examples/WDATPConnectivity.ps1) | Get-WDATPConnectivity |
+| Microsoft | Windows Telemetry | [WindowsTelemetryConnectivity.ps1](./Examples/WindowsTelemetryConnectivity.ps1) | Get-WindowsTelemetryConnectivity |
+
 ## License
 See [LICENSE](./LICENSE.md).
 
