@@ -8,7 +8,7 @@ To get started using the tools:
 1. [Download](#downloading-the-repository) the repository as a zip file 
 1. [Configure PowerShell](#configuring-the-powershell-environment) 
 1. [Load the code](#loading-the-code) 
-1. [Running the code](#running-the-code) 
+1. [Run the code](#running-the-code) 
 
 ## Downloading the repository
 
@@ -21,12 +21,13 @@ The PowerShell commands are meant to run from a system with at least PowerShell 
 
 Users may need to change the default PowerShell execution policy. This can be achieved in a number of different ways:
 
+* Open a command prompt and run **powershell.exe -ExecutionPolicy Bypass** and run scripts from that PowerShell session. 
 * Open a command prompt and run **powershell.exe -ExecutionPolicy Unrestricted** and run scripts from that PowerShell session. 
 * Open a PowerShell prompt and run **Set-ExecutionPolicy Unrestricted -Scope Process** and run scripts from the current PowerShell session. 
 * Open an administrative PowerShell prompt and run **Set-ExecutionPolicy Unrestricted** and run scripts from any PowerShell session. 
 
 ### Unblocking the PowerShell scripts
-Users will need to unblock the downloaded zip file since it will be marked as having been downloaded from the Internet which PowerShell will block from executing by default. Open a PowerShell prompt and run the following commands to unblock the PowerShell code in the zip file:
+Users will need to unblock the downloaded zip file since it will be marked as having been downloaded from the Internet (Mark of the Web) which PowerShell will block from executing by default. Open a PowerShell prompt and run the following commands to unblock the PowerShell code in the zip file:
 
 1. `cd $env:USERPROFILE` 
 1. `cd Downloads` 
@@ -48,23 +49,24 @@ Get-ChildItem -Path '.\Connectivity-Tester' -Recurse -Include '*.ps1','*.psm1','
 See the [Unblock-File command's documentation](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Utility/Unblock-File?view=powershell-5.1) for more information on how to use it.
 
 ### Loading the code
-Now extract the downloaded zip file and load the PowerShell code used for apply the policies.
+Extract the downloaded zip file and install the ConnectivityTester PowerShell module.
 
 1. Right click on the zip file and select **Extract All**
 1. At the dialog remove **Connectivity-Tester-master** from the end of the path since it will extract the files to a Connectivity-Tester-master folder by default
 1. Click the **Extract** button
 1. From the previously opened PowerShell prompt, rename the **Connectivity-Tester-master** folder to **Connectivity-Tester** `mv .\Connectivity-Tester-master\ .\Connectivity-Tester\`
 1. `cd Connectivity-Tester`
-1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is a PowerShell module. Move this folder to a folder path in your $PSModulePath such as **C:\\users\\*username*\\Documents\\WindowsPowerShell\\Modules**
+1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is the ConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow modules to be installed at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
 1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
-1. Go to the **Examples folder** `cd .\Examples`
-1. Dot source one of the files from [examples folder](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
+1. Close the PowerShell prompt and open a new PowerShell prompt
+1. Go to the **Examples folder** `cd .\Examples` from the extracted download
+1. Dot source one of the files from the [examples folder](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
 
 ### Running the code
 Call the main command after loading the file via dot sourcing. The main command to execute for each file in the [examples folder](./Examples) is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. **Get-_FileName_**). The main command is **Get-WindowsTelemetryConnectivity** for the WindowsTelemetryConnectivity.ps1 file. The main command is **Get-WDATPConnectivity** for the WDATPConnectivity.ps1 file.
 
 
-The main Get command supports the same options for each file:
+The main [Get command for each example](#connectivity-tests) supports the same options for each file:
 * **-Verbose** - prints verbose output to the console
 * **-PerformBlueCoatLookup** - useful for looking up the rating of a URL when a BlueCoat proxy is being used. A rate limit is enforced for accessing the BlueCoat SiteReview REST API so use this option only when behind a BlueCoat proxy and use it sparingly.
 
@@ -84,8 +86,13 @@ $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusC
 Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 
-## Connectivity Tests
-| Vendor | Product / Service | File | Command |
+The main properties of interest in the connectivity object for determining if the a URL or services is blocked or not are the **IsBlocked**, **ActualStatusCode**, **ExpectedStatusCode**, and **TestUrl** properties. IsBlocked should be false. ActualStatusCode and ExpectedStatusCode should be the same (non-zero) value. TestUrl should be the URL that was tested. IsBlocked is true and ActualStatusCode is zero when a URL is blocked.
+
+
+## Connectivity tests
+A number of different connectivity tests have been created in the [examples folder](./Examples). The table below documents the currently implemented tests along with the main Get command.
+
+| Vendor | Product / Service | File | Get Command |
 | -- | -- | -- | -- |
 | Microsoft | Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.ps1](./Examples/WindowsAnalyticsUpdateComplianceConnectivity.ps1) | Get-WindowsAnalyticsUpdateComplianceConnectivity |
 | Microsoft | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.ps1](./Examples/WindowsAnalyticsUpgradeReadinessConnectivity.ps1) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
