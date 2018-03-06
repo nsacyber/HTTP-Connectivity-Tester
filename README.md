@@ -56,7 +56,7 @@ Extract the downloaded zip file and install the ConnectivityTester PowerShell mo
 1. Click the **Extract** button
 1. From the previously opened PowerShell prompt, rename the **Connectivity-Tester-master** folder to **Connectivity-Tester** `mv .\Connectivity-Tester-master\ .\Connectivity-Tester\`
 1. `cd Connectivity-Tester`
-1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is the ConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow modules to be installed at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
+1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is the ConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow [modules to be installed](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx#Where%20to%20Install%20Modules) at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
 1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
 1. Close the PowerShell prompt and open a new PowerShell prompt
 1. Go to the **Examples folder** `cd .\Examples` from the extracted download
@@ -86,7 +86,7 @@ $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusC
 Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 
-The main properties of interest in the connectivity object for determining if the a URL or services is blocked or not are the **IsBlocked**, **ActualStatusCode**, **ExpectedStatusCode**, and **TestUrl** properties. IsBlocked should be false. ActualStatusCode and ExpectedStatusCode should be the same (non-zero) value. TestUrl should be the URL that was tested. IsBlocked is true and ActualStatusCode is zero when a URL is blocked.
+The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or not are the **IsBlocked**, **ActualStatusCode**, **ExpectedStatusCode**, and **TestUrl** properties. IsBlocked should be false. ActualStatusCode and ExpectedStatusCode should be the same (non-zero) value. TestUrl should be the URL that was tested. IsBlocked is true and ActualStatusCode is zero when a URL is blocked.
 
 
 ## Connectivity tests
