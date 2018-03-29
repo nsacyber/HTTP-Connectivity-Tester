@@ -37,8 +37,8 @@ Function Get-WindowsAnalyticsUpgradeReadinessConnectivity() {
 
     #$data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com'; StatusCode = 404; IgnoreCertificateValidationErrors=$ignore})
     #$data.Add([pscustomobject]@{ TestUrl = 'https://vortex-win.data.microsoft.com'; StatusCode = 404; IgnoreCertificateValidationErrors=$ignore })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; IgnoreCertificateValidationErrors=$ignore})
-    $data.Add([pscustomobject]@{ TestUrl = 'https://adl.windows.com'; StatusCode = 404; IgnoreCertificateValidationErrors=$true})
+    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; IgnoreCertificateValidationErrors=$ignore })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://adl.windows.com'; StatusCode = 404; IgnoreCertificateValidationErrors=$true })
     
     # https://docs.microsoft.com/en-us/windows/deployment/upgrade/upgrade-readiness-requirements#diagnostic-data-and-data-sharing
     

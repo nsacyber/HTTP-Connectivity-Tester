@@ -98,6 +98,7 @@ A number of different connectivity tests have been created in the [examples fold
 | Microsoft | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.ps1](./Examples/WindowsAnalyticsUpgradeReadinessConnectivity.ps1) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
 | Microsoft | Windows Defender Antivirus | [WDAVConnectivity.ps1](./Examples/WDAVConnectivity.ps1) | Get-WDAVConnectivity |
 | Microsoft | Windows Defender Advanced Threat Protection | [WDATPConnectivity.ps1](./Examples/WDATPConnectivity.ps1) | Get-WDATPConnectivity |
+| Microsoft | Windows Defender SmartScreen | [WDSSConnectivity.ps1](./Examples/WDSSConnectivity.ps1) | Get-WDSSConnectivity |
 | Microsoft | Windows Telemetry | [WindowsTelemetryConnectivity.ps1](./Examples/WindowsTelemetryConnectivity.ps1) | Get-WindowsTelemetryConnectivity |
 
 ## License
