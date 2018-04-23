@@ -33,7 +33,8 @@ Function Get-WindowsTelemetryConnectivity() {
     
     # https://docs.microsoft.com/en-us/windows/configuration/configure-windows-diagnostic-data-in-your-organization#endpoints
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com'; StatusCode = 404; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 404; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://v20.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 404; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 404; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 404; })
