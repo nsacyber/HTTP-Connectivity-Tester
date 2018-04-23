@@ -454,7 +454,7 @@ Function Get-Connectivity() {
     $request = [Net.WebRequest]::CreateHttp($testUri)
     $request.Proxy = if ($testUri -ne $proxyUri) { [Net.WebRequest]::DefaultWebProxy } else { $null }
     $request.UseDefaultCredentials = ($testUri -ne $proxyUri)
-    $request.UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36'
+    $request.UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
     $request.Method = $Method
     $request.ServerCertificateValidationCallback = $RemoteCertificateValidationCallback
 
