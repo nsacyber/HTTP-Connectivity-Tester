@@ -275,7 +275,7 @@ Function Get-IPAlias() {
 
     $dnsResults = $null
     
-    $dnsResults = @(Resolve-DnsName -Name $Url.Host -Type CNAME -NoHostsFile -QuickTimeout -ErrorAction SilentlyContinue | Where-Object { $_.Type -eq 'CNAME' })
+    $dnsResults = @(Resolve-DnsName -Name $Url.Host -NoHostsFile -QuickTimeout -ErrorAction SilentlyContinue | Where-Object { $_.Type -eq 'CNAME' })
     
     #$aliases = [string[]]@($dnsResults | ForEach-Object { try { $_.NameHost } catch [System.Management.Automation.PropertyNotFoundException] {} }) # NameHost results in a PropertyNotFoundException when a URL is blocked upstream
     $aliases = [string[]]@($dnsResults | ForEach-Object { $_.NameHost })
