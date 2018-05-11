@@ -17,6 +17,75 @@ Import-Module -Name ConnectivityTester -Force
 # $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,TestUrl
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
+
+Function Get-OperatingSystemReleaseId() {
+    <#
+    .SYNOPSIS
+    Gets the operating system release identifier.
+
+    .DESCRIPTION
+    Gets the Windows 10 operating system release identifier (e.g. 1507, 1511, 1607).
+
+    .EXAMPLE
+    Get-OperatingSystemReleaseId
+    #>
+    [CmdletBinding()]
+    [OutputType([UInt32])]
+    Param()
+
+    $release = [UInt32](Get-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows NT\CurrentVersion' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'ReleaseId' -ErrorAction SilentlyContinue)
+
+    return $release
+}
+
+Function Get-OperatingSystemVersion() {
+    <#
+    .SYNOPSIS
+    Gets the operating system version.
+
+    .DESCRIPTION
+    Gets the operating system version.
+
+    .EXAMPLE
+    Get-OperatingSystemVersion
+    #>
+    [CmdletBinding()]
+    [OutputType([System.Version])]
+    Param()
+
+    $major = 0
+    $minor = 0
+    $build = 0
+    $revision = 0
+
+    $currentVersionPath = 'HKLM:\Software\Microsoft\Windows NT\CurrentVersion'
+
+    $isWindows10orLater = $null -ne (Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentMajorVersionNumber' -ErrorAction SilentlyContinue)
+
+    if($isWindows10orLater) {
+        $major = [Uint32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentMajorVersionNumber' -ErrorAction SilentlyContinue)
+        $minor = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentMinorVersionNumber' -ErrorAction SilentlyContinue)
+        $build = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentBuildNumber' -ErrorAction SilentlyContinue)
+        $revision = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'UBR' -ErrorAction SilentlyContinue)
+
+        if ($revision -eq 0) {
+            $revision = 1507
+        }
+    } else {
+        $major = [Uint32]((Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentVersion' -ErrorAction SilentlyContinue) -split '\.')[0]
+        $minor = [UInt32]((Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentVersion' -ErrorAction SilentlyContinue) -split '\.')[1]
+        $build = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentBuild' -ErrorAction SilentlyContinue)      
+        $revision = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'UBR' -ErrorAction SilentlyContinue) # might exist on fully patched 8.1
+
+        # get service pack version number for downlevel OSes. no SP installed, then registry value doesn't exist. Otherwise the value is 0x100, 0x200, etc
+        if ($revision -eq 0) {
+            $revision = ([UInt32](Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Windows' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CSDVersion' -ErrorAction SilentlyContinue)) -shr 2
+        }
+    }
+
+    return [System.Version]('{0}.{1}.{2}.{3}' -f $major,$minor,$build,$revision)
+}
+
 Function Get-WDATPConnectivity() {
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
@@ -33,27 +102,40 @@ Function Get-WDATPConnectivity() {
 
     # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; }) # dashboard
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; }) # dashboard
     $data.Add([pscustomobject]@{ TestUrl = 'http://crl.microsoft.com'; StatusCode = 400; })
     $data.Add([pscustomobject]@{ TestUrl = 'http://ctldl.windowsupdate.com'; StatusCode = 200; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
     $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; })
 
-    # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 02/14/2018:
+    # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 05/03/2018:
 
     #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; }) # repeat from above
     #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; }) # repeat from above
     #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-weu.microsoft.com/test'; StatusCode = 200; }) # europe
     #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-neu.microsoft.com/test'; StatusCode = 200; }) # europe
     #$data.Add([pscustomobject]@{ TestUrl = 'https://eu.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 400; }) # europe
-    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; }) # might be the status for https://us.vortex-win.data.microsoft.com/collect/v1
+    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+    # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab # repeat from above
+
+    $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; }) # 1803 only?
+
+    $osVersion = Get-OperatingSystemVersion
+
+    if($osVersion.Major -ge 10) {
+        $releaseId = Get-OperatingSystemReleaseId
+    }
+
+    if ($osVersion.Major -ge 10 -and $releaseId -ge 1803) {
+        $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 200; })
+    }
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-          $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }  
 
