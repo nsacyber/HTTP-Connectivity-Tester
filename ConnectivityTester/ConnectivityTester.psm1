@@ -132,7 +132,11 @@ Function Get-BlueCoatSiteReview() {
     Param (
         [Parameter(Mandatory=$true, HelpMessage='The URL to get BlueCoat Site Review information for.')]
         [ValidateNotNullOrEmpty()]
-        [Uri]$Url
+        [Uri]$Url,
+
+        [Parameter(Mandatory=$false, HelpMessage='The user agent')]
+        [ValidateNotNullOrEmpty()]        
+        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
     )
 
     $siteReviewData = $null
@@ -146,7 +150,7 @@ Function Get-BlueCoatSiteReview() {
         Method = 'POST';
         ProxyUseDefaultCredentials = (([string]$proxyUri) -ne $uri);
         UseBasicParsing = $true;
-        UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.168 Safari/537.36'
+        UserAgent = $UserAgent;
         ContentType = 'text/plain';
         Body =  @{url = $uri};
         Verbose = $false
@@ -401,6 +405,14 @@ Function Get-Connectivity() {
         [ValidateNotNullOrEmpty()]
         [int]$ExpectedStatusCode = 200,
 
+        [Parameter(Mandatory=$false, HelpMessage='The description of the connectivity scenario')]
+        [ValidateNotNullOrEmpty()]        
+        [string]$Description,        
+
+        [Parameter(Mandatory=$false, HelpMessage='The user agent')]
+        [ValidateNotNullOrEmpty()]        
+        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+
         [Parameter(Mandatory=$false, HelpMessage='Whether to ignore certificate validation errors')]
         [switch]$IgnoreCertificateValidationErrors,
         
@@ -454,7 +466,7 @@ Function Get-Connectivity() {
     $request = [Net.WebRequest]::CreateHttp($testUri)
     $request.Proxy = if ($testUri -ne $proxyUri) { [Net.WebRequest]::DefaultWebProxy } else { $null }
     $request.UseDefaultCredentials = ($testUri -ne $proxyUri)
-    $request.UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+    $request.UserAgent = $UserAgent;
     $request.Method = $Method
     $request.ServerCertificateValidationCallback = $RemoteCertificateValidationCallback
 
@@ -489,7 +501,7 @@ Function Get-Connectivity() {
     $hasServerCertificateError = if ($script:ServerCertificateError -eq $null) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
 
     $serverCertificateErrorMessage = ''
-    
+
     if ($testUri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
         $serverCertificateErrorMessage = Get-CertificateErrorMessage -Url $testUri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
     }
@@ -501,7 +513,7 @@ Function Get-Connectivity() {
 
     $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
 
-    $connectivitySummary = ('{0}Url: {1}{2}Addresses: {3}{4}Aliases: {5}{6}Actual Status: {7}{8}Expected Status: {9}{10}Status Matched: {11}{12}Status Message: {13}{14}Blocked: {15}{16}Certificate Error: {17}{18}Certificate Error Message: {19}{20}Ignore Certificate Validation Errors: {21}{22}{23}' -f $newLine,$testUri,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
+    $connectivitySummary = ('{0}Url: {1}{2}Description: {3}{4}Addresses: {5}{6}Aliases: {7}{8}Actual Status: {9}{10}Expected Status: {11}{12}Status Matched: {13}{14}Status Message: {15}{16}Blocked: {17}{18}Certificate Error: {19}{20}Certificate Error Message: {21}{22}Ignore Certificate Validation Errors: {23}{24}{25}' -f $newLine,$testUri,$newLine,$Description,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
    
     $bluecoat = $null
