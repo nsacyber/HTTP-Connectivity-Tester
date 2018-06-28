@@ -35,6 +35,7 @@ Function Get-WDAVConnectivity() {
 
     # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus
 
+    $data.Add([pscustomobject]@{ TestUrl = 'https://unitedstates.cp.wd.microsoft.com'; StatusCode = 503; IgnoreCertificateValidationErrors=$ignore }) # appears to be the replacement for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062. Seems related to HKLM\SOFTWARE\Microsoft\Windows Defender\Features\    GeoPreferenceId = 'US'
     $data.Add([pscustomobject]@{ TestUrl = 'https://wdcp.microsoft.com'; StatusCode = 503; IgnoreCertificateValidationErrors=$ignore }) # cloud-delivered protection service aka MAPS https://cloudblogs.microsoft.com/enterprisemobility/2016/05/31/important-changes-to-microsoft-active-protection-service-maps-endpoint/
     $data.Add([pscustomobject]@{ TestUrl = 'https://wdcpalt.microsoft.com'; StatusCode = 503; IgnoreCertificateValidationErrors=$ignore}) # cloud-delivered protection service aka MAPS https://cloudblogs.microsoft.com/enterprisemobility/2016/05/31/important-changes-to-microsoft-active-protection-service-maps-endpoint/
     $data.Add([pscustomobject]@{ TestUrl = 'https://update.microsoft.com'; StatusCode = 200; IgnoreCertificateValidationErrors=$true }) # changed to "update" from "updates due to possible typo of "updates" on Microsoft's page
