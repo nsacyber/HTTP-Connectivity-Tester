@@ -56,77 +56,7 @@ Function Get-ErrorMessage() {
     }
 }
 
-# locked URL result
-# --------------------------------------------------------------------------------------------------------------------
-# url                 : https://url.com
-# unrated             : False
-# curtrackingid       : 622805
-# locked              : True
-# locked_message      : This Web page matches a list of high-profile URLs which are rated correctly and will not be
-#                       rated differently, thus it cannot be submitted via this page.
-# locked_special_note :
-# multiple            : False
-# ratedate            : Last Time Rated/Reviewed: > 7 days <img
-#                       onmouseover='document.getElementById("dtsDiv").style.display="block";'
-#                       onmouseout='document.getElementById("dtsDiv").style.display="none";'src='images/info24.gif'
-#                       width=10 height=10></img><div id='dtsDiv' style='background-color: white; position:absolute;
-#                       display:none'><table cellspacing="0" cellpadding="4" width="600" style="border: 1px solid
-#                       black;"><thead><th  bgcolor=003366>&nbsp;</th></thead><tbody><tr><td class='bodytext'>The URL
-#                       submitted for review was rated more than 7 days ago.  The default setting for Symantec SG
-#                       clients to download rating changes is once a day.  There is no need to show ratings older than
-#                       this.<br><br>Since Symantec&#39;s desktop client K9 and certain OEM partners update differently,
-#                       ratings may differ from those of a Symantec SG as well as those present on the Site Review
-#                       Tool.</td></tr></tbody></table></div>
-# categorization      : <a href="javascript:showPopupWindow('catdesc.jsp?catnum=38')">Technology/Internet</a> and <a
-#                       href="javascript:showPopupWindow('catdesc.jsp?catnum=88')">Web Ads/Analytics</a>
-# threatrisklevel     :
-# threatrisklevel_en  :
-# linkable            : True
-
-# multiple submission result
-# ------------------------------------------------------------------------------------------------------------------
-# url                : http://url.com
-# unrated            : False
-# curtrackingid      : 692018
-# locked             : False
-# multiple           : True
-# multiple_message   : Only a single submission per site is needed unless the content differs.  A pending related submission already exists.; 
-# ratedate           : This page was rated by our WebPulse system; 
-# categorization     : <a href="javascript:showPopupWindow('catdesc.jsp?catnum=38')">Technology/Internet</a>; 
-# threatrisklevel    :
-# threatrisklevel_en :
-# linkable           : True
-
-# unlocked URL result (locked_message and locked_special_note are missing)
-# --------------------------------------------------------------------------------------------------------------------
-# url                : http://url.com
-# unrated            : False
-# curtrackingid      : 690630
-# locked             : False
-# multiple           : False
-# ratedate           : This page was rated by our WebPulse system
-# categorization     : <a href="javascript:showPopupWindow('catdesc.jsp?catnum=38')">Technology/Internet</a>
-# threatrisklevel    : 
-# threatrisklevel_en : 
-# linkable           : True
-
-# rate limit exceeded result
-# --------------------------------------------------------------------------------------------------------------------
-# url       : http://url.com
-# error     : Please complete the CAPTCHA
-# errorType : captcha  
-
 Function Get-BlueCoatSiteReview() {
-    <#
-    .SYNOPSIS
-    Gets BlueCoat Site Review data for a URL.
-
-    .DESCRIPTION
-    Gets BlueCoat Site Review data for a URL.
-
-    .EXAMPLE
-    Get-BlueCoatSiteReview -Url http://www.site.com
-    #>
     [CmdletBinding()]
     [OutputType([psobject])]
     Param (
@@ -134,96 +64,123 @@ Function Get-BlueCoatSiteReview() {
         [ValidateNotNullOrEmpty()]
         [Uri]$Url,
 
-        [Parameter(Mandatory=$false, HelpMessage='The user agent')]
-        [ValidateNotNullOrEmpty()]        
-        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
+        [Parameter(Mandatory=$false, HelpMessage='The user agent.')]
+        [ValidateNotNullOrEmpty()]
+        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36',
+
+        [Parameter(Mandatory=$false, HelpMessage='Disable throttling.')]
+        [switch]$NoThrottle
     )
+
+    if ($Url.OriginalString.ToLower().StartsWith('http://') -or $Url.OriginalString.ToLower().StartsWith('https://')) {
+        $testUri = $Url
+    } else {
+        $testUri = [Uri]('http://{0}' -f $Url.OriginalString)
+    }  
+
+    $newLine = [System.Environment]::NewLine
+
+    $throttle = !$NoThrottle
+    
+    if ($throttle) {
+        $global:rateLimitCount++
+
+        if($global:rateLimitCount -gt 10) {
+            $nowTime = [DateTime]::Now
+            $resumeTime = $nowTime.AddSeconds($global:sleepSeconds)
+
+            Write-Verbose -Message ('Paused for {0} seconds. Current time: {1} Resume time: {2}' -f $global:sleepSeconds,$nowTime,$resumeTime)
+
+            Start-Sleep -Seconds $global:sleepSeconds
+  
+            $nowTime = [DateTime]::Now
+
+            Write-Verbose -Message ('Resumed at {0}' -f $nowTime)
+
+            $global:rateLimitCount = 1 # needs to be 1 since BlueCoat Site Review API is called when exiting this if statement. If left at 0, then will hit the rate limit on successive calls to this cmdlet
+        }
+    }
 
     $siteReviewData = $null
 
-    $uri = $Url
+    $uri = $testUri
 
     $proxyUri = [System.Net.WebRequest]::GetSystemWebProxy().GetProxy($uri)
 
     $params = @{
-        Uri = 'https://sitereview.bluecoat.com/rest/categorization';
+        Uri = 'https://sitereview.bluecoat.com/resource/lookup';
         Method = 'POST';
         ProxyUseDefaultCredentials = (([string]$proxyUri) -ne $uri);
         UseBasicParsing = $true;
-        UserAgent = $UserAgent;
-        ContentType = 'text/plain';
-        Body =  @{url = $uri};
+        UserAgent = $UserAgent
+        ContentType = 'application/json';
+        Body = (@{url = $uri; captcha = ''} | ConvertTo-Json);
+        Headers = @{Referer = 'https://sitereview.bluecoat.com'} ;
         Verbose = $false
     }
 
     if (([string]$proxyUri) -ne $uri) {
-        $params.Add('Proxy',$proxyUri)
+       $params.Add('Proxy',$proxyUri)
     }
 
     $ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
 
     $statusCode = 0
+    $statusDescription = ''
 
     try {
         $response = Invoke-WebRequest @params
 
         $statusCode = $response.StatusCode 
     } catch [System.Net.WebException] {
-        throw "BlueCoat Site Review request for $Url failed with status code $statusCode"
+        $statusCode = [int]$_.Exception.Response.StatusCode
+        $statusDescription = $_.Exception.Response.StatusDescription
     }
 
-    if ($statusCode -eq 200) {
-        $returnedJson = $response.Content | ConvertFrom-Json
-
-        Write-Debug -Message ('JSON: {0}' -f $returnedJson)
-
-        if ($returnedJson.PSObject.Properties.Name -contains 'errorType') {
-            $m = 'Error retrieving Blue Coat data. Error Type: {0} Error Message: {1}' -f $returnedJson.errorType, $returnedJson.error
-            throw $m
-        } else {
-
-            $cats = @{}
-
-            $categoryParts = [string[]]@($returnedJson.categorization -split 'and')
-
-            $categoryParts | ForEach-Object {
-                $catMatched = $_ -match ".*(catdesc\.jsp\?catnum=\d*).*>(.*)</a>.*"
-
-                $name = ''
-                $link = ''
-
-                if($catMatched -and $matches.Count -ge 3) {
-                    $name = $matches[2].Trim()
-                    $link = '{0}/{1}' -f 'https://sitereview.bluecoat.com',$matches[1].Trim()
-                    $cats.Add($name, $link)
-                }
-            }
-
-            $dateMatched = $returnedJson.ratedate -match 'Last Time Rated/Reviewed:\s*(.+)\s*<img.*' 
-
-            $lastRated = ''
-
-            if($dateMatched -and $matches.Count -ge 2) {
-                $lastRated = $matches[1].Trim()
-            }
-
-            $siteReviewData = [pscustomobject]@{
-                SubmittedUri = $Uri;
-                ReturnedUri = [System.Uri]$returnedJson.url;
-                IsRated = -not([bool]$returnedJson.unrated);
-                LastedRated = $lastRated;
-                IsLocked = [bool]$returnedJson.locked;
-                LockMessage = if ([bool]$returnedJson.locked) { [string]$returnedJson.locked_message } else { '' };
-                IsPending = [bool]$returnedJson.multiple;
-                PendingMessage = if ([bool]$returnedJson.multiple) { [string]$returnedJson.multiple_message } else { '' };
-                Categories = $cats;
-            }
-        }
-    } else {
-        throw "Request failed with status code $statusCode"
+    if ($statusCode -ne 200) {
+        throw "BlueCoat Site Review REST API request failed. Status code: $statusCode Status description: $statusDescription"
     }
 
-    return $siteReviewData
+    $returnedJson = $response.Content
+
+    #Write-Verbose -Message ('JSON: {0}' -f $returnedJson)
+
+    $siteReview = $returnedJson | ConvertFrom-Json 
+
+    if ($siteReview.PSObject.Properties.Name -contains 'errorType') {
+        throw ('Error retrieving Blue Coat data. Error Type: {0} Error Message: {1}' -f $siteReview.errorType, $siteReview.error)
+    } 
+    
+    $cats = @{}
+
+    $siteReview.categorization | ForEach-Object {
+        $link = ('https://sitereview.bluecoat.com/catdesc.jsp?catnum={0}' -f $_.num)
+        $cats.Add($_.name,$link)
+    }
+
+    $dateMatched = $siteReview.rateDate -match 'Last Time Rated/Reviewed:\s*(.+)\s*{{.*'
+
+    $lastRated = ''
+
+    if($dateMatched -and $matches.Count -ge 2) {
+        $lastRated = $matches[1].Trim()
+    }
+
+    $siteReviewObject = [pscustomobject]@{
+        SubmittedUri = $Uri;
+        ReturnedUri = [System.Uri]$siteReview.url;
+        IsRated = $siteReview.unrated -eq 'false'
+        LastedRated = $lastRated;
+        IsLocked = $siteReview.locked -eq 'true';
+        LockMessage = if ($siteReview.locked -eq 'true') {[string]$siteReview.lockedMessage} else {''};
+        IsPending = $siteReview.multiple -eq 'true';
+        PendingMessage = if ($siteReview.multiple -eq 'true') {[string]$siteReview.multipleMessage} else {''};
+        Categories = $cats;
+    }
+
+    Write-Verbose -Message ('{0}Rated: {1}{2}Last Rated: {3}{4}Locked: {5}{6}Lock Message: {7}{8}Pending: {9}{10}Pending Message: {11}{12}Categories: {13}{14}{15}' -f $newLine,$siteReviewObject.IsRated,$newLine,$siteReviewObject.LastedRated,$newLine,$siteReviewObject.IsLocked,$newLine,$siteReviewObject.LockMessage,$newLine,$siteReviewObject.IsPending,$newLine,$siteReviewObject.PendingMessage,$newLine,($siteReviewObject.Categories.Keys -join ','),$newLine,$newLine)
+
+    return $siteReviewObject
 }
 
 Function Get-IPAddress() {
@@ -520,28 +477,7 @@ Function Get-Connectivity() {
 
     if ($PerformBluecoatLookup) { 
         try {
-
-            $global:rateLimitCount++
-
-            if($global:rateLimitCount -gt 10) {
-                $nowTime = [DateTime]::Now
-                $resumeTime = $nowTime.AddSeconds($global:sleepSeconds)
-
-                Write-Verbose -Message ('Paused for {0} seconds. Current time: {1} Resume time: {2}' -f $global:sleepSeconds,$nowTime,$resumeTime)
-
-                Start-Sleep -Seconds $global:sleepSeconds
-                
-                $nowTime = [DateTime]::Now
-                
-                Write-Verbose -Message ('Resumed at {0}' -f $nowTime)
-
-                $global:rateLimitCount = 1 # needs to be 1 since BlueCoat Site Review API is called when exiting this if statement. If left at 0, then will hit the rate limit on successive calls to this cmdlet
-            }
-
             $bluecoat = Get-BlueCoatSiteReview -Url $testUri -Verbose:$isVerbose
-            $bluecoatSummary = ('{0}Rated: {1}{2}Last Rated: {3}{4}Locked: {5}{6}Lock Message: {7}{8}Pending: {9}{10}Pending Message: {11}{12}Categories: {13}{14}{15}' -f $newLine,$bluecoat.IsRated,$newLine,$bluecoat.LastedRated,$newLine,$bluecoat.IsLocked,$newLine,$bluecoat.LockMessage,$newLine,$bluecoat.IsPending,$newLine,$bluecoat.PendingMessage,$newLine,($bluecoat.Categories.Keys -join ','),$newLine,$newLine)
-
-            Write-Verbose -Message $bluecoatSummary
         } catch { 
             Write-Verbose -Message $_
         } 
