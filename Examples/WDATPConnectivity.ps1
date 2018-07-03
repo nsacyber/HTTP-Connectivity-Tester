@@ -102,13 +102,13 @@ Function Get-WDATPConnectivity() {
 
     # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; }) # dashboard
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; }) # dashboard
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; Description=''; }) # dashboard
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; Description=''; }) # dashboard
     $data.Add([pscustomobject]@{ TestUrl = 'http://crl.microsoft.com'; StatusCode = 400; })
     $data.Add([pscustomobject]@{ TestUrl = 'http://ctldl.windowsupdate.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
-    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description=''; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
+    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description=''; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description=''; })
 
     # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 05/03/2018:
 
@@ -117,27 +117,32 @@ Function Get-WDATPConnectivity() {
     #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-weu.microsoft.com/test'; StatusCode = 200; }) # europe
     #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-neu.microsoft.com/test'; StatusCode = 200; }) # europe
     #$data.Add([pscustomobject]@{ TestUrl = 'https://eu.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 400; }) # europe
-    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; Description=''; }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
     # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab # repeat from above
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; }) # 1803 only?
-
-    $osVersion = Get-OperatingSystemVersion
-
-    if($osVersion.Major -ge 10) {
-        $releaseId = Get-OperatingSystemReleaseId
-    }
-
-    if ($osVersion.Major -ge 10 -and $releaseId -ge 1803) {
-        $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 200; })
-    }
+    $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; Description=''; }) # 1803 only?
+    $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803 only
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
         $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
-    }  
+    }
+
+    $authenticatedProxyValue = Get-ItemProperty 'HKLM:\Software\Policies\Microsoft\Windows\DataCollection' | Select-Object -Property DisableEnterpriseAuthProxy -ExpandProperty DisableEnterpriseAuthProxy -ErrorAction SilentlyContinue
+
+    $useAuthenticatedProxy = $authenticatedProxyValue -eq $null -or $authenticatedProxyValue -eq 0
+
+    $isRunningAsSystem = [bool](&"$env:systemroot\system32\whoami.exe" | Select-String -Pattern '^nt authority\\system$' -Quiet) #$env:username -eq "$env:computername$"
+
+    if ($useAuthenticatedProxy -and $isRunningAsSystem) {
+        Write-Warning -Message 'This script must be run as a user to ensure accurate results since the diagnostic tracking service is configured to use a user authenticating proxy'
+    }
+
+    if (!$useAuthenticatedProxy -and !$isRunningAsSystem) {
+        Write-Warning -Message 'This script must be run as SYSTEM to ensure accurate results since the diagnostic tracking service is not configured to use a user authenticating proxy'
+    }
 
     return $results
 }
