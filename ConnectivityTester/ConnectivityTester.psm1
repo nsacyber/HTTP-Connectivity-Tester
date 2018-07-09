@@ -363,8 +363,8 @@ Function Get-Connectivity() {
         [int]$ExpectedStatusCode = 200,
 
         [Parameter(Mandatory=$false, HelpMessage='The description of the connectivity scenario')]
-        [ValidateNotNullOrEmpty()]        
-        [string]$Description,        
+        [ValidateNotNull()]        
+        [string]$Description = '',        
 
         [Parameter(Mandatory=$false, HelpMessage='The user agent')]
         [ValidateNotNullOrEmpty()]        
@@ -487,6 +487,7 @@ Function Get-Connectivity() {
         TestUrl = $testUri;
         Addresses = [string[]]$address;
         Aliases = [string[]]$alias;
+        Description = $Description;
         ActualStatusCode = [int]$actualStatusCode;
         ExpectedStatusCode = $ExpectedStatusCode;
         StatusMatched = $statusMatch;

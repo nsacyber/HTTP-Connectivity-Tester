@@ -14,7 +14,7 @@ Import-Module -Name ConnectivityTester -Force
 
 # to filter results or save them to a file:
 # $connectivity = Get-WDATPConnectivity -Verbose -PerformBlueCoatLookup
-# $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,TestUrl
+# $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,TestUrl,Description
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 
@@ -102,31 +102,39 @@ Function Get-WDATPConnectivity() {
 
     # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; Description=''; }) # dashboard
-    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; Description=''; }) # dashboard
-    $data.Add([pscustomobject]@{ TestUrl = 'http://crl.microsoft.com'; StatusCode = 400; })
-    $data.Add([pscustomobject]@{ TestUrl = 'http://ctldl.windowsupdate.com'; StatusCode = 200; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description=''; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
-    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description=''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description=''; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; Description='*.blob.core.windows.net - Eastern US data center'; }) # dashboard
+    $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; Description='*.blob.core.windows.net - Central US data center'; }) # dashboard
+    $data.Add([pscustomobject]@{ TestUrl = 'http://crl.microsoft.com'; StatusCode = 400; Description='Microsoft Certificate Revocation List responder URL'; })
+    $data.Add([pscustomobject]@{ TestUrl = 'http://ctldl.windowsupdate.com'; StatusCode = 200; Description='Microsoft Certificate Trust List download URL'; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; Description=''; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description='WDATP data channel'; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
+    #$data.Add([pscustomobject]@{ TestUrl = 'https://v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803+ might be a Windows Analytics URL
+    $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803+ 
+    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel - Eastern US data center'; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel - Central US data center'; })
 
-    # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 05/03/2018:
-
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; }) # repeat from above
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; }) # repeat from above
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-weu.microsoft.com/test'; StatusCode = 200; }) # europe
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-neu.microsoft.com/test'; StatusCode = 200; }) # europe
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://eu.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 400; }) # europe
     $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; Description=''; }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
-    # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab # repeat from above
-
-    $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; Description=''; }) # 1803 only?
-    $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803 only
+    
+    # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 07/05/2018:   
+    # https://winatp-gw-cus.microsoft.com/test
+    # https://winatp-gw-eus.microsoft.com/test
+    # https://winatp-gw-weu.microsoft.com/test
+    # https://winatp-gw-neu.microsoft.com/test
+    # https://winatp-gw-uks.microsoft.com/test
+    # https://winatp-gw-ukw.microsoft.com/test
+    # https://eu.vortex-win.data.microsoft.com/health/keepalive
+    # https://us.vortex-win.data.microsoft.com/health/keepalive
+    # https://uk.vortex-win.data.microsoft.com/health/keepalive
+    # https://events.data.microsoft.com
+    # https://us-v20.events.data.microsoft.com
+    # https://eu-v20.events.data.microsoft.com
+    # https://uk-v20.events.data.microsoft.com
+    # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab	NoPinning
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }
 
