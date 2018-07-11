@@ -465,12 +465,13 @@ Function Get-Connectivity() {
 
     $address = Get-IPAddress -Url $testUri -Verbose:$false
     $alias = Get-IPAlias -Url $testUri -Verbose:$false
+    $resolved = (@($address)).Length -ge 1 -or (@($alias)).Length -ge 1
     $actualStatusCode = [int]$statusCode
-    $isBlocked = $statusCode -eq 0
+    $isBlocked = $statusCode -eq 0 -and $resolved
 
     $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
 
-    $connectivitySummary = ('{0}Url: {1}{2}Description: {3}{4}Addresses: {5}{6}Aliases: {7}{8}Actual Status: {9}{10}Expected Status: {11}{12}Status Matched: {13}{14}Status Message: {15}{16}Blocked: {17}{18}Certificate Error: {19}{20}Certificate Error Message: {21}{22}Ignore Certificate Validation Errors: {23}{24}{25}' -f $newLine,$testUri,$newLine,$Description,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
+    $connectivitySummary = ('{0}Url: {1}{2}Description: {3}{4}Resolved: {5}{6}Addresses: {7}{8}Aliases: {9}{10}Actual Status: {11}{12}Expected Status: {13}{14}Status Matched: {15}{16}Status Message: {17}{18}Blocked: {19}{20}Certificate Error: {21}{22}Certificate Error Message: {23}{24}Ignore Certificate Validation Errors: {25}{26}{27}' -f $newLine,$testUri,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
    
     $bluecoat = $null
@@ -485,6 +486,7 @@ Function Get-Connectivity() {
 
     $connectivity = [pscustomobject]@{
         TestUrl = $testUri;
+        Resolved = $resolved;
         Addresses = [string[]]$address;
         Aliases = [string[]]$alias;
         Description = $Description;
