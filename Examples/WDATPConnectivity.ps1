@@ -23,75 +23,6 @@ Import-Module -Name ConnectivityTester -Force
 # $connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,TestUrl,Description
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
-
-Function Get-OperatingSystemReleaseId() {
-    <#
-    .SYNOPSIS
-    Gets the operating system release identifier.
-
-    .DESCRIPTION
-    Gets the Windows 10 operating system release identifier (e.g. 1507, 1511, 1607).
-
-    .EXAMPLE
-    Get-OperatingSystemReleaseId
-    #>
-    [CmdletBinding()]
-    [OutputType([UInt32])]
-    Param()
-
-    $release = [UInt32](Get-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows NT\CurrentVersion' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'ReleaseId' -ErrorAction SilentlyContinue)
-
-    return $release
-}
-
-Function Get-OperatingSystemVersion() {
-    <#
-    .SYNOPSIS
-    Gets the operating system version.
-
-    .DESCRIPTION
-    Gets the operating system version.
-
-    .EXAMPLE
-    Get-OperatingSystemVersion
-    #>
-    [CmdletBinding()]
-    [OutputType([System.Version])]
-    Param()
-
-    $major = 0
-    $minor = 0
-    $build = 0
-    $revision = 0
-
-    $currentVersionPath = 'HKLM:\Software\Microsoft\Windows NT\CurrentVersion'
-
-    $isWindows10orLater = $null -ne (Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentMajorVersionNumber' -ErrorAction SilentlyContinue)
-
-    if($isWindows10orLater) {
-        $major = [Uint32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentMajorVersionNumber' -ErrorAction SilentlyContinue)
-        $minor = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentMinorVersionNumber' -ErrorAction SilentlyContinue)
-        $build = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentBuildNumber' -ErrorAction SilentlyContinue)
-        $revision = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'UBR' -ErrorAction SilentlyContinue)
-
-        if ($revision -eq 0) {
-            $revision = 1507
-        }
-    } else {
-        $major = [Uint32]((Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentVersion' -ErrorAction SilentlyContinue) -split '\.')[0]
-        $minor = [UInt32]((Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentVersion' -ErrorAction SilentlyContinue) -split '\.')[1]
-        $build = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CurrentBuild' -ErrorAction SilentlyContinue)      
-        $revision = [UInt32](Get-ItemProperty -Path $currentVersionPath -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'UBR' -ErrorAction SilentlyContinue) # might exist on fully patched 8.1
-
-        # get service pack version number for downlevel OSes. no SP installed, then registry value doesn't exist. Otherwise the value is 0x100, 0x200, etc
-        if ($revision -eq 0) {
-            $revision = ([UInt32](Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Windows' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty 'CSDVersion' -ErrorAction SilentlyContinue)) -shr 2
-        }
-    }
-
-    return [System.Version]('{0}.{1}.{2}.{3}' -f $major,$minor,$build,$revision)
-}
-
 Function Get-WDATPConnectivity() {
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
@@ -120,7 +51,7 @@ Function Get-WDATPConnectivity() {
         $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; Description=''; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description='WDATP data channel'; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
         #$data.Add([pscustomobject]@{ TestUrl = 'https://v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803+ might be a Windows Analytics URL
-        $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803+ 
+        $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 404; Description=''; }) # 1803+ 
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel - Eastern US data center'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel - Central US data center'; })
 
@@ -129,7 +60,7 @@ Function Get-WDATPConnectivity() {
         # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 07/05/2018:   
         # https://winatp-gw-cus.microsoft.com/test
         # https://winatp-gw-eus.microsoft.com/test
-        # https://winatp-gw-weu.microsoft.com/test
+        # https://winatp-gw-weu.microsoft.com/test 
         # https://winatp-gw-neu.microsoft.com/test
         # https://winatp-gw-uks.microsoft.com/test
         # https://winatp-gw-ukw.microsoft.com/test
@@ -144,9 +75,11 @@ Function Get-WDATPConnectivity() {
     }
     
     if ($UrlType.ToLower() -in @('all','securitycenter')) {
+        $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; StatusCode = 400; Description='https://*.blob.core.windows.net - Azure Blob storage. Eastern US data center'; }) # onboarding package download URL, there are other sub domains for other resources
+        $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; StatusCode = 400; Description='https://*.blob.core.windows.net - Azure Blob storage. Central US data center'; }) # onboarding package download URL, there are other sub domains for other resources
         $data.Add([pscustomobject]@{ TestUrl = 'https://securitycenter.windows.com'; StatusCode = 200; Description='Windows Defender Security Center'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://login.windows.net/'; StatusCode = 200; Description='Azure AD authentication'; })
-        #$data.Add([pscustomobject]@{ TestUrl = 'https://securitycenter.onmicrosoft.com '; StatusCode = 400; Description='Windows Defender Security Center instance'; })
+        # $data.Add([pscustomobject]@{ TestUrl = 'https://securitycenter.onmicrosoft.com'; StatusCode = 400; Description='Windows Defender Security Center instance'; }) # DNS failure
         $data.Add([pscustomobject]@{ TestUrl = 'https://secure.aadcdn.microsoftonline-p.com'; StatusCode = 400; Description='https://*.microsoftonline-p.com - Azure AD Connect / Azure MFA / Azure ADFS'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://login.microsoftonline.com'; StatusCode = 200; Description='Azure AD authentication'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatpmanagement-us.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
@@ -156,15 +89,15 @@ Function Get-WDATPConnectivity() {
         $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR Central US data center'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
         # $data.Add([pscustomobject]@{ TestUrl = 'https://dc.services.visualstudio.com'; StatusCode = 404; Description='Azure Application Insights'; }) # https://dc.services.visualstudio.com/v2/track
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; StatusCode = 403; Description='https://*.securitycenter.windows.com'; })
     }
     
+    $uniqueUrls = @($data | Select-Object -Property TestUrl -ExpandProperty TestUrl -Unique)   
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
-    $data | ForEach-Object {
+    $data | Where-Object {$_.TestUrl -in $uniqueUrls } | ForEach-Object {
         $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }

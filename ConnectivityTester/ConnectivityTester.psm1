@@ -493,7 +493,7 @@ Function Get-Connectivity() {
         StatusMatched = $statusMatch;
         StatusMessage = $statusMessage;
         IsBlocked = $isBlocked;
-        ServerCertificate = $script:ServerCertificate;
+        ServerCertificate = $script:ServerCertificate | Select-Object -Property * -ExcludeProperty RawData; # RawData property makes JSON files to large when calling Save-Connectivity
         ServerCertificateChain = $script:ServerCertificateChain;
         ServerCertificateError = $script:ServerCertificateError;
         ServerCertificateErrorMessage = $serverCertificateErrorMessage;
@@ -536,7 +536,7 @@ Function Save-Connectivity() {
     if (-not(Test-Path -Path $OutputPath)) {
         New-Item -Path $OutputPath -ItemType Directory
     }
-
+   
     #$fileName = ($targetUrl.OriginalString.Split([string[]][IO.Path]::GetInvalidFileNameChars(),[StringSplitOptions]::RemoveEmptyEntries)) -join '-'
     $json = $Results | ConvertTo-Json -Depth 3 -Compress:$Compress
     $json | Out-File -FilePath "$OutputPath\$FileName.json" -NoNewline -Force
