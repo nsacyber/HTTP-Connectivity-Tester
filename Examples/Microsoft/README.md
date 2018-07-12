@@ -1,7 +1,7 @@
 ## Microsoft connectivity tests
 
 | Product / Service | File |
-| -- | -- | -- |
+| -- | -- |
 | [Windows Analytics Update Compliance](./WindowsAnalytics/) | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpdateComplianceConnectivity.psm1) |
 | [Windows Analytics Upgrade Readiness](./WindowsAnalytics/) | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpgradeReadinessConnectivity.psm1) |
 | [Windows Defender Antivirus](./WindowsDefenderAntiVirus/) | [WDAVConnectivity.psm1](./WindowsDefenderAntiVirus/WDAVConnectivity.psm1) |
