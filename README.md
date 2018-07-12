@@ -59,14 +59,14 @@ Extract the downloaded zip file and install the ConnectivityTester PowerShell mo
 1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is the ConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow [modules to be installed](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx#Where%20to%20Install%20Modules) at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
 1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
 1. Close the PowerShell prompt and open a new PowerShell prompt
-1. Go to the **Examples folder** `cd .\Examples` from the extracted download
+1. Go to the Examples folder `cd .\Examples` from the extracted download
 1. Go to the vendor specific folder `cd .\Microsoft`
 1. Go to the product/service specific folder `cd .\WindowsTelemetry\`
 1. Import the product/service specific connectivity test `Import-Module -Name .\WindowsTelemetryConnectivity.psm1`
 
 
 ### Running the code
-Call the main Get- (e.g. `Get-WindowsTelemetryConnectivity`) command after importing the product/service specific connectivity test. The main Get- command to execute for each connectivity test in the [examples folder](./Examples) is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. **Get-_FileName_**). The main Get- command is **Get-WindowsTelemetryConnectivity** for the WindowsTelemetryConnectivity.ps1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.ps1 file.
+Call the main Get- (e.g. `Get-WindowsTelemetryConnectivity`) command after importing the product/service specific connectivity test to execute the test. The main Get- command is named after the file name. For example, **Get-WindowsTelemetryConnectivity** is the main Get- command for the WindowsTelemetryConnectivity.psm1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.psm1 file.
 
 
 The main Get- command for each connectivity test supports the same common options:
@@ -104,7 +104,7 @@ The connectivity object can be saved to a JSON file using the **Save-Connectivit
 A number of different connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
 
 | Vendor | Product / Service | More Information |
-| -- | -- | -- | -- |
+| -- | -- | -- | 
 | [Microsoft](./Examples/Microsoft/) | Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./Examples/Microsoft/WindowsAnalytics/) | 
 | [Microsoft](./Examples/Microsoft/) | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | Windows Defender Antivirus | [WDAVConnectivity.ps1](./Examples/Microsoft/WindowsDefenderAntiVirus/) |

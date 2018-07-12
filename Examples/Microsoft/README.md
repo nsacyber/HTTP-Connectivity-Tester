@@ -2,9 +2,9 @@
 
 | Product / Service | File | Get Command |
 | -- | -- | -- |
-| Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.ps1](./WindowsAnalytics/WindowsAnalyticsUpdateComplianceConnectivity.ps1) | Get-WindowsAnalyticsUpdateComplianceConnectivity |
-| Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.ps1](./WindowsAnalytics/WindowsAnalyticsUpgradeReadinessConnectivity.ps1) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
-| Windows Defender Antivirus | [WDAVConnectivity.ps1](./WindowsDefenderAntiVirus/WDAVConnectivity.ps1) | Get-WDAVConnectivity |
-| Windows Defender Advanced Threat Protection | [WDATPConnectivity.ps1](./WindowsDefenderAdvancedThreatProtection/WDATPConnectivity.ps1) | Get-WDATPConnectivity |
-| Windows Defender SmartScreen | [WDSSConnectivity.ps1](./WindowsDefenderSmartScreen/WDSSConnectivity.ps1) | Get-WDSSConnectivity |
-| Windows Telemetry | [WindowsTelemetryConnectivity.ps1](./WindowsTelemetry/WindowsTelemetryConnectivity.ps1) | Get-WindowsTelemetryConnectivity |
+| Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpdateComplianceConnectivity.psm1) | Get-WindowsAnalyticsUpdateComplianceConnectivity |
+| Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpgradeReadinessConnectivity.ps1m) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
+| Windows Defender Antivirus | [WDAVConnectivity.psm1](./WindowsDefenderAntiVirus/WDAVConnectivity.psm1) | Get-WDAVConnectivity |
+| Windows Defender Advanced Threat Protection | [WDATPConnectivity.psm1](./WindowsDefenderAdvancedThreatProtection/WDATPConnectivity.psm1) | Get-WDATPConnectivity |
+| Windows Defender SmartScreen | [WDSSConnectivity.psm1](./WindowsDefenderSmartScreen/WDSSConnectivity.psm1) | Get-WDSSConnectivity |
+| Windows Telemetry | [WindowsTelemetryConnectivity.psm1](./WindowsTelemetry/WindowsTelemetryConnectivity.psm1) | Get-WindowsTelemetryConnectivity |
