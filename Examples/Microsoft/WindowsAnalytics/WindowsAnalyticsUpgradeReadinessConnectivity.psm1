@@ -25,8 +25,6 @@ Function Get-WindowsAnalyticsUpgradeReadinessConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
-
     $isVerbose = $verbosePreference -eq 'Continue'    
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
@@ -46,7 +44,7 @@ Function Get-WindowsAnalyticsUpgradeReadinessConnectivity() {
     #$data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; IgnoreCertificateValidationErrors=$ignore }) # same base URL as a link above, but full URL returns 400 rather than 404 
     #$data.Add([pscustomobject]@{ TestUrl = 'https://vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; IgnoreCertificateValidationErrors=$ignore }) # same base URL as a link above, but full URL returns 200 rather than 404
     #$data.Add([pscustomobject]@{ TestUrl = 'https://settings.data.microsoft.com/qos'; StatusCode = 200; IgnoreCertificateValidationErrors=$ignore })
-    ##$data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com/qos'; StatusCode = 200; IgnoreCertificateValidationErrors=$ignore }) # same base URL as a link above
+    #$data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com/qos'; StatusCode = 200; IgnoreCertificateValidationErrors=$ignore }) # same base URL as a link above
     #$data.Add([pscustomobject]@{ TestUrl = 'https://go.microsoft.com/fwlink/?LinkID=544713'; StatusCode = 400; IgnoreCertificateValidationErrors=$ignore }) # goes to https://compatexchange1.trafficmanager.net/CompatibilityExchangeService.svc/extended
     #$data.Add([pscustomobject]@{ TestUrl = 'https://compatexchange1.trafficmanager.net/CompatibilityExchangeService.svc'; StatusCode = 200; IgnoreCertificateValidationErrors=$ignore })
 

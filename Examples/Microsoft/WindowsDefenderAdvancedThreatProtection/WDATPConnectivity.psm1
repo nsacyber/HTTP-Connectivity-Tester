@@ -88,7 +88,7 @@ Function Get-WDATPConnectivity() {
         $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR Eastern US data center'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR Central US data center'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
-        # $data.Add([pscustomobject]@{ TestUrl = 'https://dc.services.visualstudio.com'; StatusCode = 404; Description='Azure Application Insights'; }) # https://dc.services.visualstudio.com/v2/track
+        #$data.Add([pscustomobject]@{ TestUrl = 'https://dc.services.visualstudio.com'; StatusCode = 404; Description='Azure Application Insights'; }) # https://dc.services.visualstudio.com/v2/track
         $data.Add([pscustomobject]@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; StatusCode = 403; Description='https://*.securitycenter.windows.com'; })
     }

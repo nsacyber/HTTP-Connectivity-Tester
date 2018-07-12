@@ -25,8 +25,6 @@ Function Get-WDSSConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
-
     $isVerbose = $verbosePreference -eq 'Continue'
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
@@ -37,14 +35,14 @@ Function Get-WDSSConnectivity() {
     $data.Add([pscustomobject]@{ TestUrl = 'https://apprep.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://ars.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://c.urs.microsoft.com'; StatusCode = 403; Description = ''; })
-	$data.Add([pscustomobject]@{ TestUrl = 'https://feedback.smartscreen.microsoft.com'; StatusCode = 403; Description = ''; })    
+    $data.Add([pscustomobject]@{ TestUrl = 'https://feedback.smartscreen.microsoft.com'; StatusCode = 403; Description = ''; })    
     $data.Add([pscustomobject]@{ TestUrl = 'https://nav.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://nf.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://ping.nav.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://ping.nf.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })   
     $data.Add([pscustomobject]@{ TestUrl = 'https://t.nf.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })   
     $data.Add([pscustomobject]@{ TestUrl = 'https://t.urs.microsoft.com'; StatusCode = 403; Description = ''; })
-	$data.Add([pscustomobject]@{ TestUrl = 'https://urs.microsoft.com' ; StatusCode = 403; Description = ''; })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://urs.microsoft.com' ; StatusCode = 403; Description = ''; })
     $data.Add([pscustomobject]@{ TestUrl = 'https://urs.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
 
 

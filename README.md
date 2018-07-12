@@ -60,46 +60,57 @@ Extract the downloaded zip file and install the ConnectivityTester PowerShell mo
 1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
 1. Close the PowerShell prompt and open a new PowerShell prompt
 1. Go to the **Examples folder** `cd .\Examples` from the extracted download
-1. Dot source one of the files from the [examples folder](./Examples) `. .\WindowsTelemetryConnectivity.ps1`
+1. Go to the vendor specific folder `cd .\Microsoft`
+1. Go to the product/service specific folder `cd .\WindowsTelemetry\`
+1. Import the product/service specific connectivity test `Import-Module -Name .\WindowsTelemetryConnectivity.psm1`
+
 
 ### Running the code
-Call the main command after loading the file via dot sourcing. The main command to execute for each file in the [examples folder](./Examples) is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. **Get-_FileName_**). The main command is **Get-WindowsTelemetryConnectivity** for the WindowsTelemetryConnectivity.ps1 file. The main command is **Get-WDATPConnectivity** for the WDATPConnectivity.ps1 file.
+Call the main Get- (e.g. `Get-WindowsTelemetryConnectivity`) command after importing the product/service specific connectivity test. The main Get- command to execute for each connectivity test in the [examples folder](./Examples) is named after the filename. Just add **Get-** before the file name and exclude the file extension (e.g. **Get-_FileName_**). The main Get- command is **Get-WindowsTelemetryConnectivity** for the WindowsTelemetryConnectivity.ps1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.ps1 file.
 
 
-The main [Get command for each example](#connectivity-tests) supports the same options for each file:
+The main Get- command for each connectivity test supports the same common options:
 * **-Verbose** - prints verbose output to the console
 * **-PerformBlueCoatLookup** - useful for looking up the rating of a URL when a BlueCoat proxy is being used. A rate limit is enforced for accessing the BlueCoat SiteReview REST API so use this option only when behind a BlueCoat proxy and use it sparingly.
 
-The main command returns a connectivity object that contains properties about the connectivity test. The connectivity object can be saved to a JSON file using the **Save-Connectivity** command from the ConnectivityTester PowerShell module. The Save-Connectivity command supports the following options:
+Some Get- commands support additional unique options that can be discovered by running the built-in **Get-Help** command on the main Get- command (e.g. `Get-Help Get-WindowsTelemetryConnectivity`).
+
+
+**Example**
+
+```
+cd .\Examples\Microsoft\WindowsTelemetry\
+Import-Module -Name .\WindowsTelemetryConnectivity.psm1
+$connectivity = Get-WindowsTelemetryConnectivity -Verbose
+$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+```
+### Interpreting results
+The main Get- command returns a connectivity object that contains more information about the connectivity test. The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or functional are: 
+* **IsBlocked** - whether the service appears to be blocked. Value should be **false**.
+* **TestUrl** - the URL that was used to perform the test. 
+* **Description** - a description of what the URL is for.
+* **Resolved** - whether the URL resolves its DNS entry to IP addresses or DNS aliases. Value should be **true**.
+* **ExpectedStatusCode** - the expected HTTP status code returned by the test. 
+* **ActualStatusCode** - the actual HTTP status code returned by the test. Value will be 0 when IsBlocked is true or Resolved is false.
+
+The connectivity object can be saved to a JSON file using the **Save-Connectivity** command from the ConnectivityTester PowerShell module. The Save-Connectivity command supports the following options:
 * **-Verbose** - prints verbose output to the console
 * **-Results** - the connectivity object, or an array of connectivity objects, to save to a JSON file
 * **-OutputPath** - the path to a folder to save the JSON file to
 * **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to 
 
-**Example**
-
-```
-cd .\Examples
-. .\WindowsTelemetryConnectivity.ps1
-$connectivity = Get-WindowsTelemetryConnectivity -Verbose
-$connectivity | Format-List -Property IsBlocked,ActualStatusCode,ExpectedStatusCode,TestUrl
-Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
-```
-
-The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or not are the **IsBlocked**, **ActualStatusCode**, **ExpectedStatusCode**, and **TestUrl** properties. IsBlocked should be false. ActualStatusCode and ExpectedStatusCode should be the same (non-zero) value. TestUrl should be the URL that was tested. IsBlocked is true and ActualStatusCode is zero when a URL is blocked.
-
-
 ## Connectivity tests
-A number of different connectivity tests have been created in the [examples folder](./Examples). The table below documents the currently implemented tests along with the main Get command.
+A number of different connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
 
-| Vendor | Product / Service | File | Get Command |
+| Vendor | Product / Service | More Information |
 | -- | -- | -- | -- |
-| Microsoft | Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.ps1](./Examples/WindowsAnalyticsUpdateComplianceConnectivity.ps1) | Get-WindowsAnalyticsUpdateComplianceConnectivity |
-| Microsoft | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.ps1](./Examples/WindowsAnalyticsUpgradeReadinessConnectivity.ps1) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
-| Microsoft | Windows Defender Antivirus | [WDAVConnectivity.ps1](./Examples/WDAVConnectivity.ps1) | Get-WDAVConnectivity |
-| Microsoft | Windows Defender Advanced Threat Protection | [WDATPConnectivity.ps1](./Examples/WDATPConnectivity.ps1) | Get-WDATPConnectivity |
-| Microsoft | Windows Defender SmartScreen | [WDSSConnectivity.ps1](./Examples/WDSSConnectivity.ps1) | Get-WDSSConnectivity |
-| Microsoft | Windows Telemetry | [WindowsTelemetryConnectivity.ps1](./Examples/WindowsTelemetryConnectivity.ps1) | Get-WindowsTelemetryConnectivity |
+| [Microsoft](./Examples/Microsoft/) | Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./Examples/Microsoft/WindowsAnalytics/) | 
+| [Microsoft](./Examples/Microsoft/) | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./Examples/Microsoft/WindowsAnalytics/) |
+| [Microsoft](./Examples/Microsoft/) | Windows Defender Antivirus | [WDAVConnectivity.ps1](./Examples/Microsoft/WindowsDefenderAntiVirus/) |
+| [Microsoft](./Examples/Microsoft/) | Windows Defender Advanced Threat Protection | [WDATPConnectivity.psm1](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |
+| [Microsoft](./Examples/Microsoft/) | Windows Defender SmartScreen | [WDSSConnectivity.psm1](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
+| [Microsoft](./Examples/Microsoft/) | Windows Telemetry | [WindowsTelemetryConnectivity.psm1](./Examples/Microsoft/WindowsTelemetry/) |
 
 ## License
 See [LICENSE](./LICENSE.md).

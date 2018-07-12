@@ -25,8 +25,6 @@ Function Get-WDAVConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
-
     $isVerbose = $verbosePreference -eq 'Continue'
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
