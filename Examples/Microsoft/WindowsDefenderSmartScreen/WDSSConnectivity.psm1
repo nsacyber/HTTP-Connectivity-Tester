@@ -1,23 +1,45 @@
 Set-StrictMode -Version 4
 
-#Import-Module -Name .\ConnectivityTester.psm1 -Force
-
 Import-Module -Name ConnectivityTester -Force
 
-# dot source this file 
-# . .\WDSSConnectivity.ps1
+# 1. import this file:
+# Import-Module .\WDSSConnectivity.ps1
 
-# then run one of the following:
-# Get-WDSSConnectivity
-# Get-WDSSConnectivity -Verbose
-# Get-WDSSConnectivity -Verbose -PerformBlueCoatLookup
-
-# to filter results or save them to a file:
+# 2. run one of the following:
+# $connectivity = Get-WDSSConnectivity
+# $connectivity = Get-WDSSConnectivity -Verbose
+# $connectivity = Get-WDSSConnectivity -PerformBlueCoatLooku
 # $connectivity = Get-WDSSConnectivity -Verbose -PerformBlueCoatLookup
+
+# 3. filter results:
 # $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+
+# 4. save results to a file:
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDSSConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WDSSConnectivity() {
+    <#
+    .SYNOPSIS
+    Gets connectivity information for Windows Defender SmartScreen.
+
+    .DESCRIPTION
+    Gets connectivity information for Windows Defender SmartScreen.
+    
+    .PARAMETER PerformBlueCoatLookup
+    Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
+
+    .EXAMPLE
+    Get-WDSSConnectivity
+
+    .EXAMPLE
+    Get-WDSSConnectivity -Verbose
+    
+    .EXAMPLE
+    Get-WDSSConnectivity -PerformBlueCoatLookup
+
+    .EXAMPLE
+    Get-WDSSConnectivity -Verbose -PerformBlueCoatLookup
+    #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
     Param(       

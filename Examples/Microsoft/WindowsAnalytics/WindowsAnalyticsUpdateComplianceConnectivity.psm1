@@ -1,23 +1,45 @@
 Set-StrictMode -Version 4
 
-#Import-Module -Name .\ConnectivityTester.psm1 -Force
-
 Import-Module -Name ConnectivityTester -Force
 
-# dot source this file 
-# . .\WindowsAnalyticsUpdateComplianceConnectivity.ps1
+# 1. import this file:
+# Import-Module .\WindowsAnalyticsUpdateComplianceConnectivity.psm1
 
-# then run one of the following:
-# Get-WindowsAnalyticsUpdateComplianceConnectivity
-# Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose
-# Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose -PerformBlueCoatLookup
-
-# to filter results or save them to a file:
+# 2. run one of the following:
+# $connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity
+# $connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose
+# $connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -PerformBlueCoatLookup
 # $connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose -PerformBlueCoatLookup
+
+# 3. filter results:
 # $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+
+# 4. save results to a file:
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpdateComplianceConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WindowsAnalyticsUpdateComplianceConnectivity() {
+    <#
+    .SYNOPSIS 
+    Gets connectivity information for Windows Analytics Update Compliance.
+
+    .DESCRIPTION  
+    Gets connectivity information for Windows Analytics Update Compliance.
+     
+    .PARAMETER PerformBlueCoatLookup   
+    Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
+
+    .EXAMPLE   
+    Get-WindowsAnalyticsUpdateComplianceConnectivity
+
+    .EXAMPLE  
+    Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose
+    
+    .EXAMPLE   
+    Get-WindowsAnalyticsUpdateComplianceConnectivity -PerformBlueCoatLookup
+
+    .EXAMPLE  
+    Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose -PerformBlueCoatLookup
+    #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
     Param(

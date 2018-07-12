@@ -73,7 +73,7 @@ The main Get- command for each connectivity test supports the same common option
 * **-Verbose** - prints verbose output to the console
 * **-PerformBlueCoatLookup** - useful for looking up the rating of a URL when a BlueCoat proxy is being used. A rate limit is enforced for accessing the BlueCoat SiteReview REST API so use this option only when behind a BlueCoat proxy and use it sparingly.
 
-Some Get- commands support additional unique options that can be discovered by running the built-in **Get-Help** command on the main Get- command (e.g. `Get-Help Get-WindowsTelemetryConnectivity`).
+Some Get- commands support additional unique options that can be discovered by running the built-in **Get-Help** command on the main Get- command (e.g. `Get-Help Get-WindowsTelemetryConnectivity -Detailed`).
 
 
 **Example**
@@ -94,23 +94,25 @@ The main Get- command returns a connectivity object that contains more informati
 * **ExpectedStatusCode** - the expected HTTP status code returned by the test. 
 * **ActualStatusCode** - the actual HTTP status code returned by the test. Value will be 0 when IsBlocked is true or Resolved is false.
 
+### Saving results
+
 The connectivity object can be saved to a JSON file using the **Save-Connectivity** command from the ConnectivityTester PowerShell module. The Save-Connectivity command supports the following options:
-* **-Verbose** - prints verbose output to the console
-* **-Results** - the connectivity object, or an array of connectivity objects, to save to a JSON file
-* **-OutputPath** - the path to a folder to save the JSON file to
-* **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to 
+* **-Verbose** - prints verbose output to the console.
+* **-Results** - the connectivity object, or an array of connectivity objects, to save to a JSON file.
+* **-OutputPath** - the path to a folder to save the JSON file to.
+* **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to.
 
 ## Connectivity tests
 A number of different connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
 
-| Vendor | Product / Service | More Information |
+| Vendor | Product / Service |
 | -- | -- | -- | 
-| [Microsoft](./Examples/Microsoft/) | Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./Examples/Microsoft/WindowsAnalytics/) | 
-| [Microsoft](./Examples/Microsoft/) | Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./Examples/Microsoft/WindowsAnalytics/) |
-| [Microsoft](./Examples/Microsoft/) | Windows Defender Antivirus | [WDAVConnectivity.ps1](./Examples/Microsoft/WindowsDefenderAntiVirus/) |
-| [Microsoft](./Examples/Microsoft/) | Windows Defender Advanced Threat Protection | [WDATPConnectivity.psm1](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |
-| [Microsoft](./Examples/Microsoft/) | Windows Defender SmartScreen | [WDSSConnectivity.psm1](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
-| [Microsoft](./Examples/Microsoft/) | Windows Telemetry | [WindowsTelemetryConnectivity.psm1](./Examples/Microsoft/WindowsTelemetry/) |
+| [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) | 
+| [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness ](./Examples/Microsoft/WindowsAnalytics/) |
+| [Microsoft](./Examples/Microsoft/) | [Windows Defender Antivirus](./Examples/Microsoft/WindowsDefenderAntiVirus/) |
+| [Microsoft](./Examples/Microsoft/) | [Windows Defender Advanced Threat Protection](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |
+| [Microsoft](./Examples/Microsoft/) | [Windows Defender SmartScreen](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
+| [Microsoft](./Examples/Microsoft/) | [Windows Telemetry](./Examples/Microsoft/WindowsTelemetry/) |
 
 ## License
 See [LICENSE](./LICENSE.md).

@@ -1,10 +1,10 @@
 ## Microsoft connectivity tests
 
-| Product / Service | File | Get Command |
+| Product / Service | File |
 | -- | -- | -- |
-| Windows Analytics Update Compliance | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpdateComplianceConnectivity.psm1) | Get-WindowsAnalyticsUpdateComplianceConnectivity |
-| Windows Analytics Upgrade Readiness | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpgradeReadinessConnectivity.psm1) | Get-WindowsAnalyticsUpgradeReadinessConnectivity |
-| Windows Defender Antivirus | [WDAVConnectivity.psm1](./WindowsDefenderAntiVirus/WDAVConnectivity.psm1) | Get-WDAVConnectivity |
-| Windows Defender Advanced Threat Protection | [WDATPConnectivity.psm1](./WindowsDefenderAdvancedThreatProtection/WDATPConnectivity.psm1) | Get-WDATPConnectivity |
-| Windows Defender SmartScreen | [WDSSConnectivity.psm1](./WindowsDefenderSmartScreen/WDSSConnectivity.psm1) | Get-WDSSConnectivity |
-| Windows Telemetry | [WindowsTelemetryConnectivity.psm1](./WindowsTelemetry/WindowsTelemetryConnectivity.psm1) | Get-WindowsTelemetryConnectivity |
+| [Windows Analytics Update Compliance](./WindowsAnalytics/) | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpdateComplianceConnectivity.psm1) |
+| [Windows Analytics Upgrade Readiness](./WindowsAnalytics/) | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpgradeReadinessConnectivity.psm1) |
+| [Windows Defender Antivirus](./WindowsDefenderAntiVirus/) | [WDAVConnectivity.psm1](./WindowsDefenderAntiVirus/WDAVConnectivity.psm1) |
+| [Windows Defender Advanced Threat Protection](./WindowsDefenderAdvancedThreatProtection/) | [WDATPConnectivity.psm1](./WindowsDefenderAdvancedThreatProtection/WDATPConnectivity.psm1) |
+| [Windows Defender SmartScreen](/WindowsDefenderSmartScreen/W) | [WDSSConnectivity.psm1](./WindowsDefenderSmartScreen/WDSSConnectivity.psm1) |
+| [Windows Telemetry](./WindowsTelemetry/) | [WindowsTelemetryConnectivity.psm1](./WindowsTelemetry/WindowsTelemetryConnectivity.psm1) |

@@ -1,23 +1,45 @@
 Set-StrictMode -Version 4
 
-#Import-Module -Name .\ConnectivityTester.psm1 -Force
-
 Import-Module -Name ConnectivityTester -Force
 
-# dot source this file 
-# . .\WindowsTelemetryConnectivity.ps1
+# 1. import this file 
+# Import-Module .\WindowsTelemetryConnectivity.psm1
 
-# then run one of the following:
-# Get-WindowsTelemetryConnectivity
-# Get-WindowsTelemetryConnectivity -Verbose
-# Get-WindowsTelemetryConnectivity -Verbose -PerformBlueCoatLookup
-
-# to filter results or save them to a file:
+# 2. run one of the following:
+# $connectivity = Get-WindowsTelemetryConnectivity
+# $connectivity = Get-WindowsTelemetryConnectivity -Verbose
+# $connectivity = Get-WindowsTelemetryConnectivity -PerformBlueCoatLookup
 # $connectivity = Get-WindowsTelemetryConnectivity -Verbose -PerformBlueCoatLookup
+
+# 3. filter results:
 # $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+
+# 4. save results to a file:
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WindowsTelemetryConnectivity() {
+    <#
+    .SYNOPSIS 
+    Gets connectivity information for Windows Telemetry.
+
+    .DESCRIPTION  
+    Gets connectivity information for Windows Telemetry.
+     
+    .PARAMETER PerformBlueCoatLookup   
+    Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
+
+    .EXAMPLE   
+    Get-WindowsTelemetryConnectivity
+
+    .EXAMPLE  
+    Get-WindowsTelemetryConnectivity -Verbose
+    
+    .EXAMPLE   
+    Get-WindowsTelemetryConnectivity -PerformBlueCoatLookup
+
+    .EXAMPLE  
+    Get-WindowsTelemetryConnectivity -Verbose -PerformBlueCoatLookup
+    #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
     Param(     
@@ -31,9 +53,9 @@ Function Get-WindowsTelemetryConnectivity() {
     
     # https://docs.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization#endpoints
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description = 'Diagnostic data.' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://v20.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description = 'Functional data.' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; Description = '' })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description = 'Diagnostic/telemetry data for Windows 10 1607 and later.' })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://v20.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description = 'Diagnostic/telemetry data for Windows 10 1703 and later.' })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; Description = 'Used by applications, such as Windows Connected User Experiences and Telemetry component and Windows Insider Program, to dynamically update their configuration.' })
     $data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 404; Description = 'Windows Error Reporting.' })
     $data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 404; Description = 'Online Crash Analysis.' })
     $data.Add([pscustomobject]@{ TestUrl = 'https://vortex.data.microsoft.com/collect/v1'; StatusCode = 400; Description = 'OneDrive app for Windows 10.' }) 

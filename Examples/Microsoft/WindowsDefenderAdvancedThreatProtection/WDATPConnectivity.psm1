@@ -1,29 +1,59 @@
 Set-StrictMode -Version 4
 
-#Import-Module -Name .\ConnectivityTester.psm1 -Force
-
 Import-Module -Name ConnectivityTester -Force
 
-# dot source this file 
-# . .\WDATPConnectivity.ps1
+# 1. import this file:
+# Import-Module .\WDATPConnectivity.ps1
 
-# then run one of the following:
-# Get-WDATPConnectivity
-# Get-WDATPConnectivity -Verbose
-# Get-WDATPConnectivity -UrlType 'Endpoint' -Verbose
-# Get-WDATPConnectivity -UrlType 'SecurityCenter' -Verbose
-# Get-WDATPConnectivity -UrlType 'All' -Verbose
-# Get-WDATPConnectivity -Verbose -PerformBlueCoatLookup
-# Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose 
-# Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose
-# Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose
-
-# to filter results or save them to a file:
+# 2. run one of the following:
+# $connectivity = Get-WDATPConnectivity
+# $connectivity = Get-WDATPConnectivity -Verbose
+# $connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -Verbose
+# $connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -Verbose
+# $connectivity = Get-WDATPConnectivity -UrlType 'All' -Verbose
 # $connectivity = Get-WDATPConnectivity -Verbose -PerformBlueCoatLookup
+# $connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose 
+# $connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose
+# $connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose
+
+# 3. filter results :
 # $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+
+# 4. save results to a file:
 # Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WDATPConnectivity() {
+    <#
+    .SYNOPSIS
+    Gets connectivity information for Windows Defender Advanced Threat Protection.
+
+    .DESCRIPTION
+    Gets connectivity information for Windows Defender Advanced Threat Protection.
+ 
+    .PARAMETER UrlType
+    Selects the type of URLs to test. 'All', 'Endpoint', and 'SecurityCenter' are accepted values. 'All' is the default behavior.
+       
+    .PARAMETER PerformBlueCoatLookup
+    Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
+
+    .EXAMPLE
+    Get-WDATPConnectivity
+
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose
+
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose -UrlType 'Endpoint'
+    
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose -UrlType 'SecurityCenter'
+    
+    .EXAMPLE
+    Get-WDATPConnectivity -PerformBlueCoatLookup
+
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose -PerformBlueCoatLookup
+    #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
     Param(       
@@ -52,8 +82,8 @@ Function Get-WDATPConnectivity() {
         $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description='WDATP data channel'; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
         #$data.Add([pscustomobject]@{ TestUrl = 'https://v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803+ might be a Windows Analytics URL
         $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 404; Description=''; }) # 1803+ 
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel - Eastern US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel - Central US data center'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel. Eastern US data center'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel. Central US data center'; })
 
         $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; Description=''; }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
     
@@ -83,14 +113,14 @@ Function Get-WDATPConnectivity() {
         $data.Add([pscustomobject]@{ TestUrl = 'https://secure.aadcdn.microsoftonline-p.com'; StatusCode = 400; Description='https://*.microsoftonline-p.com - Azure AD Connect / Azure MFA / Azure ADFS'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://login.microsoftonline.com'; StatusCode = 200; Description='Azure AD authentication'; })
         $data.Add([pscustomobject]@{ TestUrl = 'https://winatpmanagement-us.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://threatintel-eus.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com - Threat Intel Eastern US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://threatintel-cus.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com - Threat Intel Central US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR Eastern US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR Central US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://threatintel-eus.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com - Threat Intel. Eastern US data center'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://threatintel-cus.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com - Threat Intel. Central US data center'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR. Eastern US data center'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; StatusCode = 500; Description='https://*.securitycenter.windows.com - Automated IR. Central US data center'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com - Service health status'; })
         #$data.Add([pscustomobject]@{ TestUrl = 'https://dc.services.visualstudio.com'; StatusCode = 404; Description='Azure Application Insights'; }) # https://dc.services.visualstudio.com/v2/track
         $data.Add([pscustomobject]@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; StatusCode = 404; Description='https://*.securitycenter.windows.com'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; StatusCode = 403; Description='https://*.securitycenter.windows.com'; })
+        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; StatusCode = 403; Description='https://*.securitycenter.windows.com - Secure Score security analytics'; })
     }
     
     $uniqueUrls = @($data | Select-Object -Property TestUrl -ExpandProperty TestUrl -Unique)   
