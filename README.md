@@ -66,7 +66,7 @@ Extract the downloaded zip file and install the ConnectivityTester PowerShell mo
 
 
 ### Running the code
-Call the main Get- (e.g. `Get-WindowsTelemetryConnectivity`) command after importing the product/service specific connectivity test to execute the test. The main Get- command is named after the file name. For example, **Get-WindowsTelemetryConnectivity** is the main Get- command for the WindowsTelemetryConnectivity.psm1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.psm1 file.
+Call the main Get- command (e.g. `Get-WindowsTelemetryConnectivity`) after importing the product/service specific connectivity test to execute the test. The main Get- command is named after the file name. For example, **Get-WindowsTelemetryConnectivity** is the main Get- command for the WindowsTelemetryConnectivity.psm1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.psm1 file.
 
 
 The main Get- command for each connectivity test supports the same common options:
@@ -106,7 +106,7 @@ The connectivity object can be saved to a JSON file using the **Save-Connectivit
 A number of different connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
 
 | Vendor | Product / Service |
-| -- | -- | -- | 
+| -- | -- | 
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) | 
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness ](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Antivirus](./Examples/Microsoft/WindowsDefenderAntiVirus/) |
