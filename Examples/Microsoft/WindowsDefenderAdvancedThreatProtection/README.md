@@ -18,6 +18,7 @@
 ### Tested URLs
 
 Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+)
+
 | Test URL | Representative URL | Description |
 | -- | -- | -- |
 | https://onboardingpackagescusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Eastern US data center. |
@@ -32,6 +33,7 @@ Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803,
   
   
 Endpoint URLs for WDATP downlevel Microsoft Management Agent support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016)
+
 | Test URL | Representative URL | Description |
 | -- | -- | -- |
 | https://_workspaceid_.oms.opinsights.azure.com  | https://*.oms.opinsights.azure.com | Microsoft Management Agent communication. |
@@ -40,6 +42,7 @@ Endpoint URLs for WDATP downlevel Microsoft Management Agent support (Windows 7,
  
  
 Windows Defender Security Center URLs.
+
 | Test URL | Representative URL | Description |
 | -- | -- | -- |
 | https://onboardingpackagescusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Eastern US data center. |

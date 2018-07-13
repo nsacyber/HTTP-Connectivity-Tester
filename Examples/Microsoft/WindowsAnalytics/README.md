@@ -23,6 +23,7 @@ Windows Analytics Upgrade Readiness
 
 ### Tested URLs
 Windows Analytics Update Compliance
+
 | Test URL | Representative URL | Description |
 | -- | -- | -- |
 | https://v10.events.data.microsoft.com | https://v10.events.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later. |
@@ -35,6 +36,7 @@ Windows Analytics Update Compliance
     
 
 Windows Analytics Upgrade Readiness
+
 | Test URL | Representative URL | Description |
 | -- | -- | -- |
 | https://v10.events.data.microsoft.com | https://v10.events.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later. |
