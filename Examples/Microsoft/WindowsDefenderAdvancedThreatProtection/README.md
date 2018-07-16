@@ -25,9 +25,9 @@ Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803,
 | https://onboardingpackageseusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Central US data center. |
 | http://crl.microsoft.com | http://crl.microsoft.com | Microsoft Certificate Revocation List responder URL. |
 | http://ctldl.windowsupdate.com | http://ctldl.windowsupdate.com | Microsoft Certificate Trust List download URL. |
-| https://events.data.microsoft.com | https://events.data.microsoft.com | | 
+| https://events.data.microsoft.com | https://events.data.microsoft.com | WDATP event channel. | 
 | https://us.vortex-win.data.microsoft.com/collect/v1 | https://us.vortex-win.data.microsoft.com | WDATP data channel. | 
-| https://us-v20.events.data.microsoft.com | https://us-v20.events.data.microsoft.com | |
+| https://us-v20.events.data.microsoft.com | https://us-v20.events.data.microsoft.com | WDATP event channel for 1803+. |
 | https://winatp-gw-eus.microsoft.com/test | https://winatp-gw-eus.microsoft.com | WDATP heartbeat/C&C channel. Eastern US data center. |
 | https://winatp-gw-cus.microsoft.com/test | https://winatp-gw-cus.microsoft.com | WDATP heartbeat/C&C channel. Central US data center. | 
   
