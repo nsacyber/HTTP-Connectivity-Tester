@@ -107,6 +107,7 @@ A number of different connectivity tests are available in the [Examples folder](
 
 | Vendor | Product / Service |
 | -- | -- | 
+| [Apple](./Examples/Apple/) | [macOS updates](./Examples/Apple/MacOSUpdate/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) | 
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness ](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Antivirus](./Examples/Microsoft/WindowsDefenderAntiVirus/) |
