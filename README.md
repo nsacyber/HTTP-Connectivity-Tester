@@ -1,5 +1,5 @@
-# Connectivity Tester
-Aids in discovering HTTP and HTTPS connectivity issues. Includes a PowerShell module named [ConnectivityTester](./ConnectivityTester/) along with [example PowerShell scripts](./Examples/) to use the module.
+# HTTP Connectivity Tester
+Aids in discovering HTTP and HTTPS connectivity issues. Includes a PowerShell module named [HttpConnectivityTester](./HttpConnectivityTester/) along with [example PowerShell scripts](./Examples/) to use the module.
 
 ## Getting started
 
@@ -12,7 +12,7 @@ To get started using the tools:
 
 ## Downloading the repository
 
-Download the [current code](https://github.com/iadgov/Connectivity-Tester/archive/master.zip) to your **Downloads** folder. It will be saved as **Connectivity-Tester-master.zip** by default.
+Download the [current code](https://github.com/nsacyber/HTTP-Connectivity-Tester/archive/master.zip) to your **Downloads** folder. It will be saved as **HTTP-Connectivity-Tester-master.zip** by default.
 
 ## Configuring the PowerShell environment
 The PowerShell commands are meant to run from a system with at least PowerShell 4.0 and .Net 4.5 installed. PowerShell may need to be configured to run the commands.
@@ -31,7 +31,7 @@ Users will need to unblock the downloaded zip file since it will be marked as ha
 
 1. `cd $env:USERPROFILE` 
 1. `cd Downloads` 
-1. `Unblock-File -Path '.\Connectivity-Tester-master.zip'`
+1. `Unblock-File -Path '.\HTTP-Connectivity-Tester-master.zip'`
 
 Running the PowerShell scripts inside the zip file without unblocking the file will result in the following warning:
 
@@ -43,21 +43,21 @@ Running the PowerShell scripts inside the zip file without unblocking the file w
 If the downloaded zip file is not unblocked before extracting it, then all the individual PowerShell files that were in the zip file will have to be unblocked. You will need to run the following command after Step 5 in the [Loading the code](#loading-the-code) section:
 
 ```
-Get-ChildItem -Path '.\Connectivity-Tester' -Recurse -Include '*.ps1','*.psm1','*.psd1' | Unblock-File -Verbose
+Get-ChildItem -Path '.\HTTP-Connectivity-Tester' -Recurse -Include '*.ps1','*.psm1','*.psd1' | Unblock-File -Verbose
 ```
 
 See the [Unblock-File command's documentation](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Utility/Unblock-File?view=powershell-5.1) for more information on how to use it.
 
 ### Loading the code
-Extract the downloaded zip file and install the ConnectivityTester PowerShell module.
+Extract the downloaded zip file and install the HttpConnectivityTester PowerShell module.
 
 1. Right click on the zip file and select **Extract All**
-1. At the dialog remove **Connectivity-Tester-master** from the end of the path since it will extract the files to a Connectivity-Tester-master folder by default
+1. At the dialog remove **HTTP-Connectivity-Tester-master** from the end of the path since it will extract the files to a HTTP-Connectivity-Tester-master folder by default
 1. Click the **Extract** button
-1. From the previously opened PowerShell prompt, rename the **Connectivity-Tester-master** folder to **Connectivity-Tester** `mv .\Connectivity-Tester-master\ .\Connectivity-Tester\`
-1. `cd Connectivity-Tester`
-1. Inside the **Connectivity-Tester** folder is another folder named **ConnectivityTester** which is the ConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow [modules to be installed](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx#Where%20to%20Install%20Modules) at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
-1. `mv .\ConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
+1. From the previously opened PowerShell prompt, rename the **HTTP-Connectivity-Tester-master** folder to **HTTP-Connectivity-Tester** `mv .\HTTP-Connectivity-Tester-master\ .\HTTP-Connectivity-Tester\`
+1. `cd HTTP-Connectivity-Tester`
+1. Inside the **HTTP-Connectivity-Tester** folder is another folder named **HttpConnectivityTester** which is the HttpConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow [modules to be installed](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx#Where%20to%20Install%20Modules) at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
+1. `mv .\HttpConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
 1. Close the PowerShell prompt and open a new PowerShell prompt
 1. Go to the Examples folder `cd .\Examples` from the extracted download
 1. Go to the vendor specific folder `cd .\Microsoft`
