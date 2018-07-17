@@ -1,6 +1,6 @@
 Set-StrictMode -Version 4
 
-Import-Module -Name ConnectivityTester -Force
+Import-Module -Name HttpConnectivityTester -Force
 
 # 1. import this file:
 # Import-Module .\WDATPConnectivity.ps1
