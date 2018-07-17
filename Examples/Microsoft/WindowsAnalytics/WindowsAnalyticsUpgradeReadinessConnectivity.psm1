@@ -12,10 +12,10 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
-# $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+# $connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 
 # 4. save results to a file:
-# Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpgradeReadinessConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+# Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpgradeReadinessConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WindowsAnalyticsUpgradeReadinessConnectivity() {
     <#
@@ -53,13 +53,13 @@ Function Get-WindowsAnalyticsUpgradeReadinessConnectivity() {
        
     # https://docs.microsoft.com/en-us/windows/deployment/update/windows-analytics-get-started#enable-data-sharing
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.events.data.microsoft.com'; StatusCode = 404; Description = 'Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com'; StatusCode = 404; Description = 'Connected User Experience and Diagnostic component endpoint for Windows 10 1709 and earlier'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://vortex.data.microsoft.com'; StatusCode = 404; Description = 'Connected User Experience and Diagnostic component endpoint for operating systems older than Windows 10'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; Description = 'Enables the compatibility update to send data to Microsoft.'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://adl.windows.com'; StatusCode = 404; Description = 'Allows the compatibility update to receive the latest compatibility data from Microsoft.'; IgnoreCertificateValidationErrors=$true })
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 404; Description = 'Windows Error Reporting (WER); required for Device Health and Update Compliance AV reports. Not used by Upgrade Readiness.'; IgnoreCertificateValidationErrors=$false })
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 404; Description = 'Online Crash Analysis; required for Device Health and Update Compliance AV reports. Not used by Upgrade Readiness.'; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.events.data.microsoft.com'; UnblockUrl = 'https://v10.events.data.microsoft.com'; StatusCode = 404; Description = 'Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later'; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com'; UnblockUrl = 'https://v10.vortex-win.data.microsoft.com'; StatusCode = 404; Description = 'Connected User Experience and Diagnostic component endpoint for Windows 10 1709 and earlier'; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://vortex.data.microsoft.com'; UnblockUrl = 'https://vortex.data.microsoft.com'; StatusCode = 404; Description = 'Connected User Experience and Diagnostic component endpoint for operating systems older than Windows 10'; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; UnblockUrl = 'https://settings-win.data.microsoft.com'; StatusCode = 404; Description = 'Enables the compatibility update to send data to Microsoft.'; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://adl.windows.com'; UnblockUrl = 'https://adl.windows.com'; StatusCode = 404; Description = 'Allows the compatibility update to receive the latest compatibility data from Microsoft.'; IgnoreCertificateValidationErrors=$true })
+    #$data.Add([pscustomobject]@{ TestUrl = 'https://watson.telemetry.microsoft.com'; UnblockUrl = 'https://watson.telemetry.microsoft.com'; StatusCode = 404; Description = 'Windows Error Reporting (WER); required for Device Health and Update Compliance AV reports. Not used by Upgrade Readiness.'; IgnoreCertificateValidationErrors=$false })
+    #$data.Add([pscustomobject]@{ TestUrl = 'https://oca.telemetry.microsoft.com'; UnblockUrl = 'https://oca.telemetry.microsoft.com'; StatusCode = 404; Description = 'Online Crash Analysis; required for Device Health and Update Compliance AV reports. Not used by Upgrade Readiness.'; IgnoreCertificateValidationErrors=$false })
    
     # https://docs.microsoft.com/en-us/windows/deployment/upgrade/upgrade-readiness-data-sharing   
     
@@ -76,7 +76,7 @@ Function Get-WindowsAnalyticsUpgradeReadinessConnectivity() {
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }  
 

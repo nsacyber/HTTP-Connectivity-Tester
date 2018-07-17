@@ -7,12 +7,12 @@
     * `$connectivity = Get-WindowsTelemetryConnectivity -Verbose`
     * `$connectivity = Get-WindowsTelemetryConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsTelemetryConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://v10.vortex-win.data.microsoft.com/collect/v1 | https://v10.vortex-win.data.microsoft.com | Diagnostic/telemetry data for Windows 10 1607 and later. |
 | https://v20.vortex-win.data.microsoft.com/collect/v1 | https://v20.vortex-win.data.microsoft.com | Diagnostic/telemetry data for Windows 10 1703 and later. |

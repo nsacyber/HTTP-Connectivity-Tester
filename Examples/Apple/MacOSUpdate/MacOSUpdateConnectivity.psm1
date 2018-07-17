@@ -2,20 +2,20 @@ Set-StrictMode -Version 4
 
 Import-Module -Name HttpConnectivityTester -Force
 
-# 1. import this file 
+# 1. import this file:
 # Import-Module .\MacOSUpdateConnectivity.psm1
 
 # 2. run one of the following:
-# Get-MacOSUpdateConnectivity 
-# Get-MacOSUpdateConnectivity -Verbose
-# Get-MacOSUpdateConnectivity -PerformBlueCoatLookup 
-# Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup
+# $connectivity = Get-MacOSUpdateConnectivity 
+# $connectivity = Get-MacOSUpdateConnectivity -Verbose
+# $connectivity = Get-MacOSUpdateConnectivity -PerformBlueCoatLookup 
+# $connectivity = Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
-# $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+# $connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 
-# 4. save results
-# Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+# 4. save results:
+# Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-MacOSUpdateConnectivity() {
     <#
@@ -53,18 +53,18 @@ Function Get-MacOSUpdateConnectivity() {
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
    
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swscan.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdnlocator.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swscan.apple.com'; UnblockUrl = 'https://swscan.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdnlocator.apple.com'; UnblockUrl = 'https://swcdnlocator.apple.com'; StatusCode = 501; Description = ''; IgnoreCertificateValidationErrors=$false })
 
-    # $data.Add([pscustomobject]@{ TestUrl = 'https://swquery.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false }) # DNS failure    
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swdownload.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdn.apple.com'; StatusCode = 404; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swdist.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    # $data.Add([pscustomobject]@{ TestUrl = 'https://swquery.apple.com'; UnblockUrl = 'https://swquery.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false }) # DNS failure    
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swdownload.apple.com'; UnblockUrl = 'https://swdownload.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdn.apple.com'; UnblockUrl = 'https://swcdn.apple.com'; StatusCode = 404; Description = ''; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swdist.apple.com'; UnblockUrl = 'https://swdist.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-Connectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }  
 

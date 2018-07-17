@@ -8,11 +8,11 @@
     * `$connectivity = Get-MacOSUpdateConnectivity -Verbose`
     * `$connectivity = Get-MacOSUpdateConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://swscan.apple.com | https://swscan.apple.com | |
 | https://swcdnlocator.apple.com | https://swcdnlocator.apple.com |

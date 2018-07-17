@@ -12,14 +12,14 @@
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
 
 Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+)
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://onboardingpackagescusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Eastern US data center. |
 | https://onboardingpackageseusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Central US data center. |
@@ -34,7 +34,7 @@ Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803,
   
 Endpoint URLs for WDATP downlevel Microsoft Management Agent support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016)
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://_workspaceid_.oms.opinsights.azure.com  | https://*.oms.opinsights.azure.com | Microsoft Management Agent communication. |
 | https://_workspaceid_.opinsights.azure.com | https://*.ods.opinsights.azure.com | Azure OMS data collection. |

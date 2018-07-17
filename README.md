@@ -91,14 +91,15 @@ Some Get- commands support additional unique options that can be discovered by r
 cd .\Examples\Microsoft\WindowsTelemetry\
 Import-Module -Name .\WindowsTelemetryConnectivity.psm1
 $connectivity = Get-WindowsTelemetryConnectivity -Verbose
-$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
-Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 
 ### Interpreting results
 The main Get- command returns a connectivity object that contains more information about the connectivity test. The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or functional are: 
 * **IsBlocked** - whether the service appears to be blocked. Value should be **false**.
-* **TestUrl** - the URL that was used to perform the test. 
+* **TestUrl** - the URL that was used to perform the test.
+* **UnblockUrl** - the URL to get unblocked. Could be a URL pattern rather than a literal URL.
 * **Description** - a description of what the URL is for.
 * **Resolved** - whether the URL resolves its DNS entry to IP addresses or DNS aliases. Value should be **true**.
 * **ExpectedStatusCode** - the expected HTTP status code returned by the test. 
@@ -106,7 +107,7 @@ The main Get- command returns a connectivity object that contains more informati
 
 ### Saving results
 
-The connectivity object can be saved to a JSON file using the **Save-Connectivity** command from the ConnectivityTester PowerShell module. The Save-Connectivity command supports the following options:
+The connectivity object can be saved to a JSON file using the **Save-HttpConnectivity** command from the ConnectivityTester PowerShell module. The Save-HttpConnectivity command supports the following options:
 * **-Verbose** - prints verbose output to the console.
 * **-Results** - the connectivity object, or an array of connectivity objects, to save to a JSON file.
 * **-OutputPath** - the path to a folder to save the JSON file to.

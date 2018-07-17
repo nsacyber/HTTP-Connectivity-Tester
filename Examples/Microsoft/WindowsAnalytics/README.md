@@ -8,8 +8,8 @@ Windows Analytics Update Compliance
     * `$connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose`
     * `$connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpdateComplianceConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpdateComplianceConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 Windows Analytics Upgrade Readiness
 1. Import this file: `Import-Module .\WindowsAnalyticsUpgradeReadinessConnectivity.psm1`
@@ -18,13 +18,13 @@ Windows Analytics Upgrade Readiness
     * `$connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -Verbose`
     * `$connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpgradeReadinessConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpgradeReadinessConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
 Windows Analytics Update Compliance
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://v10.events.data.microsoft.com | https://v10.events.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later. |
 | https://v10.vortex-win.data.microsoft.com | https://v10.vortex-win.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for Windows 10 1709 and earlier. |
@@ -37,7 +37,7 @@ Windows Analytics Update Compliance
 
 Windows Analytics Upgrade Readiness
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://v10.events.data.microsoft.com | https://v10.events.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later. |
 | https://v10.vortex-win.data.microsoft.com | https://v10.vortex-win.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for Windows 10 1709 and earlier. |

@@ -7,12 +7,12 @@
     * `$connectivity = Get-WDSSConnectivity -Verbose`
     * `$connectivity = Get-WDSSConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WDSSConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDSSConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDSSConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://apprep.smartscreen.microsoft.com | https://*.smartscreen.microsoft.com | | 
 | https://ars.smartscreen.microsoft.com | https://*.smartscreen.microsoft.com | | 

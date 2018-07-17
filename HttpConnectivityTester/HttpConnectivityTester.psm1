@@ -323,7 +323,7 @@ Function Get-CertificateErrorMessage() {
     return $details
 }
 
-Function Get-Connectivity() {
+Function Get-HttpConnectivity() {
     <#
     .SYNOPSIS
     Get connectivity information for a URL.
@@ -352,6 +352,10 @@ Function Get-Connectivity() {
         [Parameter(Mandatory=$true, HelpMessage='The URL to test')]
         [ValidateNotNullOrEmpty()]
         [Uri]$TestUrl,
+        
+        [Parameter(Mandatory=$true, HelpMessage='The URL to unblock')]
+        [ValidateNotNullOrEmpty()]
+        [string]$UnblockUrl,
 
         [Parameter(Mandatory=$false, HelpMessage='The HTTP method to use to test the URL')]
         [ValidateNotNullOrEmpty()]
@@ -471,7 +475,7 @@ Function Get-Connectivity() {
 
     $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
 
-    $connectivitySummary = ('{0}Url: {1}{2}Description: {3}{4}Resolved: {5}{6}Addresses: {7}{8}Aliases: {9}{10}Actual Status: {11}{12}Expected Status: {13}{14}Status Matched: {15}{16}Status Message: {17}{18}Blocked: {19}{20}Certificate Error: {21}{22}Certificate Error Message: {23}{24}Ignore Certificate Validation Errors: {25}{26}{27}' -f $newLine,$testUri,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
+    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Description: {5}{6}Resolved: {7}{8}Addresses: {9}{10}Aliases: {11}{12}Actual Status: {13}{14}Expected Status: {15}{16}Status Matched: {17}{18}Status Message: {19}{20}Blocked: {21}{22}Certificate Error: {23}{24}Certificate Error Message: {25}{26}Ignore Certificate Validation Errors: {27}{28}{29}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
    
     $bluecoat = $null
@@ -486,6 +490,7 @@ Function Get-Connectivity() {
 
     $connectivity = [pscustomobject]@{
         TestUrl = $testUri;
+        UnblockUrl = $UnblockUrl;
         Resolved = $resolved;
         Addresses = [string[]]$address;
         Aliases = [string[]]$alias;
@@ -507,7 +512,7 @@ Function Get-Connectivity() {
     return $connectivity
 }
 
-Function Save-Connectivity() {
+Function Save-HttpConnectivity() {
     [CmdletBinding()]
     [OutputType([void])]
     Param(
