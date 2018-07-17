@@ -7,7 +7,7 @@ To get started using the tools:
 
 1. [Download](#downloading-the-repository) the repository as a zip file 
 1. [Configure PowerShell](#configuring-the-powershell-environment) 
-1. [Extract the code](#extracting-the-code]
+1. [Extract the code](#extracting-the-code)
 1. [Load the code](#loading-the-code) 
 1. [Run the code](#running-the-code) 
 
@@ -58,6 +58,8 @@ See the [Unblock-File command's documentation](https://docs.microsoft.com/en-us/
 or
 
 1. From the previously opened PowerShell prompt, type `Expand-Archive -Path .\HTTP-Connectivity-Tester-master.zip -DestinationPath .\`
+
+The [Expand-Archive command](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/expand-archive) is available starting with PowerShell 5.0.
 
 ### Loading the code
 Extract the downloaded zip file and install the HttpConnectivityTester PowerShell module.
