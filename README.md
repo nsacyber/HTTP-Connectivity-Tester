@@ -7,12 +7,13 @@ To get started using the tools:
 
 1. [Download](#downloading-the-repository) the repository as a zip file 
 1. [Configure PowerShell](#configuring-the-powershell-environment) 
+1. [Extract the code](#extracting-the-code]
 1. [Load the code](#loading-the-code) 
 1. [Run the code](#running-the-code) 
 
 ## Downloading the repository
 
-Download the [current code](https://github.com/nsacyber/HTTP-Connectivity-Tester/archive/master.zip) to your **Downloads** folder. It will be saved as **HTTP-Connectivity-Tester-master.zip** by default.
+[Download the current code](https://github.com/nsacyber/HTTP-Connectivity-Tester/archive/master.zip) to your **Downloads** folder. It will be saved as **HTTP-Connectivity-Tester-master.zip** by default.
 
 ## Configuring the PowerShell environment
 The PowerShell commands are meant to run from a system with at least PowerShell 4.0 and .Net 4.5 installed. PowerShell may need to be configured to run the commands.
@@ -48,13 +49,20 @@ Get-ChildItem -Path '.\HTTP-Connectivity-Tester' -Recurse -Include '*.ps1','*.ps
 
 See the [Unblock-File command's documentation](https://docs.microsoft.com/en-us/powershell/module/Microsoft.PowerShell.Utility/Unblock-File?view=powershell-5.1) for more information on how to use it.
 
-### Loading the code
-Extract the downloaded zip file and install the HttpConnectivityTester PowerShell module.
-
+### Extracting the code
 1. Right click on the zip file and select **Extract All**
 1. At the dialog remove **HTTP-Connectivity-Tester-master** from the end of the path since it will extract the files to a HTTP-Connectivity-Tester-master folder by default
 1. Click the **Extract** button
 1. From the previously opened PowerShell prompt, rename the **HTTP-Connectivity-Tester-master** folder to **HTTP-Connectivity-Tester** `mv .\HTTP-Connectivity-Tester-master\ .\HTTP-Connectivity-Tester\`
+
+or
+
+1. From the previously opened PowerShell prompt, type `Expand-Archive -Path .\HTTP-Connectivity-Tester-master.zip -DestinationPath .\`
+
+### Loading the code
+Extract the downloaded zip file and install the HttpConnectivityTester PowerShell module.
+
+
 1. `cd HTTP-Connectivity-Tester`
 1. Inside the **HTTP-Connectivity-Tester** folder is another folder named **HttpConnectivityTester** which is the HttpConnectivityTester PowerShell module. Move this folder to one of the PowerShell module directories on the system. Open a PowerShell prompt and type **$env:PSModulePath** to see the locations where PowerShell modules can be installed. PowerShell 4.0 and later allow [modules to be installed](https://msdn.microsoft.com/en-us/library/dd878350(v=vs.85).aspx#Where%20to%20Install%20Modules) at the following paths by default: %ProgramFilesDir%\WindowsPowerShell\Modules\;%SystemRoot%\System32\WindowsPowerShell\v1.0\Modules\;%UserProfile%\Documents\WindowsPowerShell\Modules\
 1. `mv .\HttpConnectivityTester "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"`
@@ -63,7 +71,6 @@ Extract the downloaded zip file and install the HttpConnectivityTester PowerShel
 1. Go to the vendor specific folder `cd .\Microsoft`
 1. Go to the product/service specific folder `cd .\WindowsTelemetry\`
 1. Import the product/service specific connectivity test `Import-Module -Name .\WindowsTelemetryConnectivity.psm1`
-
 
 ### Running the code
 Call the main Get- command (e.g. `Get-WindowsTelemetryConnectivity`) after importing the product/service specific connectivity test to execute the test. The main Get- command is named after the file name. For example, **Get-WindowsTelemetryConnectivity** is the main Get- command for the WindowsTelemetryConnectivity.psm1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.psm1 file.
@@ -85,6 +92,7 @@ $connectivity = Get-WindowsTelemetryConnectivity -Verbose
 $connectivity | Format-List -Property IsBlocked,TestUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 Save-Connectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
+
 ### Interpreting results
 The main Get- command returns a connectivity object that contains more information about the connectivity test. The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or functional are: 
 * **IsBlocked** - whether the service appears to be blocked. Value should be **false**.
