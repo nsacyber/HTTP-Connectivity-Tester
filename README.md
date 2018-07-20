@@ -80,7 +80,7 @@ Call the main Get- command (e.g. `Get-WindowsTelemetryConnectivity`) after impor
 
 The main Get- command for each connectivity test supports the same common options:
 * **-Verbose** - prints verbose output to the console
-* **-PerformBlueCoatLookup** - useful for looking up the rating of a URL when a BlueCoat proxy is being used. A rate limit is enforced for accessing the BlueCoat SiteReview REST API so use this option only when behind a BlueCoat proxy and use it sparingly.
+* **-PerformBlueCoatLookup** - useful for looking up the rating of a URL when a BlueCoat proxy is being used. A rate limit is enforced for accessing the BlueCoat SiteReview REST API so use this option only when behind a BlueCoat proxy and use it sparingly. The script will automatically rate limit BlueCoat requests after every 10 requests and will then pause for 5 minutes.
 
 Some Get- commands support additional unique options that can be discovered by running the built-in **Get-Help** command on the main Get- command (e.g. `Get-Help Get-WindowsTelemetryConnectivity -Detailed`).
 
@@ -125,6 +125,7 @@ A number of different connectivity tests are available in the [Examples folder](
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Advanced Threat Protection](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender SmartScreen](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Telemetry](./Examples/Microsoft/WindowsTelemetry/) |
+| [Microsoft](./Examples/Microsoft/) | [Windows Update](./Examples/Microsoft/WindowsUpdate/) |
 
 ## License
 See [LICENSE](./LICENSE.md).

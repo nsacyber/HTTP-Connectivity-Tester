@@ -8,3 +8,4 @@
 | [Windows Defender Advanced Threat Protection](./WindowsDefenderAdvancedThreatProtection/) | [WDATPConnectivity.psm1](./WindowsDefenderAdvancedThreatProtection/WDATPConnectivity.psm1) |
 | [Windows Defender SmartScreen](/WindowsDefenderSmartScreen/W) | [WDSSConnectivity.psm1](./WindowsDefenderSmartScreen/WDSSConnectivity.psm1) |
 | [Windows Telemetry](./WindowsTelemetry/) | [WindowsTelemetryConnectivity.psm1](./WindowsTelemetry/WindowsTelemetryConnectivity.psm1) |
+| [Windows Update](./WindowsUpdate/) | [WindowsUpdateConnectivity.psm1](./WindowsUpdate/WindowsUpdateConnectivity.psm1) |
