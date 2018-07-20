@@ -46,8 +46,8 @@ Windows Analytics Upgrade Readiness
 | https://adl.windows.com | https://adl.windows.com | Allows the compatibility update to receive the latest compatibility data from Microsoft. |
 
 ### References
-* https://docs.microsoft.com/en-us/windows/deployment/update/windows-analytics-get-started#enable-data-sharing
-* https://docs.microsoft.com/en-us/windows/deployment/upgrade/upgrade-readiness-data-sharing
-* https://docs.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization#endpoints
-* https://blogs.technet.microsoft.com/upgradeanalytics/2017/03/10/understanding-connectivity-scenarios-and-the-deployment-script/
-* https://blogs.technet.microsoft.com/ukplatforms/2017/03/13/upgrade-readiness-client-configuration/
+* [Enrolling devices in Windows Analytics - Enable data sharing](https://docs.microsoft.com/en-us/windows/deployment/update/windows-analytics-get-started#enable-data-sharing)
+* [Upgrade Readiness data sharing](https://docs.microsoft.com/en-us/windows/deployment/upgrade/upgrade-readiness-data-sharing)
+* [Configure Windows diagnostic data in your organization - Endpoints](https://docs.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization#endpoints)
+* [Understanding connectivity scenarios and the deployment script](https://blogs.technet.microsoft.com/upgradeanalytics/2017/03/10/understanding-connectivity-scenarios-and-the-deployment-script)
+* [Upgrade Readiness Client Configuration](https://blogs.technet.microsoft.com/ukplatforms/2017/03/13/upgrade-readiness-client-configuration)

@@ -61,6 +61,6 @@ Windows Defender Security Center URLs.
 | https://winatpsecurityanalyticsapi-us.securitycenter.windows.com | https://*.securitycenter.windows.com | Secure Score security analytics. |
 
 ### References
-* https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
-* https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/onboard-downlevel-windows-defender-advanced-threat-protection#configure-proxy-and-internet-connectivity-settings
-* https://go.microsoft.com/fwlink/p/?linkid=823683 
+* [Configure machine proxy and Internet connectivity settings - Enable access to Windows Defender ATP service URLs in the proxy server](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
+* [Onboard previous versions of Windows - Configure proxy and Internet connectivity settings](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/onboard-downlevel-windows-defender-advanced-threat-protection#configure-proxy-and-internet-connectivity-settings
+* [WDATPConnectivityAnalyzer](https://go.microsoft.com/fwlink/p/?linkid=823683)

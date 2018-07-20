@@ -22,6 +22,4 @@
 | https://vortex.data.microsoft.com/collect/v1 | https://vortex.data.microsoft.com | OneDrive application for Windows 10 data. |
 
 ### References 
-* https://docs.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization#endpoints
-* https://docs.microsoft.com/en-us/windows/desktop/wer/windows-error-reporting 
-* https://docs.microsoft.com/en-us/windows/desktop/DxTechArts/crash-dump-analysis
+* [Configure Windows diagnostic data in your organization - Endpoints](https://docs.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization#endpoints)
