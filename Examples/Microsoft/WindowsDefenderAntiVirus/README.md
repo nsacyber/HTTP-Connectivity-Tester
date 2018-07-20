@@ -26,7 +26,9 @@
 | https://msdl.microsoft.com/download/symbols | https://msdl.microsoft.com/download/symbols | Microsoft Symbol Store. Used by Windows Defender Antivirus to restore certain critical files during remediation flows. |
 | https://vortex-win.data.microsoft.com | https://vortex-win.data.microsoft.com | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
 | https://settings-win.data.microsoft.com | https://settings-win.data.microsoft.com | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
+| https://definitionupdates.microsoft.com | https://definitionupdates.microsoft.com | Windows Defender Antivirus definition updates for Windows 10 1709+ |
 | https://unitedstates.cp.wd.microsoft.com | https://unitedstates.cp.wd.microsoft.com | Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+. | 
 
 ### References
 * https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus#allow-connections-to-the-windows-defender-antivirus-cloud
+* https://docs.microsoft.com/en-us/windows/privacy/manage-windows-endpoints#windows-defender

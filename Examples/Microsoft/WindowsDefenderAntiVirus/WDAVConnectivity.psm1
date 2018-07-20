@@ -65,7 +65,9 @@ Function Get-WDAVConnectivity() {
     $data.Add([pscustomobject]@{ TestUrl = 'https://msdl.microsoft.com/download/symbols'; UnblockUrl='https://msdl.microsoft.com'; StatusCode = 200; Description = 'Microsoft Symbol Store. Used by Windows Defender Antivirus to restore certain critical files during remediation flows.'; IgnoreCertificateValidationErrors=$false })
     $data.Add([pscustomobject]@{ TestUrl = 'https://vortex-win.data.microsoft.com'; UnblockUrl='https://vortex-win.data.microsoft.com'; StatusCode = 404; Description = 'Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes.'; IgnoreCertificateValidationErrors=$false })
     $data.Add([pscustomobject]@{ TestUrl = 'https://settings-win.data.microsoft.com'; UnblockUrl='https://settings-win.data.microsoft.com'; StatusCode = 400; Description = 'Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes.'; IgnoreCertificateValidationErrors=$false })
-
+    $data.Add([pscustomobject]@{ TestUrl = 'https://definitionupdates.microsoft.com'; UnblockUrl='https://definitionupdates.microsoft.com'; StatusCode = 200; Description = 'Windows Defender Antivirus definition updates for Windows 10 1709+.'; IgnoreCertificateValidationErrors=$false })
+    
+    
     $data.Add([pscustomobject]@{ TestUrl = 'https://unitedstates.cp.wd.microsoft.com'; UnblockUrl='https://unitedstates.cp.wd.microsoft.com'; StatusCode = 503; Description = 'Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+'; IgnoreCertificateValidationErrors=$false }) # appears to be a possible replacement for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062. Seems related to HKLM\SOFTWARE\Microsoft\Windows Defender\Features\    GeoPreferenceId = 'US'
     
     $results = New-Object System.Collections.Generic.List[pscustomobject]
