@@ -53,13 +53,17 @@ Function Get-WindowsUpdateConnectivity() {
     
     # 
 
-    $data.Add([pscustomobject]@{ TestUrl = 'http://windowsupdate.microsoft.com'; UnblockUrl = 'http://windowsupdate.microsoft.com'; StatusCode = 200; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; UnblockUrl = 'http://windowsupdate.microsoft.com'; StatusCode = 200; Description = '' })   
+    $data.Add([pscustomobject]@{ TestUrl = 'http://windowsupdate.microsoft.com'; UnblockUrl = 'http://windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; UnblockUrl = 'https://windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
+    #$data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; UnblockUrl = 'http://*.windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://geo-prod.do.dsp.mp.microsoft.com'; UnblockUrl = 'https://*.do.dsp.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false }) # many different *-prod.do.dsp.mp.microsoft.com, but geo-prod.do.dsp.mp.microsoft.com is the most common one
+    $data.Add([pscustomobject]@{ TestUrl = 'https://download.windowsupdate.com'; UnblockUrl = 'https://download.windowsupdate.com'; StatusCode = 504; Description = ''; IgnoreCertificateValidationErrors=$true})
+    $data.Add([pscustomobject]@{ TestUrl = 'https://au.download.windowsupdate.com'; UnblockUrl = 'https://*.download.windowsupdate.com'; StatusCode = 400; Description = ''; IgnoreCertificateValidationErrors=$true }) # many different *.download.windowsupdate.com, au.download.windowsupdate.com is most common. *.au.download.windowsupdate.com, *.l.windowsupdate.com
     
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
     }  
 
