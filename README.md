@@ -91,7 +91,7 @@ Some Get- commands support additional unique options that can be discovered by r
 cd .\Examples\Microsoft\WindowsTelemetry\
 Import-Module -Name .\WindowsTelemetryConnectivity.psm1
 $connectivity = Get-WindowsTelemetryConnectivity -Verbose
-$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Aliases,Addresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 
@@ -100,6 +100,8 @@ The main Get- command returns a connectivity object that contains more informati
 * **IsBlocked** - whether the service appears to be blocked. Value should be **false**.
 * **TestUrl** - the URL that was used to perform the test.
 * **UnblockUrl** - the URL to get unblocked. Could be a URL pattern rather than a literal URL.
+* **Aliases** - a list of DNS aliases for the TestUrl. Pattern based unblocks of the TestUrl may need matching unblocks of all the DNS aliases.
+* **Addresses** - a list of IP addresses corresponding to the TestUrl. Unblocking based on the listed IP addresses is not effective due to cloud providers and content delivery networks that may return many different IP addresses.
 * **Description** - a description of what the URL is for.
 * **Resolved** - whether the URL resolves its DNS entry to IP addresses or DNS aliases. Value should be **true**.
 * **ExpectedStatusCode** - the expected HTTP status code returned by the test. 

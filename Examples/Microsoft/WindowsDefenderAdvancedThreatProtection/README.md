@@ -12,7 +12,7 @@
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Aliases,Addresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
 1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
@@ -43,7 +43,7 @@ Endpoint URLs for WDATP downlevel Microsoft Management Agent support (Windows 7,
  
 Windows Defender Security Center URLs.
 
-| Test URL | Representative URL | Description |
+| Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | https://onboardingpackagescusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Eastern US data center. |
 | https://onboardingpackageseusprd.blob.core.windows.net | https://*.blob.core.windows.net | Azure Blob storage. Central US data center. |
