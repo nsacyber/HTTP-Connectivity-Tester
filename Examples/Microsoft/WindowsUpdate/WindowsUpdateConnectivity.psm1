@@ -51,14 +51,24 @@ Function Get-WindowsUpdateConnectivity() {
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
     
-    # 
+    # https://docs.microsoft.com/en-us/windows/privacy/manage-windows-endpoints#windows-update
 
     $data.Add([pscustomobject]@{ TestUrl = 'http://windowsupdate.microsoft.com'; UnblockUrl = 'http://windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
     $data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; UnblockUrl = 'https://windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
     #$data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; UnblockUrl = 'http://*.windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://geo-prod.do.dsp.mp.microsoft.com'; UnblockUrl = 'https://*.do.dsp.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false }) # many different *-prod.do.dsp.mp.microsoft.com, but geo-prod.do.dsp.mp.microsoft.com is the most common one
-    $data.Add([pscustomobject]@{ TestUrl = 'https://download.windowsupdate.com'; UnblockUrl = 'https://download.windowsupdate.com'; StatusCode = 504; Description = ''; IgnoreCertificateValidationErrors=$true})
-    $data.Add([pscustomobject]@{ TestUrl = 'https://au.download.windowsupdate.com'; UnblockUrl = 'https://*.download.windowsupdate.com'; StatusCode = 400; Description = ''; IgnoreCertificateValidationErrors=$true }) # many different *.download.windowsupdate.com, au.download.windowsupdate.com is most common. *.au.download.windowsupdate.com, *.l.windowsupdate.com
+    $data.Add([pscustomobject]@{ TestUrl = 'https://geo-prod.do.dsp.mp.microsoft.com'; UnblockUrl = 'https://*.do.dsp.mp.microsoft.com'; StatusCode = 403; Description = 'Updates for applications and the OS on Windows 10 1709 and later. Windows Update Delivery Optimization metadata, resiliency, and anti-corruption.'; IgnoreCertificateValidationErrors=$false }) # many different *-prod.do.dsp.mp.microsoft.com, but geo-prod.do.dsp.mp.microsoft.com is the most common one
+    $data.Add([pscustomobject]@{ TestUrl = 'http://download.windowsupdate.com'; UnblockUrl = 'http://download.windowsupdate.com'; StatusCode = 200; Description = 'Download operating system patches and updates'; IgnoreCertificateValidationErrors=$true})
+    $data.Add([pscustomobject]@{ TestUrl = 'http://au.download.windowsupdate.com'; UnblockUrl = 'http://*.au.download.windowsupdate.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$true }) # many different *.download.windowsupdate.com, au.download.windowsupdate.com is most common. *.au.download.windowsupdate.com, *.l.windowsupdate.com
+    $data.Add([pscustomobject]@{ TestUrl = 'https://cds.d2s7q6s2.hwcdn.net'; UnblockUrl = 'https://cds.*.hwcdn.net'; StatusCode = 504; Description = 'Highwinds Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'http://cs9.wac.phicdn.net'; UnblockUrl = 'http://*.wac.phicdn.net'; StatusCode = 200; Description = 'Verizon Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://cs491.wac.edgecastcdn.net'; UnblockUrl = 'https://*.wac.edgecastcdn.net'; StatusCode = 404; Description = 'Verizon Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'http://dl.delivery.mp.microsoft.com'; UnblockUrl = 'http://*.dl.delivery.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true }) 
+    $data.Add([pscustomobject]@{ TestUrl = 'http://tlu.dl.delivery.mp.microsoft.com'; UnblockUrl = 'http://*.tlu.dl.delivery.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })    
+    $data.Add([pscustomobject]@{ TestUrl = 'https://emdl.ws.microsoft.com'; UnblockUrl = 'https://emdl.ws.microsoft.com'; StatusCode = 503; Description = 'Update applications from the Microsoft Store'; IgnoreCertificateValidationErrors=$true })    
+    $data.Add([pscustomobject]@{ TestUrl = 'https://fe2.update.microsoft.com'; UnblockUrl = 'https://*.update.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })    
+    $data.Add([pscustomobject]@{ TestUrl = 'https://sls.update.microsoft.com'; UnblockUrl = 'https://*.update.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })    
+    $data.Add([pscustomobject]@{ TestUrl = 'https://fe3.delivery.mp.microsoft.com'; UnblockUrl = 'https://*.delivery.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://tsfe.trafficshaping.dsp.mp.microsoft.com'; UnblockUrl = 'https://*.dsp.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
     
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
