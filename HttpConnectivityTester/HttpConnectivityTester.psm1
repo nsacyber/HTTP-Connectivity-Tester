@@ -475,7 +475,7 @@ Function Get-HttpConnectivity() {
 
     $statusMatch = $ExpectedStatusCode -eq $actualStatusCode
 
-    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Description: {5}{6}Resolved: {7}{8}Addresses: {9}{10}Aliases: {11}{12}Actual Status: {13}{14}Expected Status: {15}{16}Status Matched: {17}{18}Status Message: {19}{20}Blocked: {21}{22}Certificate Error: {23}{24}Certificate Error Message: {25}{26}Ignore Certificate Validation Errors: {27}{28}{29}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
+    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Description: {5}{6}Resolved: {7}{8}IP Addresses: {9}{10}DNS Aliases: {11}{12}Actual Status: {13}{14}Expected Status: {15}{16}Status Matched: {17}{18}Status Message: {19}{20}Blocked: {21}{22}Certificate Error: {23}{24}Certificate Error Message: {25}{26}Ignore Certificate Validation Errors: {27}{28}{29}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMatch,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$hasServerCertificateError,$newLine,$serverCertificateErrorMessage,$newLine,$IgnoreCertificateValidationErrors,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
    
     $bluecoat = $null
@@ -492,14 +492,14 @@ Function Get-HttpConnectivity() {
         TestUrl = $testUri;
         UnblockUrl = $UnblockUrl;
         Resolved = $resolved;
-        Addresses = [string[]]$address;
-        Aliases = [string[]]$alias;
+        IpAddresses = [string[]]$address;
+        DnsAliases = [string[]]$alias;
         Description = $Description;
         ActualStatusCode = [int]$actualStatusCode;
         ExpectedStatusCode = $ExpectedStatusCode;
         StatusMatched = $statusMatch;
         StatusMessage = $statusMessage;
-        IsBlocked = $isBlocked;
+        Blocked = $isBlocked;
         ServerCertificate = $script:ServerCertificate | Select-Object -Property * -ExcludeProperty RawData; # RawData property makes JSON files to large when calling Save-Connectivity
         ServerCertificateChain = $script:ServerCertificateChain;
         ServerCertificateError = $script:ServerCertificateError;

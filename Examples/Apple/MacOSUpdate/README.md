@@ -8,7 +8,7 @@
     * `$connectivity = Get-MacOSUpdateConnectivity -Verbose`
     * `$connectivity = Get-MacOSUpdateConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Aliases,Addresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
 1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs

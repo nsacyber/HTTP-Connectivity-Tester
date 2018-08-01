@@ -8,7 +8,7 @@ Windows Analytics Update Compliance
     * `$connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose`
     * `$connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsAnalyticsUpdateComplianceConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Aliases,Addresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
 1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpdateComplianceConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 Windows Analytics Upgrade Readiness
@@ -18,7 +18,7 @@ Windows Analytics Upgrade Readiness
     * `$connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -Verbose`
     * `$connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsAnalyticsUpgradeReadinessConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property IsBlocked,TestUrl,UnblockUrl,Aliases,Addresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
 1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsAnalyticsUpgradeReadinessConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ### Tested URLs
