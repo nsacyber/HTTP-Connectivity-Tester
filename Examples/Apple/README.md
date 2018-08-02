@@ -1,4 +1,4 @@
-## Microsoft connectivity tests
+## Apple connectivity tests
 
 | Product / Service | File |
 | -- | -- |

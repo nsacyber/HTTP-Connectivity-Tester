@@ -119,7 +119,8 @@ The connectivity object can be saved to a JSON file using the **Save-HttpConnect
 A number of different connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
 
 | Vendor | Product / Service |
-| -- | -- | 
+| -- | -- |
+| [Adobe](./Examples/Adobe/) | [Adobe Reader Manager updates](./Examples/Adobe/ARMUpdate/) |
 | [Apple](./Examples/Apple/) | [macOS updates](./Examples/Apple/MacOSUpdate/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) | 
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness ](./Examples/Microsoft/WindowsAnalytics/) |
