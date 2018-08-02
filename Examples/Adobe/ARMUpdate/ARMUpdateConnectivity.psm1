@@ -29,16 +29,16 @@ Function Get-ARMUpdateConnectivity() {
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
     
     .EXAMPLE   
-    Get-WindowsTelemetryConnectivity
+    Get-ARMUpdateConnectivity
     
     .EXAMPLE  
-    Get-WindowsTelemetryConnectivity -Verbose
+    Get-ARMUpdateConnectivity -Verbose
     
     .EXAMPLE   
-    Get-WindowsTelemetryConnectivity -PerformBlueCoatLookup
+    Get-ARMUpdateConnectivity -PerformBlueCoatLookup
     
     .EXAMPLE  
-    Get-WindowsTelemetryConnectivity -Verbose -PerformBlueCoatLookup
+    Get-ARMUpdateConnectivity -Verbose -PerformBlueCoatLookup
     #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]

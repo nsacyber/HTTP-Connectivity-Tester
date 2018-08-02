@@ -29,16 +29,16 @@ Function Get-MacOSUpdateConnectivity() {
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
     
     .EXAMPLE   
-    Get-WindowsTelemetryConnectivity
+    Get-MacOSUpdateConnectivity
     
     .EXAMPLE  
-    Get-WindowsTelemetryConnectivity -Verbose
+    Get-MacOSUpdateConnectivity -Verbose
     
     .EXAMPLE   
-    Get-WindowsTelemetryConnectivity -PerformBlueCoatLookup
+    Get-MacOSUpdateConnectivity -PerformBlueCoatLookup
     
     .EXAMPLE  
-    Get-WindowsTelemetryConnectivity -Verbose -PerformBlueCoatLookup
+    Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup
     #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
