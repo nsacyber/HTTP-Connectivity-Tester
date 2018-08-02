@@ -129,6 +129,7 @@ A number of different connectivity tests are available in the [Examples folder](
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender SmartScreen](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Telemetry](./Examples/Microsoft/WindowsTelemetry/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Update](./Examples/Microsoft/WindowsUpdate/) |
+| [Mozilla](./Examples/Mozilla] | [Firefox updates](./Examples/Mozilla/Firefox/) |
 
 ## License
 See [LICENSE](./LICENSE.md).
