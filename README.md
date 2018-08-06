@@ -122,6 +122,7 @@ A number of different connectivity tests are available in the [Examples folder](
 | -- | -- |
 | [Adobe](./Examples/Adobe/) | [Adobe Reader Manager updates](./Examples/Adobe/ARMUpdate/) |
 | [Apple](./Examples/Apple/) | [macOS updates](./Examples/Apple/MacOSUpdate/) |
+| [Google](./Examples/Google/) | [Chrome updates](./Examples/Google/ChromeBrowser/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) | 
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness ](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Advanced Threat Protection](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |
