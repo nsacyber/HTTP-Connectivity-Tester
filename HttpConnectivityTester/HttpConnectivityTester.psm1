@@ -353,7 +353,7 @@ Function Get-HttpConnectivity() {
         [ValidateNotNullOrEmpty()]
         [Uri]$TestUrl,
         
-        [Parameter(Mandatory=$true, HelpMessage='The URL to unblock')]
+        [Parameter(Mandatory=$false, HelpMessage='The URL to unblock')]
         [ValidateNotNullOrEmpty()]
         [string]$UnblockUrl,
 
@@ -381,6 +381,8 @@ Function Get-HttpConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
+    $parameters = $PSBoundParameters
+   
     $isVerbose = $verbosePreference -eq 'Continue'
 
     if ($TestUrl.OriginalString.ToLower().StartsWith('http://') -or $TestUrl.OriginalString.ToLower().StartsWith('https://')) {
@@ -389,6 +391,10 @@ Function Get-HttpConnectivity() {
         $testUri = [Uri]('http://{0}' -f $testUri.OriginalString)
     }  
 
+    if(-not($parameters.ContainsKey('UnblockUrl'))) {
+        $UnblockUrl = ('{0}//{1}' -f $testUri.Scheme,$testUri.Host)
+    }    
+    
     $newLine = [System.Environment]::NewLine
 
     Write-Verbose -Message ('{0}*************************************************{1}Testing {2}{3}*************************************************{4}' -f $newLine,$newLine,$testUri,$newLine,$newLine)
@@ -491,6 +497,7 @@ Function Get-HttpConnectivity() {
     $connectivity = [pscustomobject]@{
         TestUrl = $testUri;
         UnblockUrl = $UnblockUrl;
+        UrlType = if ($UnblockUrl.Contains('*')) { 'Pattern' } else { 'Literal' }; 
         Resolved = $resolved;
         IpAddresses = [string[]]$address;
         DnsAliases = [string[]]$alias;
