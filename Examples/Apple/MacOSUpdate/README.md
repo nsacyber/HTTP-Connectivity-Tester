@@ -19,7 +19,7 @@
 | https://swdownload.apple.com | https://swdownload.apple.com | |
 | https://swcdn.apple.com | https://swcdn.apple.com | |
 | https://swdist.apple.com | https://swdist.apple.com | |
-  
+
 ### References
 * [Requirements for Software Update service](https://support.apple.com/en-us/HT200149)
 * [OS X: Server addresses used by Software Update](https://support.apple.com/en-us/HT202943)

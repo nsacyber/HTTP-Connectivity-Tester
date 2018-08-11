@@ -6,9 +6,9 @@ Import-Module -Name HttpConnectivityTester -Force
 # Import-Module .\FirefoxUpdateConnectivity.psm1
 
 # 2. run one of the following:
-# $connectivity = Get-FirefoxUpdateConnectivity 
+# $connectivity = Get-FirefoxUpdateConnectivity
 # $connectivity = Get-FirefoxUpdateConnectivity -Verbose
-# $connectivity = Get-FirefoxUpdateConnectivity -PerformBlueCoatLookup 
+# $connectivity = Get-FirefoxUpdateConnectivity -PerformBlueCoatLookup
 # $connectivity = Get-FirefoxUpdateConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
@@ -19,40 +19,40 @@ Import-Module -Name HttpConnectivityTester -Force
 
 Function Get-FirefoxUpdateConnectivity() {
     <#
-    .SYNOPSIS 
+    .SYNOPSIS
     Gets connectivity information for Firefox updates.
-    
-    .DESCRIPTION  
+
+    .DESCRIPTION
     Gets connectivity information for Firefox updates.
-     
-    .PARAMETER PerformBlueCoatLookup   
+
+    .PARAMETER PerformBlueCoatLookup
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
-    
-    .EXAMPLE   
+
+    .EXAMPLE
     Get-FirefoxUpdateConnectivity
-    
-    .EXAMPLE  
+
+    .EXAMPLE
     Get-FirefoxUpdateConnectivity -Verbose
-    
-    .EXAMPLE   
+
+    .EXAMPLE
     Get-FirefoxUpdateConnectivity -PerformBlueCoatLookup
-    
-    .EXAMPLE  
+
+    .EXAMPLE
     Get-FirefoxUpdateConnectivity -Verbose -PerformBlueCoatLookup
     #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
-    Param(     
+    Param(
         [Parameter(Mandatory=$false, HelpMessage='Whether to perform a BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited.')]
         [switch]$PerformBluecoatLookup
     )
 
     $parameters = $PSBoundParameters
 
-    $isVerbose = $verbosePreference -eq 'Continue'    
+    $isVerbose = $verbosePreference -eq 'Continue'
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
-   
+
     $data.Add([pscustomobject]@{ TestUrl = 'https://aus3.mozilla.org'; UnblockUrl = 'https://aus3.mozilla.org'; StatusCode = 404; Description = 'Firefox update check' })
     $data.Add([pscustomobject]@{ TestUrl = 'https://aus4.mozilla.org'; UnblockUrl = 'https://aus4.mozilla.org'; StatusCode = 404; Description = 'Firefox update check' })
     $data.Add([pscustomobject]@{ TestUrl = 'https://aus5.mozilla.org'; UnblockUrl = 'https://aus5.mozilla.org'; StatusCode = 404; Description = 'Firefox update check'})
@@ -67,7 +67,7 @@ Function Get-FirefoxUpdateConnectivity() {
     $data | ForEach-Object {
         $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
-    }  
+    }
 
     return $results
 }

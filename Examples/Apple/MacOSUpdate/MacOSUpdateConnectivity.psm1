@@ -6,9 +6,9 @@ Import-Module -Name HttpConnectivityTester -Force
 # Import-Module .\MacOSUpdateConnectivity.psm1
 
 # 2. run one of the following:
-# $connectivity = Get-MacOSUpdateConnectivity 
+# $connectivity = Get-MacOSUpdateConnectivity
 # $connectivity = Get-MacOSUpdateConnectivity -Verbose
-# $connectivity = Get-MacOSUpdateConnectivity -PerformBlueCoatLookup 
+# $connectivity = Get-MacOSUpdateConnectivity -PerformBlueCoatLookup
 # $connectivity = Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
@@ -19,54 +19,52 @@ Import-Module -Name HttpConnectivityTester -Force
 
 Function Get-MacOSUpdateConnectivity() {
     <#
-    .SYNOPSIS 
+    .SYNOPSIS
     Gets connectivity information for macOS updates.
-    
-    .DESCRIPTION  
+
+    .DESCRIPTION
     Gets connectivity information for macOS updates.
-     
-    .PARAMETER PerformBlueCoatLookup   
+
+    .PARAMETER PerformBlueCoatLookup
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
-    
-    .EXAMPLE   
+
+    .EXAMPLE
     Get-MacOSUpdateConnectivity
-    
-    .EXAMPLE  
+
+    .EXAMPLE
     Get-MacOSUpdateConnectivity -Verbose
-    
-    .EXAMPLE   
+
+    .EXAMPLE
     Get-MacOSUpdateConnectivity -PerformBlueCoatLookup
-    
-    .EXAMPLE  
+
+    .EXAMPLE
     Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup
     #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
-    Param(     
+    Param(
         [Parameter(Mandatory=$false, HelpMessage='Whether to perform a BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited.')]
         [switch]$PerformBluecoatLookup
     )
 
     $parameters = $PSBoundParameters
 
-    $isVerbose = $verbosePreference -eq 'Continue'    
+    $isVerbose = $verbosePreference -eq 'Continue'
 
     $data = New-Object System.Collections.Generic.List[pscustomobject]
-   
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swscan.apple.com'; UnblockUrl = 'https://swscan.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdnlocator.apple.com'; UnblockUrl = 'https://swcdnlocator.apple.com'; StatusCode = 501; Description = ''; IgnoreCertificateValidationErrors=$false })
 
-    # $data.Add([pscustomobject]@{ TestUrl = 'https://swquery.apple.com'; UnblockUrl = 'https://swquery.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false }) # DNS failure    
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swdownload.apple.com'; UnblockUrl = 'https://swdownload.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdn.apple.com'; UnblockUrl = 'https://swcdn.apple.com'; StatusCode = 404; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swdist.apple.com'; UnblockUrl = 'https://swdist.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swscan.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdnlocator.apple.com'; StatusCode = 501; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swdownload.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdn.apple.com'; StatusCode = 404; Description = ''; IgnoreCertificateValidationErrors=$true })
+    $data.Add([pscustomobject]@{ TestUrl = 'https://swdist.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
         $results.Add($connectivity)
-    }  
+    }
 
     return $results
 }

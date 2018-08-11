@@ -15,13 +15,13 @@
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | http://redirector.gvt1.com | http://*.gvt1.com | |
-| https://redirector.gvt1.com | https://*.gvt1.com | | 
-| http://update.googleapis.com/service/update2 | http://update.googleapis.com | | 
-| https://update.googleapis.com/service/update2 | https://update.googleapis.com | | 
+| https://redirector.gvt1.com | https://*.gvt1.com | |
+| http://update.googleapis.com/service/update2 | http://update.googleapis.com | |
+| https://update.googleapis.com/service/update2 | https://update.googleapis.com | |
 | https://clients2.google.com | https://clients2.google.com | |
 | https://clients5.google.com | https://clients5.google.com | |
 | https://tools.google.com | https://tools.google.com | |
 | http://dl.google.com | http://dl.google.com | |
-  
+
 ### References
 * [Manage Chrome updates (Windows) - Questions - What URLs are used for Chrome Browser updates?](https://support.google.com/chrome/a/answer/6350036?hl=en)

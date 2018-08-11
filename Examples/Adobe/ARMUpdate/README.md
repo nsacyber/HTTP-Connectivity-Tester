@@ -21,6 +21,6 @@
 | http://ardownload2.adobe.com | http://ardownload2.adobe.com | Adobe incremental updates download |
 | https://ardownload2.adobe.com| https://ardownload2.adobe.com | Adobe incremental updates download |
 | http://crl.adobe.com| http://crl.adobe.com | Adobe Certificate Revocation List |
-  
+
 ### References
 * [Adobe Enterprise Toolkit >> Enterprise Administration Guide >> Service and Online Feature Configuration - Endpoint Configuration](https://www.adobe.com/devnet-docs/acrobatetk/tools/AdminGuide/services.html#endpoint-configuration)

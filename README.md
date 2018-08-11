@@ -5,11 +5,11 @@ Aids in discovering HTTP and HTTPS connectivity issues. Includes a PowerShell mo
 
 To get started using the tools:
 
-1. [Download](#downloading-the-repository) the repository as a zip file 
-1. [Configure PowerShell](#configuring-the-powershell-environment) 
+1. [Download](#downloading-the-repository) the repository as a zip file
+1. [Configure PowerShell](#configuring-the-powershell-environment)
 1. [Extract the code](#extracting-the-code)
-1. [Load the code](#loading-the-code) 
-1. [Run the code](#running-the-code) 
+1. [Load the code](#loading-the-code)
+1. [Run the code](#running-the-code)
 
 ## Downloading the repository
 
@@ -22,16 +22,16 @@ The PowerShell commands are meant to run from a system with at least PowerShell 
 
 Users may need to change the default PowerShell execution policy. This can be achieved in a number of different ways:
 
-* Open a command prompt and run **powershell.exe -ExecutionPolicy Bypass** and run scripts from that PowerShell session. 
-* Open a command prompt and run **powershell.exe -ExecutionPolicy Unrestricted** and run scripts from that PowerShell session. 
-* Open a PowerShell prompt and run **Set-ExecutionPolicy Unrestricted -Scope Process** and run scripts from the current PowerShell session. 
-* Open an administrative PowerShell prompt and run **Set-ExecutionPolicy Unrestricted** and run scripts from any PowerShell session. 
+* Open a command prompt and run **powershell.exe -ExecutionPolicy Bypass** and run scripts from that PowerShell session.
+* Open a command prompt and run **powershell.exe -ExecutionPolicy Unrestricted** and run scripts from that PowerShell session.
+* Open a PowerShell prompt and run **Set-ExecutionPolicy Unrestricted -Scope Process** and run scripts from the current PowerShell session.
+* Open an administrative PowerShell prompt and run **Set-ExecutionPolicy Unrestricted** and run scripts from any PowerShell session.
 
 ### Unblocking the PowerShell scripts
 Users will need to unblock the downloaded zip file since it will be marked as having been downloaded from the Internet (Mark of the Web) which PowerShell will block from executing by default. Open a PowerShell prompt and run the following commands to unblock the PowerShell code in the zip file:
 
-1. `cd $env:USERPROFILE` 
-1. `cd Downloads` 
+1. `cd $env:USERPROFILE`
+1. `cd Downloads`
 1. `Unblock-File -Path '.\HTTP-Connectivity-Tester-master.zip'`
 
 Running the PowerShell scripts inside the zip file without unblocking the file will result in the following warning:
@@ -96,7 +96,7 @@ Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Deskt
 ```
 
 ### Interpreting results
-The main Get- command returns a connectivity object that contains more information about the connectivity test. The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or functional are: 
+The main Get- command returns a connectivity object that contains more information about the connectivity test. The main properties of interest from the connectivity object that are useful for determining if a URL or service is blocked or functional are:
 * **Blocked** - whether the service appears to be blocked. Value should be **false**.
 * **TestUrl** - the URL that was used to perform the test.
 * **UnblockUrl** - the URL to get unblocked. Could be a URL pattern rather than a literal URL.
@@ -104,7 +104,7 @@ The main Get- command returns a connectivity object that contains more informati
 * **IpAddresses** - a list of IP addresses corresponding to the TestUrl. Unblocking based on the listed IP addresses is not effective due to cloud providers and content delivery networks that may return many different IP addresses.
 * **Description** - a description of what the URL is for.
 * **Resolved** - whether the URL resolves its DNS entry to IP addresses or DNS aliases. Value should be **true**.
-* **ExpectedStatusCode** - the expected HTTP status code returned by the test. 
+* **ExpectedStatusCode** - the expected HTTP status code returned by the test.
 * **ActualStatusCode** - the actual HTTP status code returned by the test. Value will be 0 when IsBlocked is true or Resolved is false.
 
 ### Saving results
@@ -116,14 +116,14 @@ The connectivity object can be saved to a JSON file using the **Save-HttpConnect
 * **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to.
 
 ## Connectivity tests
-A number of different connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
+Connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
 
 | Vendor | Product / Service |
 | -- | -- |
 | [Adobe](./Examples/Adobe/) | [Adobe Reader Manager updates](./Examples/Adobe/ARMUpdate/) |
 | [Apple](./Examples/Apple/) | [macOS updates](./Examples/Apple/MacOSUpdate/) |
 | [Google](./Examples/Google/) | [Chrome updates](./Examples/Google/ChromeBrowser/) |
-| [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) | 
+| [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness ](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Advanced Threat Protection](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Antivirus](./Examples/Microsoft/WindowsDefenderAntiVirus/) |

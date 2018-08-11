@@ -1,6 +1,6 @@
 ## Windows Defender Antivirus connectivity tests
 
-### Usage 
+### Usage
 1. Import this file: `Import-Module .\WDAVConnectivity.psm1`
 1. Run one of the following:
     * `$connectivity = Get-WDAVConnectivity`
@@ -22,12 +22,12 @@
 | http://www.microsoft.com/pkiops/crl | http://www.microsoft.com/pkiops | Microsoft Certificate Revocation List (CRL). Used by Windows when creating the SSL connection to MAPS for updating the CRL. |
 | http://www.microsoft.com/pkiops/certs | http://www.microsoft.com/pkiops | |
 | http://crl.microsoft.com/pki/crl/products | http://crl.microsoft.com | Microsoft Certificate Revocation List (CRL). Used by Windows when creating the SSL connection to MAPS for updating the CRL. |
-| http://www.microsoft.com/pki/certs | http://www.microsoft.com/pki | | 
+| http://www.microsoft.com/pki/certs | http://www.microsoft.com/pki | |
 | https://msdl.microsoft.com/download/symbols | https://msdl.microsoft.com/download/symbols | Microsoft Symbol Store. Used by Windows Defender Antivirus to restore certain critical files during remediation flows. |
 | https://vortex-win.data.microsoft.com | https://vortex-win.data.microsoft.com | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
 | https://settings-win.data.microsoft.com | https://settings-win.data.microsoft.com | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
 | https://definitionupdates.microsoft.com | https://definitionupdates.microsoft.com | Windows Defender Antivirus definition updates for Windows 10 1709+ |
-| https://unitedstates.cp.wd.microsoft.com | https://unitedstates.cp.wd.microsoft.com | Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+. | 
+| https://unitedstates.cp.wd.microsoft.com | https://unitedstates.cp.wd.microsoft.com | Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+. |
 
 ### References
 * [Configure and validate network connections for Windows Defender Antivirus - Allow connections to the Windows Defender Antivirus cloud](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus#allow-connections-to-the-windows-defender-antivirus-cloud)

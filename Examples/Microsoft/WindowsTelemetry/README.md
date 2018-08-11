@@ -21,5 +21,5 @@
 | https://oca.telemetry.microsoft.com | https://oca.telemetry.microsoft.com | Online Crash Analysis (OCA) data. |
 | https://vortex.data.microsoft.com/collect/v1 | https://vortex.data.microsoft.com | OneDrive application for Windows 10 data. |
 
-### References 
+### References
 * [Configure Windows diagnostic data in your organization - Endpoints](https://docs.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization#endpoints)

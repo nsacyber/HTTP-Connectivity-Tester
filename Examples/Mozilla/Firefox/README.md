@@ -22,7 +22,7 @@
 | https://ftp.mozilla.org | https://ftp.mozilla.org | Firefox update download |
 | https://versioncheck.addons.mozilla.org | https://versioncheck.addons.mozilla.org | Firefox add-on/extension update check |
 | https://versioncheck-bg.addons.mozilla.org | https://swdist.apple.com | Firefox add-on/extension update check |
-  
+
 ### References
 * [Balrog - Environments](https://wiki.mozilla.org/Balrog#Environments)
 * [Balrog Client Domains - SSL Certificates](https://wiki.mozilla.org/Balrog/Client_Domains#SSL_Certificates)

@@ -33,7 +33,7 @@ Windows Analytics Update Compliance
 | https://adl.windows.com | https://adl.windows.com | Allows the compatibility update to receive the latest compatibility data from Microsoft. |
 | https://watson.telemetry.microsoft.com | https://watson.telemetry.microsoft.com | Windows Error Reporting (WER); required for Device Health and Update Compliance AV reports. Not used by Upgrade Readiness. |
 | https://oca.telemetry.microsoft.com | https://oca.telemetry.microsoft.com | Online Crash Analysis; required for Device Health and Update Compliance AV reports. Not used by Upgrade Readiness. |
-    
+
 
 Windows Analytics Upgrade Readiness
 
@@ -42,7 +42,7 @@ Windows Analytics Upgrade Readiness
 | https://v10.events.data.microsoft.com | https://v10.events.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later. |
 | https://v10.vortex-win.data.microsoft.com | https://v10.vortex-win.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for Windows 10 1709 and earlier. |
 | https://vortex.data.microsoft.com | https://v10.vortex-win.data.microsoft.com | Connected User Experience and Diagnostic component endpoint for operating systems older than Windows 10. |
-| https://settings-win.data.microsoft.com | https://settings-win.data.microsoft.com | Enables the compatibility update to send data to Microsoft. | 
+| https://settings-win.data.microsoft.com | https://settings-win.data.microsoft.com | Enables the compatibility update to send data to Microsoft. |
 | https://adl.windows.com | https://adl.windows.com | Allows the compatibility update to receive the latest compatibility data from Microsoft. |
 
 ### References
