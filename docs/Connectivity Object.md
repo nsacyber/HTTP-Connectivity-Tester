@@ -1,6 +1,6 @@
 # Connectivity object
 
-The [Get-HttpConnectivity](./Get-HttpConnectivity.md) cmdlet returns a Connectivity object. The object has a number of properties for troubleshooting connectivity issues.
+The [Get-HttpConnectivity](./Get-HttpConnectivity.md) cmdlet returns a Connectivity object. The object has properties for troubleshooting connectivity issues. The connectivity object, or an array of connectivity objects, can be passed into the [Save-HttpConnectivity](./Save-HttpConnectivity.md) cmdlet to save the object to a JSON file.
 
 | Property Name | Property Type | Description |
 | --- | --- | --- |
@@ -33,6 +33,3 @@ The [Get-HttpConnectivity](./Get-HttpConnectivity.md) cmdlet returns a Connectiv
 | BlueCoat.Pending | Boolean | Whether a rating decision is pending. |
 | BlueCoat.PendingMessage | String | The message indicating why the rating is pending. |
 | BlueCoat.Categories | System.Collections.Hashtable[String,String] | A hashtable where the key is the rating category name and the value is the link to the description of the category. |
-
-
-

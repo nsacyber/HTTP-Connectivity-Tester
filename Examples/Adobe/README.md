@@ -1,4 +1,4 @@
-## Adobe connectivity tests
+# Adobe connectivity tests
 
 | Product / Service | File |
 | -- | -- |

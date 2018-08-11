@@ -1,4 +1,4 @@
-## Mozilla connectivity tests
+# Mozilla connectivity tests
 
 | Product / Service | File |
 | -- | -- |

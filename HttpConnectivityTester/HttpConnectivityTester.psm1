@@ -24,31 +24,31 @@ Function Get-ErrorMessage() {
     Process {
         $msg = [System.Environment]::NewLine,'Exception Message: ',$ErrorRecord.Exception.Message -join ''
 
-        if($ErrorRecord.Exception.HResult -ne $null) {
+        if($null -ne $ErrorRecord.Exception.HResult) {
             $msg = $msg,[System.Environment]::NewLine,'Exception HRESULT: ',('{0:X}' -f $ErrorRecord.Exception.HResult),$ErrorRecord.Exception.HResult -join ''
         }
 
-        if($ErrorRecord.Exception.StackTrace -ne $null) {
+        if($null -ne $ErrorRecord.Exception.StackTrace) {
             $msg = $msg,[System.Environment]::NewLine,'Exception Stacktrace: ',$ErrorRecord.Exception.StackTrace -join ''
         }
 
-        if (($ErrorRecord.Exception | Get-Member | Where-Object { $_.Name -eq 'WasThrownFromThrowStatement'}) -ne $null) {
+        if ($null -ne ($ErrorRecord.Exception | Get-Member | Where-Object { $_.Name -eq 'WasThrownFromThrowStatement'})) {
             $msg = $msg,[System.Environment]::NewLine,'Explicitly Thrown: ',$ErrorRecord.Exception.WasThrownFromThrowStatement -join ''
         }
 
-        if ($ErrorRecord.Exception.InnerException -ne $null) {
+        if ($null -ne $ErrorRecord.Exception.InnerException) {
             if ($ErrorRecord.Exception.InnerException.Message -ne $ErrorRecord.Exception.Message) {
                 $msg = $msg,[System.Environment]::NewLine,'Inner Exception: ',$ErrorRecord.Exception.InnerException.Message -join ''
             }
 
-            if($ErrorRecord.Exception.InnerException.HResult -ne $null) {
+            if($null -ne $ErrorRecord.Exception.InnerException.HResult) {
                 $msg = $msg,[System.Environment]::NewLine,'Inner Exception HRESULT: ',('{0:X}' -f $ErrorRecord.Exception.InnerException.HResult),$ErrorRecord.Exception.InnerException.HResult -join ''
             }
         }
 
         $msg = $msg,[System.Environment]::NewLine,'Call Site: ',$ErrorRecord.InvocationInfo.PositionMessage -join ''
 
-        if (($ErrorRecord | Get-Member | Where-Object { $_.Name -eq 'ScriptStackTrace'}) -ne $null) {
+        if ($null -ne ($ErrorRecord | Get-Member | Where-Object { $_.Name -eq 'ScriptStackTrace'})) {
             $msg = $msg,[System.Environment]::NewLine,"Script Stacktrace: ",$ErrorRecord.ScriptStackTrace -join ''
         }
 
@@ -282,6 +282,10 @@ Function Get-CertificateErrorMessage() {
             'RemoteCertificateChainErrors' {
 
                 if ($Chain.ChainElements.Count -gt 0 -and $Chain.ChainStatus.Count -gt 0) {
+                    if ($Chain.ChainElements.Count -gt 0 -or $Chain.ChainStatus.Count -gt 0) {
+                        Write-Verbose -Message ('Multiple remote certificate chain elements exist. ChainElement Count: {0} ChainStatus Count: {1}' -f $Chain.ChainElements.Count,$Chain.ChainStatus.Count)
+                    }
+
                     #todo support more than one chain
                     $element = $Chain.ChainElements[0]
                     $status = $Chain.ChainStatus[0]
@@ -296,7 +300,7 @@ Function Get-CertificateErrorMessage() {
 
                 $sanExtension = $cert.Extensions | Where-Object { $_.Oid.FriendlyName -eq 'Subject Alternative Name' }
 
-                if ($sanExtension -eq $null) {
+                if ($null -ne $sanExtension) {
                     $subject = $cert.Subject.Split(',')[0].Replace('CN=', '')
                     $details = ('Remote certificate name mismatch. Host: {0} Subject: {1}' -f $Url.Host,$subject)
                 } else {
@@ -326,58 +330,67 @@ Function Get-CertificateErrorMessage() {
 Function Get-HttpConnectivity() {
     <#
     .SYNOPSIS
-    Get connectivity information for a URL.
+    Gets HTTP connectivity information for a URL.
 
     .DESCRIPTION
-    Get connectivity information for a URL.
+    Gets HTTP connectivity information for a URL.
 
     .EXAMPLE
-    Get-Connectivity -Url http://www.site.com
+    Get-HttpConnectivity -TestUrl http://www.site.com
 
     .EXAMPLE
-    Get-Connectivity -Url http://www.site.com -Method POST
+    Get-HttpConnectivity -TestUrl http://www.site.com -UrlPattern http://*.site.com
 
     .EXAMPLE
-    Get-Connectivity -Url http://www.site.com -Method POST -ExpectedStatusCode 400
+    Get-HttpConnectivity -TestUrl http://www.site.com -Method POST
 
     .EXAMPLE
-    Get-Connectivity -Url http://www.site.com -Method POST -ExpectedStatusCode 400 -IgnoreCertificateValidationErrors
+    Get-HttpConnectivity -TestUrl http://www.site.com -ExpectedStatusCode 400
 
     .EXAMPLE
-    Get-Connectivity -Url http://www.site.com -Method POST -ExpectedStatusCode 400 -IgnoreCertificateValidationErrors -PerformBluecoatLookup
+    Get-HttpConnectivity -TestUrl http://www.site.com -Description 'A site that does something'
+
+    .EXAMPLE
+    Get-HttpConnectivity -TestUrl http://www.site.com -UserAgent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36''
+
+    .EXAMPLE
+    Get-HttpConnectivity -TestUrl http://www.site.com -IgnoreCertificateValidationErrors
+
+    .EXAMPLE
+    Get-HttpConnectivity -TestUrl http://www.site.com -PerformBluecoatLookup
     #>
     [CmdletBinding()]
     [OutputType([void])]
     Param(
-        [Parameter(Mandatory=$true, HelpMessage='The URL to test')]
+        [Parameter(Mandatory=$true, HelpMessage='The URL to test.')]
         [ValidateNotNullOrEmpty()]
         [Uri]$TestUrl,
 
-        [Parameter(Mandatory=$false, HelpMessage='The URL pattern to unblock when the URL is not a literal URL')]
+        [Parameter(Mandatory=$false, HelpMessage='The URL pattern to unblock when the URL to unblock is not a literal URL.')]
         [ValidateNotNullOrEmpty()]
         [string]$UrlPattern,
 
-        [Parameter(Mandatory=$false, HelpMessage='The HTTP method to use to test the URL')]
+        [Parameter(Mandatory=$false, HelpMessage="The HTTP method used to test the URL. Defaults to 'GET'.")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet('HEAD','GET', 'POST', IgnoreCase=$true)]
         [string]$Method = 'GET',
 
-        [Parameter(Mandatory=$false, HelpMessage='The expected HTTP status code')]
+        [Parameter(Mandatory=$false, HelpMessage='The HTTP status code expected to be returned. Defaults to 200.')]
         [ValidateNotNullOrEmpty()]
-        [int]$ExpectedStatusCode = 200,
+        [Int32]$ExpectedStatusCode = 200,
 
-        [Parameter(Mandatory=$false, HelpMessage='The description of the connectivity scenario')]
+        [Parameter(Mandatory=$false, HelpMessage='A description of the connectivity test or purpose of the URL.')]
         [ValidateNotNull()]
         [string]$Description = '',
 
-        [Parameter(Mandatory=$false, HelpMessage='The user agent')]
+        [Parameter(Mandatory=$false, HelpMessage='The HTTP user agent. Defaults to the Chrome browser user agent.')]
         [ValidateNotNullOrEmpty()]
         [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
 
-        [Parameter(Mandatory=$false, HelpMessage='Whether to ignore certificate validation errors')]
+        [Parameter(Mandatory=$false, HelpMessage="Whether to ignore certificate validation errors so they don't affect the connectivity test. Some HTTPS endpoints are not meant to be accessed by a browser so the endpoint will not validate against browser security requirements.")]
         [switch]$IgnoreCertificateValidationErrors,
 
-        [Parameter(Mandatory=$false, HelpMessage='Whether to perform a BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited.')]
+        [Parameter(Mandatory=$false, HelpMessage='Whether to perform a Symantec BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited. Automatic throttling is performed when this parameter is used.')]
         [switch]$PerformBluecoatLookup
     )
 
@@ -462,12 +475,12 @@ Function Get-HttpConnectivity() {
             Write-Verbose -Message ('Unable to access {0} due to {1}' -f $testUri,$statusMessage)
         }
     } finally {
-        if ($response -ne $null) {
+        if ($null -ne $response) {
             $response.Close()
         }
     }
 
-    $hasServerCertificateError = if ($script:ServerCertificateError -eq $null) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
+    $hasServerCertificateError = if ($null -ne $script:ServerCertificateError) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
 
     $serverCertificateErrorMessage = ''
 
@@ -526,20 +539,36 @@ Function Get-HttpConnectivity() {
 }
 
 Function Save-HttpConnectivity() {
+    <#
+    .SYNOPSIS
+    Saves HTTP connectivity objects to a JSON file.
+
+    .DESCRIPTION
+    Saves HTTP connectivity objects to a JSON file.
+
+    .EXAMPLE
+    Save-HttpConnectivity -FileName 'Connectivity' -Objects $connectivity
+
+    .EXAMPLE
+    Save-HttpConnectivity -FileName 'Connectivity' -Objects $connectivity -OutputPath "$env:userprofile\Documents\ConnectivityTestResults"
+
+    .EXAMPLE
+    Save-HttpConnectivity -FileName 'Connectivity' -Objects $connectivity -Compress
+    #>
     [CmdletBinding()]
     [OutputType([void])]
     Param(
-        [Parameter(Mandatory=$true, HelpMessage='The filename without the extension')]
+        [Parameter(Mandatory=$true, HelpMessage='The filename without the extension.')]
         [ValidateNotNullOrEmpty()]
         [string]$FileName,
 
-        [Parameter(Mandatory=$true, HelpMessage='Path to save the output to')]
-        [System.Collections.Generic.List[pscustomobject]]$Results,
+        [Parameter(Mandatory=$true, HelpMessage='The connectivity object(s) to save.')]
+        [System.Collections.Generic.List[pscustomobject]]$Objects,
 
-        [Parameter(Mandatory=$false, HelpMessage='Path to save the output to')]
+        [Parameter(Mandatory=$false, HelpMessage="The path to save the file to. Defaults to the user's Desktop folder.")]
         [string]$OutputPath,
 
-        [Parameter(Mandatory=$false, HelpMessage='Compress JSON output')]
+        [Parameter(Mandatory=$false, HelpMessage='Compress the JSON text output.')]
         [switch]$Compress
     )
 
@@ -558,6 +587,6 @@ Function Save-HttpConnectivity() {
     }
 
     #$fileName = ($targetUrl.OriginalString.Split([string[]][IO.Path]::GetInvalidFileNameChars(),[StringSplitOptions]::RemoveEmptyEntries)) -join '-'
-    $json = $Results | ConvertTo-Json -Depth 3 -Compress:$Compress
+    $json = $Objects | ConvertTo-Json -Depth 3 -Compress:$Compress
     $json | Out-File -FilePath "$OutputPath\$FileName.json" -NoNewline -Force
 }

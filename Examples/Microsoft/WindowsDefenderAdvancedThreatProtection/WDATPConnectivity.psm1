@@ -20,7 +20,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 
 # 4. save results to a file:
-# Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+# Save-HttpConnectivity -Objects $connectivity -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WDATPConnectivity() {
     <#
@@ -139,7 +139,7 @@ Function Get-WDATPConnectivity() {
 
     $authenticatedProxyValue = Get-ItemProperty 'HKLM:\Software\Policies\Microsoft\Windows\DataCollection' | Select-Object -Property DisableEnterpriseAuthProxy -ExpandProperty DisableEnterpriseAuthProxy -ErrorAction SilentlyContinue
 
-    $useAuthenticatedProxy = $authenticatedProxyValue -eq $null -or $authenticatedProxyValue -eq 0
+    $useAuthenticatedProxy = $null -eq $authenticatedProxyValue -or $authenticatedProxyValue -eq 0
 
     $isRunningAsSystem = [bool](&"$env:systemroot\system32\whoami.exe" | Select-String -Pattern '^nt authority\\system$' -Quiet) #$env:username -eq "$env:computername$"
 

@@ -1,4 +1,4 @@
-## Microsoft connectivity tests
+# Microsoft connectivity tests
 
 | Product / Service | File |
 | -- | -- |

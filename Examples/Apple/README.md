@@ -1,4 +1,4 @@
-## Apple connectivity tests
+# Apple connectivity tests
 
 | Product / Service | File |
 | -- | -- |

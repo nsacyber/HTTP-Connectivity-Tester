@@ -15,7 +15,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 
 # 4. save results to a file:
-# Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+# Save-HttpConnectivity -Objects $connectivity -FileName ('WindowsUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-WindowsUpdateConnectivity() {
     <#

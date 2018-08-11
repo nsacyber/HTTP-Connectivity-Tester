@@ -1,6 +1,6 @@
-## macOS update connectivity tests
+# macOS update connectivity tests
 
-### Usage
+## Usage
 
 1. Import this file: `Import-Module .\MacOSUpdateConnectivity.psm1`
 1. Run one of the following:
@@ -9,18 +9,20 @@
     * `$connectivity = Get-MacOSUpdateConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-MacOSUpdateConnectivity -Verbose -PerformBlueCoatLookup`
 1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('MacOSUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
-### Tested URLs
+## Tested URLs
+
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
-| https://swscan.apple.com | https://swscan.apple.com | |
-| https://swcdnlocator.apple.com | https://swcdnlocator.apple.com | |
-| https://swdownload.apple.com | https://swdownload.apple.com | |
-| https://swcdn.apple.com | https://swcdn.apple.com | |
-| https://swdist.apple.com | https://swdist.apple.com | |
+| <https://swscan.apple.com> | <https://swscan.apple.com> | |
+| <https://swcdnlocator.apple.com> | <https://swcdnlocator.apple.com> | |
+| <https://swdownload.apple.com> | <https://swdownload.apple.com> | |
+| <https://swcdn.apple.com> | <https://swcdn.apple.com> | |
+| <https://swdist.apple.com> | <https://swdist.apple.com> | |
 
-### References
+## References
+
 * [Requirements for Software Update service](https://support.apple.com/en-us/HT200149)
 * [OS X: Server addresses used by Software Update](https://support.apple.com/en-us/HT202943)
 * [OSX Apple Updates?](https://github.com/bntjah/lancache/issues/36)

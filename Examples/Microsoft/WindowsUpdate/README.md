@@ -1,6 +1,7 @@
-## Windows Update connectivity tests
+# Windows Update connectivity tests
 
-### Usage
+## Usage
+
 1. Import this file: `Import-Module .\WindowsUpdateConnectivity.psm1`
 1. Run one of the following:
     * `$connectivity = Get-WindowsUpdateConnectivity`
@@ -8,30 +9,31 @@
     * `$connectivity = Get-WindowsUpdateConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsUpdateConnectivity -Verbose -PerformBlueCoatLookup`
 1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
-1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('WindowsUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
+1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('WindowsUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
-### Tested URLs
+## Tested URLs
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
-| http://windowsupdate.microsoft.com | http://windowsupdate.microsoft.com | |
-| https://windowsupdate.microsoft.com | https://windowsupdate.microsoft.com | |
+| <http://windowsupdate.microsoft.com> | <http://windowsupdate.microsoft.com> | |
+| <https://windowsupdate.microsoft.com> | <https://windowsupdate.microsoft.com> | |
 | | | |
-| https://geo-prod.do.dsp.mp.microsoft.com | https://*.do.dsp.mp.microsoft.com | |
-| http://download.windowsupdate.com | http://download.windowsupdate.com | |
-| http://au.download.windowsupdate.com | http://*.au.download.windowsupdate.com | |
-| https://cds.d2s7q6s2.hwcdn.net | https://cds.*.hwcdn.net | |
-| http://cs9.wac.phicdn.net | http://*.wac.phicdn.net | |
-| https://cs491.wac.edgecastcdn.net | https://*.wac.edgecastcdn.net | |
-| http://dl.delivery.mp.microsoft.com | http://*.dl.delivery.mp.microsoft.com | |
-| http://tlu.dl.delivery.mp.microsoft.com | http://*.tlu.dl.delivery.mp.microsoft.com | |
-| https://emdl.ws.microsoft.com | https://emdl.ws.microsoft.com | |
-| https://fe2.update.microsoft.com | https://*.update.microsoft.com | |
-| https://sls.update.microsoft.com | https://*.update.microsoft.com | |
-| https://fe3.delivery.mp.microsoft.com |  https://*.delivery.mp.microsoft.com | |
-| https://tsfe.trafficshaping.dsp.mp.microsoft.com | https://*.dsp.mp.microsoft.com | |
+| <https://geo-prod.do.dsp.mp.microsoft.com> | <https://*.do.dsp.mp.microsoft.com> | |
+| <http://download.windowsupdate.com> | <http://download.windowsupdate.com> | |
+| <http://au.download.windowsupdate.com> | <http://*.au.download.windowsupdate.com> | |
+| <https://cds.d2s7q6s2.hwcdn.net> | <https://cds.*.hwcdn.net> | |
+| <http://cs9.wac.phicdn.net> | <http://*.wac.phicdn.net> | |
+| <https://cs491.wac.edgecastcdn.net> | <https://*.wac.edgecastcdn.net> | |
+| <http://dl.delivery.mp.microsoft.com> | <http://*.dl.delivery.mp.microsoft.com> | |
+| <http://tlu.dl.delivery.mp.microsoft.com> | <http://*.tlu.dl.delivery.mp.microsoft.com> | |
+| <https://emdl.ws.microsoft.com> | <https://emdl.ws.microsoft.com> | |
+| <https://fe2.update.microsoft.com> | <https://*.update.microsoft.com> | |
+| <https://sls.update.microsoft.com> | <https://*.update.microsoft.com> | |
+| <https://fe3.delivery.mp.microsoft.com> | <https://*.delivery.mp.microsoft.com> | |
+| <https://tsfe.trafficshaping.dsp.mp.microsoft.com> | <https://*.dsp.mp.microsoft.com> | |
 
-### References
+## References
+
 * [Manage Windows 10 connection endpoints - Windows Update](https://docs.microsoft.com/en-us/windows/privacy/manage-windows-endpoints#windows-update)
 * [Can't download updates from Windows Update from behind a firewall or proxy server](https://support.microsoft.com/en-us/help/3084568/can-t-download-updates-from-windows-update-from-behind-a-firewall-or-p)
 * [How to Configure a Firewall for Software Updates](https://technet.microsoft.com/en-us/library/bb693717.aspx)

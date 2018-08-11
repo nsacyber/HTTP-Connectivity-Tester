@@ -1,4 +1,4 @@
-## Google connectivity tests
+# Google connectivity tests
 
 | Product / Service | File |
 | -- | -- |

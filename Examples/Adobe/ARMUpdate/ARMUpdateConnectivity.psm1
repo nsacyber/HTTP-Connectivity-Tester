@@ -15,7 +15,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
 
 # 4. save results:
-# Save-HttpConnectivity -Results $connectivity -OutputPath "$env:userprofile\Desktop" -FileName ('ARMUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
+# Save-HttpConnectivity -Objects $connectivity -FileName ('ARMUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
 Function Get-ARMUpdateConnectivity() {
     <#
