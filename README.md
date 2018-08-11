@@ -116,7 +116,7 @@ The connectivity object can be saved to a JSON file using the **Save-HttpConnect
 * **-FileName** - the name of the file, minus the file extension, to save the connectivity object(s) to.
 
 ## Connectivity tests
-Connectivity tests are available in the [Examples folder](./Examples/). The table below documents the currently implemented tests.
+The table below documents the currently implemented connectivity tests in the [Examples folder](./Examples/).
 
 | Vendor | Product / Service |
 | -- | -- |
@@ -130,7 +130,7 @@ Connectivity tests are available in the [Examples folder](./Examples/). The tabl
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender SmartScreen](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Telemetry](./Examples/Microsoft/WindowsTelemetry/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Update](./Examples/Microsoft/WindowsUpdate/) |
-| [Mozilla](./Examples/Mozilla] | [Firefox updates](./Examples/Mozilla/Firefox/) |
+| [Mozilla](./Examples/Mozilla) | [Firefox updates](./Examples/Mozilla/Firefox/) |
 
 ## License
 See [LICENSE](./LICENSE.md).

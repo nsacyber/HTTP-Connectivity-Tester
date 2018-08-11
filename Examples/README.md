@@ -13,4 +13,4 @@ The table below documents the currently implemented connectivity tests.
 | [Microsoft](./Microsoft/) | [Windows Defender SmartScreen](./Microsoft/WindowsDefenderSmartScreen/) |
 | [Microsoft](./Microsoft/) | [Windows Telemetry](./Microsoft/WindowsTelemetry/) |
 | [Microsoft](./Microsoft/) | [Windows Update](./Microsoft/WindowsUpdate/) |
-| [Mozilla](./Mozilla] | [Firefox updates](./Mozilla/Firefox/) |
+| [Mozilla](./Mozilla) | [Firefox updates](./Mozilla/Firefox/) |
