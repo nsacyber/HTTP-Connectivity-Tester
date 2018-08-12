@@ -47,25 +47,23 @@ Function Get-FirefoxUpdateConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $isVerbose = $verbosePreference -eq 'Continue'
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
-
-    $data.Add([pscustomobject]@{ TestUrl = 'https://aus3.mozilla.org'; UnblockUrl = 'https://aus3.mozilla.org'; StatusCode = 404; Description = 'Firefox update check' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://aus4.mozilla.org'; UnblockUrl = 'https://aus4.mozilla.org'; StatusCode = 404; Description = 'Firefox update check' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://aus5.mozilla.org'; UnblockUrl = 'https://aus5.mozilla.org'; StatusCode = 404; Description = 'Firefox update check'})
-    $data.Add([pscustomobject]@{ TestUrl = 'https://download.cdn.mozilla.net'; UnblockUrl = 'https://download.cdn.mozilla.net'; StatusCode = 200; Description = 'Firefox update download' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://archive.mozilla.org'; UnblockUrl = 'https://archive.mozilla.org'; StatusCode = 200; Description = 'Firefox update download' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://ftp.mozilla.org'; UnblockUrl = 'https://ftp.mozilla.org'; StatusCode = 200; Description = 'Firefox update download'})
-    $data.Add([pscustomobject]@{ TestUrl = 'https://versioncheck.addons.mozilla.org'; UnblockUrl = 'https://versioncheck.addons.mozilla.org'; StatusCode = 403; Description = 'Firefox add-on/extension update check' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://versioncheck-bg.addons.mozilla.org'; UnblockUrl = 'https://versioncheck-bg.addons.mozilla.org'; StatusCode = 403; Description = 'Firefox add-on/extension update check' })
+    $data.Add(@{ TestUrl = 'https://aus3.mozilla.org'; ExpectedStatusCode = 404; Description = 'Firefox update check'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://aus4.mozilla.org'; ExpectedStatusCode = 404; Description = 'Firefox update check'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://aus5.mozilla.org'; ExpectedStatusCode = 404; Description = 'Firefox update check'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://download.cdn.mozilla.net'; Description = 'Firefox update download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://archive.mozilla.org'; Description = 'Firefox update download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://ftp.mozilla.org'; Description = 'Firefox update download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://versioncheck.addons.mozilla.org'; ExpectedStatusCode = 403; Description = 'Firefox add-on/extension update check'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://versioncheck-bg.addons.mozilla.org'; ExpectedStatusCode = 403; Description = 'Firefox add-on/extension update check'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UnblockUrl $_.UnblockUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 

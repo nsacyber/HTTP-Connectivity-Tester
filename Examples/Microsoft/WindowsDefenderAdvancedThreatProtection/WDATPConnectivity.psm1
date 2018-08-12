@@ -65,27 +65,24 @@ Function Get-WDATPConnectivity() {
         [string]$UrlType = 'All'
     )
 
-    $parameters = $PSBoundParameters
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $isVerbose = $verbosePreference -eq 'Continue'
-
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
     if ($UrlType.ToLower() -in @('all','endpoint')) {
         # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
 
-        $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; StatusCode = 400; Description='Azure Blob storage. Eastern US data center'; }) # onboarding package download URL, there are other sub domains for other resources
-        $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; StatusCode = 400; Description='Azure Blob storage. Central US data center'; }) # onboarding package download URL, there are other sub domains for other resources
-        $data.Add([pscustomobject]@{ TestUrl = 'http://crl.microsoft.com'; StatusCode = 400; Description='Microsoft Certificate Revocation List responder URL'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'http://ctldl.windowsupdate.com'; StatusCode = 200; Description='Microsoft Certificate Trust List download URL'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://events.data.microsoft.com'; StatusCode = 404; Description='WDATP event channel'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; StatusCode = 400; Description='WDATP data channel'; }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
-        #$data.Add([pscustomobject]@{ TestUrl = 'https://v20.events.data.microsoft.com'; StatusCode = 200; Description=''; }) # 1803+ might be a Windows Analytics URL
-        $data.Add([pscustomobject]@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; StatusCode = 404; Description='WDATP event channel for 1803+'; }) # 1803+
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel. Eastern US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; StatusCode = 200; Description='WDATP heartbeat/C&C channel. Central US data center'; })
+        $data.Add(@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        $data.Add(@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        $data.Add(@{ TestUrl = 'http://crl.microsoft.com'; ExpectedStatusCode = 400; Description='Microsoft Certificate Revocation List responder URL'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'http://ctldl.windowsupdate.com'; Description='Microsoft Certificate Trust List download URL'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://events.data.microsoft.com'; ExpectedStatusCode = 404; Description='WDATP event channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
+        $data.Add(@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; ExpectedStatusCode = 404; Description='WDATP event channel for 1803+'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # 1803+
+        $data.Add(@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; Description='WDATP heartbeat/C&C channel. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; Description='WDATP heartbeat/C&C channel. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
-        $data.Add([pscustomobject]@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; StatusCode = 200; Description=''; }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
 
         # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 07/05/2018:
         # https://winatp-gw-cus.microsoft.com/test
@@ -105,35 +102,31 @@ Function Get-WDATPConnectivity() {
     }
 
     if ($UrlType.ToLower() -in @('all','securitycenter')) {
-        $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; StatusCode = 400; Description='Azure Blob storage. Eastern US data center'; }) # onboarding package download URL, there are other sub domains for other resources
-        $data.Add([pscustomobject]@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; StatusCode = 400; Description='Azure Blob storage. Central US data center'; }) # onboarding package download URL, there are other sub domains for other resources
-        $data.Add([pscustomobject]@{ TestUrl = 'https://securitycenter.windows.com'; StatusCode = 200; Description='Windows Defender Security Center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://login.windows.net/'; StatusCode = 200; Description='Azure AD authentication'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://secure.aadcdn.microsoftonline-p.com'; UrlPattern = 'https://*.microsoftonline-p.com'; StatusCode = 400; Description='Azure AD Connect / Azure MFA / Azure ADFS'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://login.microsoftonline.com'; StatusCode = 200; Description='Azure AD authentication'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpmanagement-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 404; Description=''; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://threatintel-eus.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 404; Description='Threat Intel. Eastern US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://threatintel-cus.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 404; Description='Threat Intel. Central US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 500; Description='Automated IR. Eastern US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 500; Description='Automated IR. Central US data center'; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 404; Description='Service health status'; })
-        #$data.Add([pscustomobject]@{ TestUrl = 'https://dc.services.visualstudio.com'; StatusCode = 404; Description='Azure Application Insights'; }) # https://dc.services.visualstudio.com/v2/track
-        $data.Add([pscustomobject]@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 404; Description=''; })
-        $data.Add([pscustomobject]@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; StatusCode = 403; Description='Secure Score security analytics'; })
+        $data.Add(@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        $data.Add(@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        $data.Add(@{ TestUrl = 'https://securitycenter.windows.com'; Description='Windows Defender Security Center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://login.windows.net/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://secure.aadcdn.microsoftonline-p.com'; UrlPattern = 'https://*.microsoftonline-p.com'; ExpectedStatusCode = 400; Description='Azure AD Connect / Azure MFA / Azure ADFS'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://login.microsoftonline.com'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://winatpmanagement-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://threatintel-eus.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; Description='Threat Intel. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://threatintel-cus.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; Description='Threat Intel. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; Description='Service health status'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #$data.Add(@{ TestUrl = 'https://dc.services.visualstudio.com'; ExpectedStatusCode = 404; Description='Azure Application Insights'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # https://dc.services.visualstudio.com/v2/track
+        $data.Add(@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 403; Description='Secure Score security analytics'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
     }
 
     #TODO add downlevel URL tests
 
-    $uniqueUrls = @($data | Select-Object -Property TestUrl -ExpandProperty TestUrl -Unique)
+    $uniqueUrls = @($data | ForEach-Object { [pscustomobject]$_ } | Select-Object -Property TestUrl -ExpandProperty TestUrl -Unique)
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
-    $data | Where-Object {$_.TestUrl -in $uniqueUrls } | ForEach-Object {
-        if ('UrlPattern' -in $_.PSObject.Properties.Name) {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UrlPattern $_.UrlPattern -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        } else {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        }
+    $data | Where-Object { ([pscustomobject]$_).TestUrl -in $uniqueUrls } | ForEach-Object {
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 

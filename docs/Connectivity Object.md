@@ -13,7 +13,6 @@ The [Get-HttpConnectivity](./Get-HttpConnectivity.md) cmdlet returns a Connectiv
 | Description | String | A description of the URL. |
 | ActualStatusCode | Int32 | The actual HTTP status code return by the connectivity test. |
 | ExpectedStatusCode | Int32 | The expected HTTP status code that should be returned by the connectivity test. |
-| StatusMatched | Boolean | Whether the actual and expected HTTP status codes matched. |
 | StatusMessage | String | The HTTP status message associated with the actual HTTP status code. Can also be an error message. |
 | Blocked | Boolean | Whether the URL is blocked. |
 | ServerCertificate | System.Management.Automation.PSCustomObject | |

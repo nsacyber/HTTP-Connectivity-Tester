@@ -47,29 +47,23 @@ Function Get-ChromeUpdateConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $isVerbose = $verbosePreference -eq 'Continue'
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
-
-    $data.Add([pscustomobject]@{ TestUrl = 'http://redirector.gvt1.com'; UrlPattern = 'http://*.gvt1.com'; StatusCode = 404; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://redirector.gvt1.com'; UrlPattern = 'https://*.gvt1.com'; StatusCode = 404; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'http://update.googleapis.com/service/update2'; StatusCode = 404; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://update.googleapis.com/service/update2'; StatusCode = 404; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://clients2.google.com'; StatusCode = 404; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://clients5.google.com'; StatusCode = 404; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://tools.google.com'; StatusCode = 200; Description = '' })
-    $data.Add([pscustomobject]@{ TestUrl = 'http://dl.google.com'; StatusCode = 200; Description = '' })
+    $data.Add(@{ TestUrl = 'http://redirector.gvt1.com'; UrlPattern = 'http://*.gvt1.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://redirector.gvt1.com'; UrlPattern = 'https://*.gvt1.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://update.googleapis.com/service/update2'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://update.googleapis.com/service/update2'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://clients2.google.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://clients5.google.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://tools.google.com'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://dl.google.com'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        if ('UrlPattern' -in $_.PSObject.Properties.Name) {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UrlPattern $_.UrlPattern -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        } else {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        }
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 

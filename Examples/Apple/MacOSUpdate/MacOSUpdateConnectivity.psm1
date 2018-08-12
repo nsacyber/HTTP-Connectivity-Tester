@@ -47,22 +47,20 @@ Function Get-MacOSUpdateConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $isVerbose = $verbosePreference -eq 'Continue'
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
-
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swscan.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdnlocator.apple.com'; StatusCode = 501; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swdownload.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swcdn.apple.com'; StatusCode = 404; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://swdist.apple.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add(@{ TestUrl = 'https://swscan.apple.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://swcdnlocator.apple.com'; ExpectedStatusCode = 501; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://swdownload.apple.com'; ExpectedStatusCode = 403; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://swcdn.apple.com'; ExpectedStatusCode = 404; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://swdist.apple.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 

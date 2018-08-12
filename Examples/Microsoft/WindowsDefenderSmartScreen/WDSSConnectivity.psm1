@@ -8,7 +8,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # 2. run one of the following:
 # $connectivity = Get-WDSSConnectivity
 # $connectivity = Get-WDSSConnectivity -Verbose
-# $connectivity = Get-WDSSConnectivity -PerformBlueCoatLooku
+# $connectivity = Get-WDSSConnectivity -PerformBlueCoatLookup
 # $connectivity = Get-WDSSConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
@@ -47,35 +47,30 @@ Function Get-WDSSConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $isVerbose = $verbosePreference -eq 'Continue'
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
     # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-smartscreen/windows-defender-smartscreen-overview
 	# https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/ee126149(v=ws.10)
 
-    $data.Add([pscustomobject]@{ TestUrl = 'https://apprep.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://ars.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://c.urs.microsoft.com'; UrlPattern='https://*.urs.microsoft.com'; StatusCode = 403; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://feedback.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 403; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://nav.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://nf.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://ping.nav.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://ping.nf.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://t.nf.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://t.urs.microsoft.com'; UrlPattern='https://*.urs.microsoft.com'; StatusCode = 403; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://urs.microsoft.com' ; UrlPattern='https://urs.microsoft.com'; StatusCode = 403; Description = ''; })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://urs.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; StatusCode = 404; Description = ''; })
-
+    $data.Add(@{ TestUrl = 'https://apprep.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose})
+    $data.Add(@{ TestUrl = 'https://ars.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://c.urs.microsoft.com'; UrlPattern='https://*.urs.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://feedback.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://nav.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://nf.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://ping.nav.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://ping.nf.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://t.nf.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://t.urs.microsoft.com'; UrlPattern='https://*.urs.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://urs.microsoft.com' ; UrlPattern='https://urs.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://urs.smartscreen.microsoft.com'; UrlPattern='https://*.smartscreen.microsoft.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        if ('UrlPattern' -in $_.PSObject.Properties.Name) {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UrlPattern $_.UrlPattern -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        } else {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        }
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 

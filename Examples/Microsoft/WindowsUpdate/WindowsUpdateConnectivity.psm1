@@ -47,37 +47,33 @@ Function Get-WindowsUpdateConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $isVerbose = $verbosePreference -eq 'Continue'
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
     # https://docs.microsoft.com/en-us/windows/privacy/manage-windows-endpoints#windows-update
 
-    $data.Add([pscustomobject]@{ TestUrl = 'http://windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
-    #$data.Add([pscustomobject]@{ TestUrl = 'https://windowsupdate.microsoft.com'; UrlPattern = 'http://*.windowsupdate.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://geo-prod.do.dsp.mp.microsoft.com'; UrlPattern = 'https://*.do.dsp.mp.microsoft.com'; StatusCode = 403; Description = 'Updates for applications and the OS on Windows 10 1709 and later. Windows Update Delivery Optimization metadata, resiliency, and anti-corruption.'; IgnoreCertificateValidationErrors=$false }) # many different *-prod.do.dsp.mp.microsoft.com, but geo-prod.do.dsp.mp.microsoft.com is the most common one
-    $data.Add([pscustomobject]@{ TestUrl = 'http://download.windowsupdate.com'; StatusCode = 200; Description = 'Download operating system patches and updates'; IgnoreCertificateValidationErrors=$true})
-    $data.Add([pscustomobject]@{ TestUrl = 'http://au.download.windowsupdate.com'; UrlPattern = 'http://*.au.download.windowsupdate.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$true }) # many different *.download.windowsupdate.com, au.download.windowsupdate.com is most common. *.au.download.windowsupdate.com, *.l.windowsupdate.com
-    $data.Add([pscustomobject]@{ TestUrl = 'https://cds.d2s7q6s2.hwcdn.net'; UrlPattern = 'https://cds.*.hwcdn.net'; StatusCode = 504; Description = 'Highwinds Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'http://cs9.wac.phicdn.net'; UrlPattern = 'http://*.wac.phicdn.net'; StatusCode = 200; Description = 'Verizon Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://cs491.wac.edgecastcdn.net'; UrlPattern = 'https://*.wac.edgecastcdn.net'; StatusCode = 404; Description = 'Verizon Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'http://dl.delivery.mp.microsoft.com'; UrlPattern = 'http://*.dl.delivery.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'http://tlu.dl.delivery.mp.microsoft.com'; UrlPattern = 'http://*.tlu.dl.delivery.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://emdl.ws.microsoft.com'; StatusCode = 503; Description = 'Update applications from the Microsoft Store'; IgnoreCertificateValidationErrors=$true })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://fe2.update.microsoft.com'; UrlPattern = 'https://*.update.microsoft.com'; StatusCode = 200; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://sls.update.microsoft.com'; UrlPattern = 'https://*.update.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://fe3.delivery.mp.microsoft.com'; UrlPattern = 'https://*.delivery.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://tsfe.trafficshaping.dsp.mp.microsoft.com'; UrlPattern = 'https://*.dsp.mp.microsoft.com'; StatusCode = 403; Description = ''; IgnoreCertificateValidationErrors=$false })
+    $data.Add(@{ TestUrl = 'http://windowsupdate.microsoft.com'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://windowsupdate.microsoft.com'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    #$data.Add(@{ TestUrl = 'https://windowsupdate.microsoft.com'; UrlPattern = 'http://*.windowsupdate.microsoft.com'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://geo-prod.do.dsp.mp.microsoft.com'; UrlPattern = 'https://*.do.dsp.mp.microsoft.com'; ExpectedStatusCode = 403; Description = 'Updates for applications and the OS on Windows 10 1709 and later. Windows Update Delivery Optimization metadata, resiliency, and anti-corruption.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # many different *-prod.do.dsp.mp.microsoft.com, but geo-prod.do.dsp.mp.microsoft.com is the most common one
+    $data.Add(@{ TestUrl = 'http://download.windowsupdate.com'; Description = 'Download operating system patches and updates'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://au.download.windowsupdate.com'; UrlPattern = 'http://*.au.download.windowsupdate.com'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # many different *.download.windowsupdate.com, au.download.windowsupdate.com is most common. *.au.download.windowsupdate.com, *.l.windowsupdate.com
+    $data.Add(@{ TestUrl = 'https://cds.d2s7q6s2.hwcdn.net'; UrlPattern = 'https://cds.*.hwcdn.net'; ExpectedStatusCode = 504; Description = 'Highwinds Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://cs9.wac.phicdn.net'; UrlPattern = 'http://*.wac.phicdn.net'; Description = 'Verizon Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://cs491.wac.edgecastcdn.net'; UrlPattern = 'https://*.wac.edgecastcdn.net'; ExpectedStatusCode = 404; Description = 'Verizon Content Delivery Network used for Windows Update on Windows 10 1709 and later'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://dl.delivery.mp.microsoft.com'; UrlPattern = 'http://*.dl.delivery.mp.microsoft.com'; ExpectedStatusCode = 403; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://tlu.dl.delivery.mp.microsoft.com'; UrlPattern = 'http://*.tlu.dl.delivery.mp.microsoft.com'; ExpectedStatusCode = 403; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://emdl.ws.microsoft.com'; ExpectedStatusCode = 503; Description = 'Update applications from the Microsoft Store'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://fe2.update.microsoft.com'; UrlPattern = 'https://*.update.microsoft.com'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://sls.update.microsoft.com'; UrlPattern = 'https://*.update.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://fe3.delivery.mp.microsoft.com'; UrlPattern = 'https://*.delivery.mp.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://tsfe.trafficshaping.dsp.mp.microsoft.com'; UrlPattern = 'https://*.dsp.mp.microsoft.com'; ExpectedStatusCode = 403; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        if ('UrlPattern' -in $_.PSObject.Properties.Name) {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -UrlPattern $_.UrlPattern -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        } else {
-            $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
-        }
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 

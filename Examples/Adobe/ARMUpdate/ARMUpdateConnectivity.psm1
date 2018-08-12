@@ -47,27 +47,25 @@ Function Get-ARMUpdateConnectivity() {
         [switch]$PerformBluecoatLookup
     )
 
-    $parameters = $PSBoundParameters
+    $isVerbose = $VerbosePreference -eq 'Continue'
 
-    $isVerbose = $verbosePreference -eq 'Continue'
+    $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
-    $data = New-Object System.Collections.Generic.List[pscustomobject]
+    $data.Add(@{ TestUrl = 'http://armmf.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe update metadata download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://armmf.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe update metadata download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
-    $data.Add([pscustomobject]@{ TestUrl = 'http://armmf.adobe.com'; StatusCode = 404; Description = 'Adobe update metadata download'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://armmf.adobe.com'; StatusCode = 404; Description = 'Adobe update metadata download'; IgnoreCertificateValidationErrors=$false })
+    $data.Add(@{ TestUrl = 'http://ardownload.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe updates download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://ardownload.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe updates download'; IgnoreCertificateValidationErrors=$true; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
-    $data.Add([pscustomobject]@{ TestUrl = 'http://ardownload.adobe.com'; StatusCode = 404; Description = 'Adobe updates download'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://ardownload.adobe.com'; StatusCode = 404; Description = 'Adobe updates download'; IgnoreCertificateValidationErrors=$true })
+    $data.Add(@{ TestUrl = 'http://ardownload2.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe incremental updates download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'https://ardownload2.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe incremental updates download'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
-    $data.Add([pscustomobject]@{ TestUrl = 'http://ardownload2.adobe.com'; StatusCode = 404; Description = 'Adobe incremental updates download'; IgnoreCertificateValidationErrors=$false })
-    $data.Add([pscustomobject]@{ TestUrl = 'https://ardownload2.adobe.com'; StatusCode = 404; Description = 'Adobe incremental updates download'; IgnoreCertificateValidationErrors=$false })
-
-    $data.Add([pscustomobject]@{ TestUrl = 'http://crl.adobe.com'; StatusCode = 404; Description = 'Adobe Certificate Revocation List'; IgnoreCertificateValidationErrors=$false })
+    $data.Add(@{ TestUrl = 'http://crl.adobe.com'; ExpectedStatusCode = 404; Description = 'Adobe Certificate Revocation List'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {
-        $connectivity = Get-HttpConnectivity -TestUrl $_.TestUrl -ExpectedStatusCode $_.StatusCode -Description $_.Description -IgnoreCertificateValidationErrors:($_.IgnoreCertificateValidationErrors) -PerformBluecoatLookup:$PerformBluecoatLookup -Verbose:$isVerbose
+        $connectivity = Get-HttpConnectivity @_
         $results.Add($connectivity)
     }
 
