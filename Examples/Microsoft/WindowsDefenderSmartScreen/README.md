@@ -18,7 +18,7 @@
 | <https://apprep.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | |
 | <https://ars.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
 | <https://c.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by Internet Explorer (iexplore.exe), Edge (MicrosoftEdge.exe) |
-| <https://feedback.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by users to report feedback on SmartScreen accuracy for a site |
+| <https://feedback.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by users to report feedback on SmartScreen accuracy for a URL |
 | <https://nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
 | <https://nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe) |
 | <https://ping.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
@@ -31,8 +31,8 @@
 
 ## Notes
 
-* urs.microsoft.com and *.urs.microsoft.com URLs are used by Internet Explorer (iexplore.exe) and Edge (MicrosoftEdge.exe) browsers.
-* *.smartscreen.microsoft.com URLs are used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), and Windows Defender Exploit Guard Network Protection (wdnsfltr.exe).
+* <https://urs.microsoft.com> and <https://*.urs.microsoft.com> URLs are used by Internet Explorer (iexplore.exe) and Edge (MicrosoftEdge.exe) browsers.
+* <https://*.smartscreen.microsoft.com> URLs are used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), and Windows Defender Exploit Guard Network Protection (wdnsfltr.exe).
 
 ## References
 
