@@ -8,7 +8,7 @@
     * `$connectivity = Get-WindowsUpdateConnectivity -Verbose`
     * `$connectivity = Get-WindowsUpdateConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-WindowsUpdateConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus`
 1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('WindowsUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ## Tested URLs

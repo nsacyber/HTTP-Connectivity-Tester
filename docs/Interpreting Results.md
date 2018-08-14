@@ -11,3 +11,4 @@ The [Connectivity object](./Connectivity%20Object.md) provides the data to help 
 * **Resolved** - whether the URL resolves its DNS entry to IP addresses or DNS aliases. Value should be **true**.
 * **ExpectedStatusCode** - the expected HTTP status code returned by the test.
 * **ActualStatusCode** - the actual HTTP status code returned by the test. Value will be 0 when Blocked is true or Resolved is false.
+* **UnexpectedStatus** - was the actual status code an unexpected value regardless of whether the actual status code was the same as the expected status code.

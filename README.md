@@ -94,7 +94,7 @@ An example for running, viewing, and saving a connectivity test:
 cd .\Examples\Microsoft\WindowsTelemetry\
 Import-Module -Name .\WindowsTelemetryConnectivity.psm1
 $connectivity = Get-WindowsTelemetryConnectivity -Verbose
-$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus
 Save-HttpConnectivity -Objects $connectivity -FileName ('WindowsTelemetryConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 ```
 
@@ -111,6 +111,7 @@ The main Get- command returns a [Connectivity object](./docs/Connectivity%20Obje
 * **Resolved** - whether the URL resolves its DNS entry to IP addresses or DNS aliases. Value should be **true**.
 * **ExpectedStatusCode** - the expected HTTP status code returned by the test.
 * **ActualStatusCode** - the actual HTTP status code returned by the test. Value will be 0 when Blocked is true or Resolved is false.
+* **UnexpectedStatus** - was the actual status code an unexpected value regardless of whether the actual status code was the same as the expected status code.
 
 See [Interpreting results](./docs/Interpreting%20Results.md) for more information.
 

@@ -502,9 +502,12 @@ Function Get-HttpConnectivity() {
     $resolved = (@($address)).Length -ge 1 -or (@($alias)).Length -ge 1
     $actualStatusCode = [int]$statusCode
     $isBlocked = $statusCode -eq 0 -and $resolved
-    $urlType = if ($UnblockUrl.Contains('*')) { 'Pattern' } else { 'Literal' };
+    $urlType = if ($UnblockUrl.Contains('*')) { 'Pattern' } else { 'Literal' }
 
-    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Url Type: {5}{6}Description: {7}{8}Resolved: {9}{10}IP Addresses: {11}{12}DNS Aliases: {13}{14}Actual Status: {15}{16}Expected Status: {17}{18}Status Message: {19}{20}Blocked: {21}{22}Certificate Error: {23}{24}Certificate Error Message: {25}{26}Ignore Certificate Validation Errors: {27}{28}{29}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$urlType,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$statusMessage,$newLine,$isBlocked,$newLine,$serverCertificateObject.HasError,$newLine,$serverCertificateObject.ErrorMessage,$newLine,$serverCertificateObject.IgnoreError,$newLine,$newLine)
+    $isUnexpectedStatus = !($statusCode -in @(200,400,403,404,500,501,503,504))
+    $simpleStatusMessage = if ($isUnexpectedStatus) { $statusMessage } else { '' }
+
+    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Url Type: {5}{6}Description: {7}{8}Resolved: {9}{10}IP Addresses: {11}{12}DNS Aliases: {13}{14}Actual Status Code: {15}{16}Expected Status Code: {17}{18}Is Unexpected Status Code: {19}{20}, Status Message: {21}{22}Blocked: {23}{24}Certificate Error: {25}{26}Certificate Error Message: {27}{28}Ignore Certificate Validation Errors: {29}{30}{31}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$urlType,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$isUnexpectedStatus,$newLine,$simpleStatusMessage,$newLine,$isBlocked,$newLine,$serverCertificateObject.HasError,$newLine,$serverCertificateObject.ErrorMessage,$newLine,$serverCertificateObject.IgnoreError,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
 
     $bluecoat = $null
@@ -527,7 +530,9 @@ Function Get-HttpConnectivity() {
         Description = $Description;
         ActualStatusCode = [int]$actualStatusCode;
         ExpectedStatusCode = $ExpectedStatusCode;
-        StatusMessage = $statusMessage;
+        UnexpectedStatus = $isUnexpectedStatus;
+        StatusMessage = $simpleStatusMessage;
+        DetailedStatusMessage = $statusMessage;
         Blocked = $isBlocked;
         ServerCertificate = $serverCertificateObject;
         BlueCoat = $bluecoat;

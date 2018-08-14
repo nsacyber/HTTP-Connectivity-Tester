@@ -8,7 +8,7 @@
     * `$connectivity = Get-ARMUpdateConnectivity -Verbose`
     * `$connectivity = Get-ARMUpdateConnectivity -PerformBlueCoatLookup`
     * `$connectivity = Get-ARMUpdateConnectivity -Verbose -PerformBlueCoatLookup`
-1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode`
+1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus`
 1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('ARMUpdateConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ## Tested URLs

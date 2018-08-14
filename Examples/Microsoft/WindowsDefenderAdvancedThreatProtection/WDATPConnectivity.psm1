@@ -17,7 +17,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose
 
 # 3. filter results:
-# $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+# $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus
 
 # 4. save results to a file:
 # Save-HttpConnectivity -Objects $connectivity -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))

@@ -12,7 +12,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity = Get-WDAVConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
-# $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode
+# $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus
 
 # 4. save results to a file:
 # Save-Connectivity -Objects $connectivity -FileName ('WDAVConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))

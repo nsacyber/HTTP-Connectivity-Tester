@@ -13,10 +13,12 @@ The [Get-HttpConnectivity](./Get-HttpConnectivity.md) cmdlet returns a Connectiv
 | Description | String | A description of the URL. |
 | ActualStatusCode | Int32 | The actual HTTP status code return by the connectivity test. |
 | ExpectedStatusCode | Int32 | The expected HTTP status code that should be returned by the connectivity test. |
-| StatusMessage | String | The HTTP status message associated with the actual HTTP status code. Can also be an error message. |
+| UnexpectedStatus | Boolean | Whether the actual status code is an unexpected value regardless of whether the actual status code was the same as the expected status code. |
+| StatusMessage | String | The HTTP status message associated with the actual HTTP status code when an unexpected HTTP status code is present. |
+| DetailedStatusMessage | String | The HTTP status message associated with the actual HTTP status code and any associated exception information regardless of whether the HTTP status code is unexpected. |
 | Blocked | Boolean | Whether the URL is blocked. |
 | ServerCertificate | System.Management.Automation.PSCustomObject | |
-| ServerCertificate.Certificate | System.Security.Cryptography.X509Certificates.X509Certificate2 | An X509 certificiate minus the RawData property. |
+| ServerCertificate.Certificate | System.Security.Cryptography.X509Certificates.X509Certificate2 | An X509 certificate minus the RawData property. |
 | ServerCertificate.Chain | System.Security.Cryptography.X509Certificates.X509Chain | X509 certificate chain information. |
 | ServerCertificate.Error | System.Net.Security.SslPolicyErrors | TLS errors associated with the X509 certificate or certificate chain. |
 | ServerCertificate.ErrorMessage | String | The error message with the X509 certificate or certificate chain. |
