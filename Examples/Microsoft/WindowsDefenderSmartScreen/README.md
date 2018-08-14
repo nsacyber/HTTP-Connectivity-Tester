@@ -16,18 +16,23 @@
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | <https://apprep.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | |
-| <https://ars.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
-| <https://c.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by iexplore.exe, MicrosoftEdge.exe |
-| <https://feedback.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by browsers and users to report feedback on SmartScreen accuracy for a site |
-| <https://nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
-| <https://nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe |
-| <https://ping.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
-| <https://ping.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe, smartscreen.exe |
-| <https://t.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
-| <https://t.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe |
-| <https://t.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by iexplore.exe, MicrosoftEdge.exe |
-| <https://urs.microsoft.com> | <https://urs.microsoft.com> | SmartScreen URL used by iexplore.exe |
-| <https://urs.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe, smartscreen.exe, wdnsfltr.exe (Windows Defender Exploit Guard Network Protection) |
+| <https://ars.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
+| <https://c.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by Internet Explorer (iexplore.exe), Edge (MicrosoftEdge.exe) |
+| <https://feedback.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by users to report feedback on SmartScreen accuracy for a site |
+| <https://nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
+| <https://nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe) |
+| <https://ping.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
+| <https://ping.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe) |
+| <https://t.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender SmartScreen (smartscreen.exe) |
+| <https://t.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe) |
+| <https://t.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by Internet Explorer (iexplore.exe), Edge (MicrosoftEdge.exe) |
+| <https://urs.microsoft.com> | <https://urs.microsoft.com> | SmartScreen URL used by Internet Explorer (iexplore.exe) |
+| <https://urs.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), Windows Defender Exploit Guard Network Protection (wdnsfltr.exe) |
+
+## Notes
+
+* urs.microsoft.com and *.urs.microsoft.com URLs are used by Internet Explorer (iexplore.exe) and Edge (MicrosoftEdge.exe) browsers.
+* *.smartscreen.microsoft.com URLs are used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), and Windows Defender Exploit Guard Network Protection (wdnsfltr.exe).
 
 ## References
 
