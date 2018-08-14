@@ -23,7 +23,7 @@
 | <https://nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe |
 | <https://ping.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
 | <https://ping.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe, smartscreen.exe |
-| <https://t.nav.smartscreen.microsoft.com | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
+| <https://t.nav.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by smartscreen.exe |
 | <https://t.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by NisSrv.exe |
 | <https://t.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by iexplore.exe, MicrosoftEdge.exe |
 | <https://urs.microsoft.com> | <https://urs.microsoft.com> | SmartScreen URL used by iexplore.exe |
