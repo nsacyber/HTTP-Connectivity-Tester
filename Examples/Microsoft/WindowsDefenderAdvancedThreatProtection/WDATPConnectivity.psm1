@@ -33,6 +33,9 @@ Function Get-WDATPConnectivity() {
     .PARAMETER UrlType
     Selects the type of URLs to test. 'All', 'Endpoint', and 'SecurityCenter' are accepted values. 'All' is the default behavior.
 
+    .PARAMETER WorkspaceId
+    The workspace identifier used for down level operating system support for WDATP.
+
     .PARAMETER PerformBlueCoatLookup
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
 
@@ -60,12 +63,17 @@ Function Get-WDATPConnectivity() {
         [Parameter(Mandatory=$false, HelpMessage='Whether to perform a BlueCoat Site Review lookup on the URL. Warning: The BlueCoat Site Review REST API is rate limited.')]
         [switch]$PerformBluecoatLookup,
 
-        [Parameter(Mandatory=$false, HelpMessage="The type of URLs to test. 'All', 'Endpoint', or 'SecurityCenter'")]
+        [Parameter(Mandatory=$false, HelpMessage="The type of URLs to test. 'All', 'Endpoint', or 'SecurityCenter'.")]
         [ValidateSet('All','Endpoint','SecurityCenter',IgnoreCase=$true)]
-        [string]$UrlType = 'All'
+        [string]$UrlType = 'All',
+
+        [Parameter(Mandatory=$false, HelpMessage='The workspace identifier used for down level operating system support for WDATP.')]
+        [string]$WorkspaceId
     )
 
     $isVerbose = $VerbosePreference -eq 'Continue'
+
+    $parameters = $PSBoundParameters
 
     $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
@@ -98,13 +106,13 @@ Function Get-WDATPConnectivity() {
         # https://us-v20.events.data.microsoft.com
         # https://eu-v20.events.data.microsoft.com
         # https://uk-v20.events.data.microsoft.com
-        # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab	NoPinning
+        # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab    NoPinning
     }
 
     if ($UrlType.ToLower() -in @('all','securitycenter')) {
         $data.Add(@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
         $data.Add(@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
-        $data.Add(@{ TestUrl = 'https://securitycenter.windows.com'; Description='Windows Defender Security Center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://securitycenter.windows.com'; Description='Windows Defeder Security Center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
         $data.Add(@{ TestUrl = 'https://login.windows.net/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
         $data.Add(@{ TestUrl = 'https://secure.aadcdn.microsoftonline-p.com'; UrlPattern = 'https://*.microsoftonline-p.com'; ExpectedStatusCode = 400; Description='Azure AD Connect / Azure MFA / Azure ADFS'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
         $data.Add(@{ TestUrl = 'https://login.microsoftonline.com'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
@@ -119,7 +127,17 @@ Function Get-WDATPConnectivity() {
         $data.Add(@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 403; Description='Secure Score security analytics'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
     }
 
-    #TODO add downlevel URL tests
+    # downlevel URL tests
+    if ($parameters.ContainsKey('WorkspaceId')) {
+        $data.Add(@{ TestUrl = "https://$WorkspaceId.oms.opinsights.azure.com"; UrlPattern = 'https://*.oms.opinsights.azure.com'; ExpectedStatusCode = 400; Description='Microsoft Management Agent communication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = "https://$WorkspaceId.ods.opinsights.azure.com"; UrlPattern = 'https://*.ods.opinsights.azure.com'; ExpectedStatusCode = 400; Description='Azure OMS data collection'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+
+        # ncus and eus2 are other options https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-oms-gateway#agent-service-urls
+        $data.Add(@{ TestUrl = 'https://scus-agentservice-prod-1.azure-automation.net'; UrlPattern = 'https://*.azure-automation.net'; ExpectedStatusCode = 400; Description='Azure Automation. Process and workflow automation'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+
+        # eusaaomssa.blob.core.windows.net is another option
+        $data.Add(@{ TestUrl = 'https://scadvisorcontent.blob.core.windows.net'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='System Center Advisor content'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    }
 
     $uniqueUrls = @($data | ForEach-Object { [pscustomobject]$_ } | Select-Object -Property TestUrl -ExpandProperty TestUrl -Unique)
 

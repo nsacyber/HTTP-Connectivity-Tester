@@ -37,8 +37,9 @@ Endpoint URLs for WDATP downlevel Microsoft Management Agent support (Windows 7,
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
 | <https://_workspaceid_.oms.opinsights.azure.com>  | <https://*.oms.opinsights.azure.com> | Microsoft Management Agent communication. |
-| <https://_workspaceid_.opinsights.azure.com> | <https://*.ods.opinsights.azure.com> | Azure OMS data collection. |
-| | <https://*.azure-automation.net> | Azure Automation. Process and workflow automation. |
+| <https://_workspaceid_.ods.opinsights.azure.com> | <https://*.ods.opinsights.azure.com> | Azure OMS data collection. |
+| <https://scus-agentservice-prod-1.azure-automation.net> | <https://*.azure-automation.net> | Azure Automation. Process and workflow automation. |
+| <https://scadvisorcontent.windows.blob.core.net> | <https://*.blob.core.windows.net> | System Center Advisor content. |
 
 Windows Defender Security Center URLs.
 
