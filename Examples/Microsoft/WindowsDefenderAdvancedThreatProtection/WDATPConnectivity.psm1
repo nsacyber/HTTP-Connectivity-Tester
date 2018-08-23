@@ -129,8 +129,8 @@ Function Get-WDATPConnectivity() {
 
     # downlevel URL tests
     if ($parameters.ContainsKey('WorkspaceId')) {
-        $data.Add(@{ TestUrl = "https://$WorkspaceId.oms.opinsights.azure.com"; UrlPattern = 'https://*.oms.opinsights.azure.com'; ExpectedStatusCode = 400; Description='Microsoft Management Agent communication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        $data.Add(@{ TestUrl = "https://$WorkspaceId.ods.opinsights.azure.com"; UrlPattern = 'https://*.ods.opinsights.azure.com'; ExpectedStatusCode = 400; Description='Azure OMS data collection'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = "https://$WorkspaceId.oms.opinsights.azure.com"; UrlPattern = 'https://*.oms.opinsights.azure.com'; ExpectedStatusCode = 403; Description='Microsoft Management Agent communication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = "https://$WorkspaceId.ods.opinsights.azure.com"; UrlPattern = 'https://*.ods.opinsights.azure.com'; ExpectedStatusCode = 403; Description='Azure OMS data collection'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
         # ncus and eus2 are other options https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-oms-gateway#agent-service-urls
         $data.Add(@{ TestUrl = 'https://scus-agentservice-prod-1.azure-automation.net'; UrlPattern = 'https://*.azure-automation.net'; ExpectedStatusCode = 400; Description='Azure Automation. Process and workflow automation'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
