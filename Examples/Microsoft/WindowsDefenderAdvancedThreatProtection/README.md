@@ -6,6 +6,7 @@
 1. Run one of the following:
     * `$connectivity = Get-WDATPConnectivity`
     * `$connectivity = Get-WDATPConnectivity -Verbose`
+    * `$connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5'`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -Verbose`
@@ -32,7 +33,7 @@ Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803,
 | <https://winatp-gw-eus.microsoft.com/test> | <https://winatp-gw-eus.microsoft.com> | WDATP heartbeat/C&C channel. Eastern US data center. |
 | <https://winatp-gw-cus.microsoft.com/test> | <https://winatp-gw-cus.microsoft.com> | WDATP heartbeat/C&C channel. Central US data center. |
 
-Endpoint URLs for WDATP downlevel Microsoft Management Agent support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016)
+Endpoint URLs for WDATP down level Microsoft Management Agent support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016)
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |

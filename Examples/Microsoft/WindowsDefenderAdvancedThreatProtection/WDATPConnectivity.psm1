@@ -8,6 +8,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # 2. run one of the following:
 # $connectivity = Get-WDATPConnectivity
 # $connectivity = Get-WDATPConnectivity -Verbose
+# $connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5'`
 # $connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -Verbose
 # $connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -Verbose
 # $connectivity = Get-WDATPConnectivity -UrlType 'All' -Verbose
@@ -39,11 +40,17 @@ Function Get-WDATPConnectivity() {
     .PARAMETER PerformBlueCoatLookup
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
 
+    .PARAMETER WorkspaceId
+    The workspace identifier used for down level operating system support for WDATP.
+
     .EXAMPLE
     Get-WDATPConnectivity
 
     .EXAMPLE
     Get-WDATPConnectivity -Verbose
+
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5'
 
     .EXAMPLE
     Get-WDATPConnectivity -Verbose -UrlType 'Endpoint'

@@ -79,7 +79,7 @@ Extract the downloaded zip file and install the HttpConnectivityTester PowerShel
 
 ### Running the code
 
-Call the main Get- command (e.g. `Get-WindowsTelemetryConnectivity`) after importing the product/service specific connectivity test to execute the test. The main Get- command is named after the file name. For example, **Get-WindowsTelemetryConnectivity** is the main Get- command for the WindowsTelemetryConnectivity.psm1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.psm1 file. The product/service specific Get- command is a wrapper around the [Get-HttpConnectivity](./docs/Get-HttpConnectivity.md) command provided by the PowerShell moduled.
+Call the main Get- command (e.g. `Get-WindowsTelemetryConnectivity`) after importing the product/service specific connectivity test to execute the test. The main Get- command is named after the file name. For example, **Get-WindowsTelemetryConnectivity** is the main Get- command for the WindowsTelemetryConnectivity.psm1 file. The main Get- command is **Get-WDATPConnectivity** for the WDATPConnectivity.psm1 file. The product/service specific Get- command is a wrapper around the [Get-HttpConnectivity](./docs/Get-HttpConnectivity.md) command provided by the PowerShell module.
 
 The main Get- command for each connectivity test supports the same common options:
 

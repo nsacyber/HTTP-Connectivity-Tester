@@ -1,6 +1,6 @@
 # Interpreting results
 
-The [Connectivity object](./Connectivity%20Object.md) provides the data to help determing if a URL is block and what URL, URL pattern, DNS aliases, and IP addresses may need to be unblocked. The main properties of interest from the Connectivity object that are useful for determining if a URL or service is blocked or functional are:
+The [Connectivity object](./Connectivity%20Object.md) provides the data to help determining if a URL is block and what URL, URL pattern, DNS aliases, and IP addresses may need to be unblocked. The main properties of interest from the Connectivity object that are useful for determining if a URL or service is blocked or functional are:
 
 * **Blocked** - whether the service appears to be blocked. Value should be **false**.
 * **TestUrl** - the URL that was used to perform the test.
