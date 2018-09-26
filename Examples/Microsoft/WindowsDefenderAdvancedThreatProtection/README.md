@@ -14,12 +14,16 @@
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose`
+    * `$connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB'`
 1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus`
 1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
+The Workspace ID of WDATP tenant is needed to test connectivity for down level support. The Workspace ID can be found in the WDATP Security Center under **Settings** > **Machine management** > **Onboarding** by selecting the **Windows 7 SP1 and 8.1** or **Windows Server 2012 R2 and 2016** option. 
+
 ## Tested URLs
 
-Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+)
+### Built-in Sense Service
+Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+) that uses the Sense service.
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
@@ -33,7 +37,9 @@ Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803,
 | <https://winatp-gw-eus.microsoft.com/test> | <https://winatp-gw-eus.microsoft.com> | WDATP heartbeat/C&C channel. Eastern US data center. |
 | <https://winatp-gw-cus.microsoft.com/test> | <https://winatp-gw-cus.microsoft.com> | WDATP heartbeat/C&C channel. Central US data center. |
 
-Endpoint URLs for WDATP down level Microsoft Management Agent support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016)
+### Add-on Microsoft Management Agent
+
+Endpoint URLs for WDATP down level support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016) that uses the Microsoft Management Agent.
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |

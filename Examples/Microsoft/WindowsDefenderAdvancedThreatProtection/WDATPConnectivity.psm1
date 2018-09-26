@@ -16,6 +16,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose
 # $connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose
 # $connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose
+# $connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB'
 
 # 3. filter results:
 # $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus
@@ -57,6 +58,9 @@ Function Get-WDATPConnectivity() {
 
     .EXAMPLE
     Get-WDATPConnectivity -Verbose -UrlType 'SecurityCenter'
+
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB'
 
     .EXAMPLE
     Get-WDATPConnectivity -PerformBlueCoatLookup
