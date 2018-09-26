@@ -48,7 +48,9 @@ Endpoint URLs for WDATP down level support (Windows 7, Windows 8.1, Windows Serv
 | <https://scus-agentservice-prod-1.azure-automation.net> | <https://*.azure-automation.net> | Azure Automation. Process and workflow automation. |
 | <https://scadvisorcontent.windows.blob.core.net> | <https://*.blob.core.windows.net> | System Center Advisor content. |
 
-Windows Defender Security Center URLs.
+### Windows Defender Security Center
+
+URLs for accessing the WDATP dashboard called the Windows Defender Security Center.
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
