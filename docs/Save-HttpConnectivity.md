@@ -37,7 +37,9 @@ Save-HttpConnectivity [-FileName <String>] [-Objects <System.Management.Automati
 The filename without the extension.
 
 Type: String
+
 Required: True
+
 Default value: None
 
 #### Objects
@@ -45,7 +47,9 @@ Default value: None
 The connectivity object(s) to save.
 
 Type: System.Collections.Generic.List[System.Management.Automation.PSCustomObject]
+
 Required: True
+
 Default value: None
 
 ### Optional parameters
@@ -55,7 +59,9 @@ Default value: None
 The path to save the file to. Defaults to the user's Desktop folder.
 
 Type: String
+
 Required: False
+
 Default value: "$env:userprofile\Desktop"
 
 #### Compress
@@ -63,7 +69,9 @@ Default value: "$env:userprofile\Desktop"
 Compress the JSON text output.
 
 Type: System.Management.Automation.SwitchParameter
+
 Required: False
+
 Default value: None
 
 ## Inputs

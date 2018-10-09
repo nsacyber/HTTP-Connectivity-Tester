@@ -1,12 +1,15 @@
 # Windows Defender Advanced Threat Protection connectivity tests
 
+## Documentation
+The [Get-WDATPConnectivity](./../../../docs/Get-WDATPConnectivity.md) command supports additional parameters (e.g. UrlType, WorkspaceId) other than what is implemented by the [Get-HttpConnectivity](./../../../docs/Get-HttpConnectivity.md) command. See the [Get-WDATPConnectivity](./../../../docs/Get-WDATPConnectivity.md) documentation for more information.
+
 ## Usage
 
 1. Import this file: `Import-Module .\WDATPConnectivity.psm1`
-1. Run one of the following:
+1. Run one of the following (replace example WorkspaceId values with the value for your WDATP instance):
     * `$connectivity = Get-WDATPConnectivity`
     * `$connectivity = Get-WDATPConnectivity -Verbose`
-    * `$connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5'`
+    * `$connectivity = Get-WDATPConnectivity -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5' -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -Verbose`
@@ -14,16 +17,14 @@
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose`
-    * `$connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB'`
+    * `$connectivity = Get-WDATPConnectivity -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB' -Verbose `
 1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus`
 1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
-The Workspace ID of WDATP tenant is needed to test connectivity for down level support. The Workspace ID can be found in the WDATP Security Center under **Settings** > **Machine management** > **Onboarding** by selecting the **Windows 7 SP1 and 8.1** or **Windows Server 2012 R2 and 2016** option. 
-
 ## Tested URLs
 
-### Built-in Sense Service
-Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+) that uses the Sense service.
+### URLs for the built-in Sense Service 
+URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+) that uses the Sense service. These URLs must be unblocked and functional from endpoints that are going to be onboarded to WDATP.
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
@@ -39,7 +40,9 @@ Endpoint URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803,
 
 ### Add-on Microsoft Management Agent
 
-Endpoint URLs for WDATP down level support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016) that uses the Microsoft Management Agent.
+URLs for WDATP down level support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016) that uses the Microsoft Management Agent. These URLs must be unblocked and functional from endpoints that are going to be onboarded to WDATP.
+
+The Workspace ID of the WDATP tenant is needed to test connectivity for down level support. The Workspace ID can be found in the WDATP Security Center under **Settings** > **Machine management** > **Onboarding** by selecting the **Windows 7 SP1 and 8.1** or **Windows Server 2012 R2 and 2016** option. 
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
@@ -50,7 +53,7 @@ Endpoint URLs for WDATP down level support (Windows 7, Windows 8.1, Windows Serv
 
 ### Windows Defender Security Center
 
-URLs for accessing the WDATP dashboard called the Windows Defender Security Center.
+URLs for accessing the WDATP dashboard called the Windows Defender Security Center. These URLs must be unblocked and functional from endpoints used to perform analysis of endpoints onboarded to WDATP.
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |

@@ -67,7 +67,9 @@ Get-HttpConnectivity [-TestUrl <System.Uri>] [-UrlPattern <String>] [-Descriptio
 The URL to test.
 
 Type: System.Uri
+
 Required: True
+
 Default value: None
 
 ### Optional parameters
@@ -77,15 +79,19 @@ Default value: None
 The URL pattern to unblock when the URL to unblock is not a literal URL.
 
 Type: String
+
 Required: True
+
 Default value: None
 
 #### Method
 
-TThe HTTP method used to test the URL. Defaults to 'GET'.
+The HTTP method used to test the URL. Defaults to 'GET'.
 
 Type: String
+
 Required: False
+
 Default value: 'GET'
 
 #### ExpectedStatusCode
@@ -93,7 +99,9 @@ Default value: 'GET'
 The HTTP status code expected to be returned. Defaults to 200.
 
 Type: Int32
+
 Required: False
+
 Default value: 200
 
 #### Description
@@ -101,7 +109,9 @@ Default value: 200
 A description of the connectivity test or purpose of the URL.
 
 Type: String
+
 Required: False
+
 Default value: None
 
 #### UserAgent
@@ -109,7 +119,9 @@ Default value: None
 The TPP user agent. Defaults to the Chrome browser user agent.
 
 Type: String
+
 Required: False
+
 Default value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'
 
 #### IgnoreCertificateValidationErrors
@@ -117,7 +129,9 @@ Default value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KH
 Whether to ignore certificate validation errors so they don't affect the connectivity test. Some HTTPS endpoints are not meant to be accessed by a browser so the endpoint will not validate against browser security requirements.
 
 Type: System.Management.Automation.SwitchParameter
+
 Required: False
+
 Default value: None
 
 #### PerformBluecoatLookup
@@ -125,7 +139,9 @@ Default value: None
 Whether to perform a Symantec BlueCoat Site Review lookup on the URL. Warning: The [Symantec BlueCoat Site Review](https://sitereview.bluecoat.com/) REST API is rate limited. Automatic throttling is performed when this parameter is used.
 
 Type: System.Management.Automation.SwitchParameter
+
 Required: False
+
 Default value: None
 
 ## Inputs

@@ -5,7 +5,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # 1. import this file:
 # Import-Module .\WDATPConnectivity.psm1
 
-# 2. run one of the following:
+# 2. run one of the following (replace example WorkspaceId values with the value for your WDATP instance):
 # $connectivity = Get-WDATPConnectivity
 # $connectivity = Get-WDATPConnectivity -Verbose
 # $connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5'`
