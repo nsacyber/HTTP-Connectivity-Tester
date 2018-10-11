@@ -5,7 +5,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # 1. import this file:
 # Import-Module .\WDATPConnectivity.psm1
 
-# 2. run one of the following:
+# 2. run one of the following (replace example WorkspaceId values with the value for your WDATP instance):
 # $connectivity = Get-WDATPConnectivity
 # $connectivity = Get-WDATPConnectivity -Verbose
 # $connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId 'a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5'`
@@ -16,6 +16,7 @@ Import-Module -Name HttpConnectivityTester -Force
 # $connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose
 # $connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose
 # $connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose
+# $connectivity = Get-WDATPConnectivity -Verbose -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB'
 
 # 3. filter results:
 # $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus
@@ -57,6 +58,9 @@ Function Get-WDATPConnectivity() {
 
     .EXAMPLE
     Get-WDATPConnectivity -Verbose -UrlType 'SecurityCenter'
+
+    .EXAMPLE
+    Get-WDATPConnectivity -Verbose -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB'
 
     .EXAMPLE
     Get-WDATPConnectivity -PerformBlueCoatLookup
