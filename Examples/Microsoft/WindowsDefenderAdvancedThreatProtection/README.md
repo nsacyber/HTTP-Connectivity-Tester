@@ -1,6 +1,7 @@
 # Windows Defender Advanced Threat Protection connectivity tests
 
 ## Documentation
+
 The [Get-WDATPConnectivity](./../../../docs/Get-WDATPConnectivity.md) command supports additional parameters (e.g. UrlType, WorkspaceId) other than what is implemented by the [Get-HttpConnectivity](./../../../docs/Get-HttpConnectivity.md) command. See the [Get-WDATPConnectivity](./../../../docs/Get-WDATPConnectivity.md) documentation for more information.
 
 ## Usage
@@ -17,13 +18,14 @@ The [Get-WDATPConnectivity](./../../../docs/Get-WDATPConnectivity.md) command su
     * `$connectivity = Get-WDATPConnectivity -UrlType 'Endpoint' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'SecurityCenter' -PerformBlueCoatLookup -Verbose`
     * `$connectivity = Get-WDATPConnectivity -UrlType 'All' -PerformBlueCoatLookup -Verbose`
-    * `$connectivity = Get-WDATPConnectivity -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB' -Verbose `
+    * `$connectivity = Get-WDATPConnectivity -WorkspaceId '12345678-90AB-CDEF-GHIJ-1234567890AB' -Verbose`
 1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus`
 1. Save results to a file: `Save-HttpConnectivity -Objects $connectivity -FileName ('WDATPConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
 ## Tested URLs
 
-### URLs for the built-in Sense Service 
+### URLs for the built-in Sense Service
+
 URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Windows Server 2019+) that uses the Sense service. These URLs must be unblocked and functional from endpoints that are going to be onboarded to WDATP.
 
 | Test URL | URL to Unblock | Description |
@@ -42,7 +44,7 @@ URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Wind
 
 URLs for WDATP down level support (Windows 7, Windows 8.1, Windows Server 2012, Windows Server 2012 R2, Windows Server 2016) that uses the Microsoft Management Agent. These URLs must be unblocked and functional from endpoints that are going to be onboarded to WDATP.
 
-The Workspace ID of the WDATP tenant is needed to test connectivity for down level support. The Workspace ID can be found in the WDATP Security Center under **Settings** > **Machine management** > **Onboarding** by selecting the **Windows 7 SP1 and 8.1** or **Windows Server 2012 R2 and 2016** option. 
+The Workspace ID of the WDATP tenant is needed to test connectivity for down level support. The Workspace ID can be found in the WDATP Security Center under **Settings** > **Machine management** > **Onboarding** by selecting the **Windows 7 SP1 and 8.1** or **Windows Server 2012 R2 and 2016** option.
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
