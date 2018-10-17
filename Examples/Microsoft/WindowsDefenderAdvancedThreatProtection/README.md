@@ -76,4 +76,5 @@ URLs for accessing the WDATP dashboard called the Windows Defender Security Cent
 
 * [Configure machine proxy and Internet connectivity settings - Enable access to Windows Defender ATP service URLs in the proxy server](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server)
 * [Onboard previous versions of Windows - Configure proxy and Internet connectivity settings](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/onboard-downlevel-windows-defender-advanced-threat-protection#configure-proxy-and-internet-connectivity-settings)
+* [Troubleshoot subscription and portal access issues - Portal communication issues](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/troubleshoot-onboarding-error-messages-windows-defender-advanced-threat-protection#portal-communication-issues)
 * [WDATPConnectivityAnalyzer](https://go.microsoft.com/fwlink/p/?linkid=823683)
