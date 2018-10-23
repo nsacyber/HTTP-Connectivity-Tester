@@ -29,6 +29,8 @@
 | <https://settings-win.data.microsoft.com> | <https://settings-win.data.microsoft.com> | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
 | <https://definitionupdates.microsoft.com> | <https://definitionupdates.microsoft.com> | Windows Defender Antivirus definition updates for Windows 10 1709+ |
 | <https://unitedstates.cp.wd.microsoft.com> | <https://unitedstates.cp.wd.microsoft.com> | Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+. |
+| <https://adldefinitionupdates-wu.azurewebsites.net> | <https://adldefinitionupdates-wu.azurewebsites.net> | Alternative to https://adl.windows.com which allows the compatibility update to receive the latest compatibility data from Microsoft. |
+| <http://ctldl.windowsupdate.com> | <http://ctldl.windowsupdate.com> | Microsoft Certificate Trust List download URL. |
 
 ## References
 

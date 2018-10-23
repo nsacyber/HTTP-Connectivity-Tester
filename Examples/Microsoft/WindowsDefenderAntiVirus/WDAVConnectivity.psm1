@@ -66,8 +66,9 @@ Function Get-WDAVConnectivity() {
     $data.Add(@{ TestUrl = 'https://vortex-win.data.microsoft.com'; ExpectedStatusCode = 404; Description = 'Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
     $data.Add(@{ TestUrl = 'https://settings-win.data.microsoft.com'; ExpectedStatusCode = 400; Description = 'Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
     $data.Add(@{ TestUrl = 'https://definitionupdates.microsoft.com'; Description = 'Windows Defender Antivirus definition updates for Windows 10 1709+.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-
     $data.Add(@{ TestUrl = 'https://unitedstates.cp.wd.microsoft.com'; ExpectedStatusCode = 503; Description = 'Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # appears to be a possible replacement for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062. Seems related to HKLM\SOFTWARE\Microsoft\Windows Defender\Features\    GeoPreferenceId = 'US'
+    $data.Add(@{ TestUrl = 'https://adldefinitionupdates-wu.azurewebsites.net'; ExpectedStatusCode = 200; Description = 'Alternative to https://adl.windows.com which allows the compatibility update to receive the latest compatibility data from Microsoft'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+    $data.Add(@{ TestUrl = 'http://ctldl.windowsupdate.com'; Description='Microsoft Certificate Trust List download URL'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
 
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
