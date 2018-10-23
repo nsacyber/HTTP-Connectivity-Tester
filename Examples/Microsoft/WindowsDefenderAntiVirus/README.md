@@ -32,6 +32,16 @@
 | <https://adldefinitionupdates-wu.azurewebsites.net> | <https://adldefinitionupdates-wu.azurewebsites.net> | Alternative to https://adl.windows.com which allows the compatibility update to receive the latest compatibility data from Microsoft. |
 | <http://ctldl.windowsupdate.com> | <http://ctldl.windowsupdate.com> | Microsoft Certificate Trust List download URL. |
 
+## WDATP query
+```kusto
+NetworkCommunicationEvents
+| where InitiatingProcessFileName in ('MpCmdRun.exe', 'MsMpEng.exe', 'MpSigStub.exe') or InitiatingProcessParentFileName in ('MpCmdRun.exe', 'MsMpEng.exe', 'MpSigStub.exe') 
+| where InitiatingProcessFileName != 'powershell.exe' or InitiatingProcessParentFileName != 'powershell.exe'
+| where RemoteUrl contains 'microsoft' or RemoteUrl contains 'windows' or RemoteUrl contains 'azure'
+| summarize count() by RemoteUrl,RemotePort
+| order by count_ desc 
+```
+
 ## References
 
 * [Configure and validate network connections for Windows Defender Antivirus - Allow connections to the Windows Defender Antivirus cloud](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus#allow-connections-to-the-windows-defender-antivirus-cloud)

@@ -35,6 +35,15 @@
 * <https://urs.microsoft.com> and <https://*.urs.microsoft.com> URLs are used by Internet Explorer (iexplore.exe) and Edge (MicrosoftEdge.exe) browsers.
 * <https://*.smartscreen.microsoft.com> URLs are used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), and Windows Defender Exploit Guard Network Protection (wdnsfltr.exe).
 
+## WDATP query
+```kusto
+NetworkCommunicationEvents
+| where RemoteUrl matches regex @'.*urs\.microsoft\.com.*|.*smartscreen\.microsoft\.com.*'
+| where InitiatingProcessFileName != "powershell.exe" 
+| summarize count() by RemoteUrl,RemotePort
+| order by count_ desc 
+```
+
 ## References
 
 * [Windows Defender SmartScreen](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-smartscreen/windows-defender-smartscreen-overview)
