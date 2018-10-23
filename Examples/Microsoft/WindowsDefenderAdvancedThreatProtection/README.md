@@ -73,6 +73,7 @@ URLs for accessing the WDATP dashboard called the Windows Defender Security Cent
 | <https://winatpservicehealth.securitycenter.windows.com> | <https://*.securitycenter.windows.com> | Service health status. |
 | <https://userrequests-us.securitycenter.windows.com> | <https://*.securitycenter.windows.com> | |
 | <https://winatpsecurityanalyticsapi-us.securitycenter.windows.com> | <https://*.securitycenter.windows.com> | Secure Score security analytics. |
+| <https://static2.sharepointonline.com> | <https://static2.sharepointonline.com> | Host for Microsoft Fabric Assets containing fonts, icons, and stylesheets used by Microsoft cloud service user interfaces. |
 
 ## References
 

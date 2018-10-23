@@ -136,6 +136,7 @@ Function Get-WDATPConnectivity() {
         #$data.Add(@{ TestUrl = 'https://dc.services.visualstudio.com'; ExpectedStatusCode = 404; Description='Azure Application Insights'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # https://dc.services.visualstudio.com/v2/track
         $data.Add(@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
         $data.Add(@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 403; Description='Secure Score security analytics'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://static2.sharepointonline.com'; UrlPattern = 'https://static2.sharepointonline.com'; ExpectedStatusCode = 400; Description='Host for Microsoft Fabric Assets containing fonts, icons, and stylesheets used by Microsoft cloud service user interfaces'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
     }
 
     # downlevel URL tests
