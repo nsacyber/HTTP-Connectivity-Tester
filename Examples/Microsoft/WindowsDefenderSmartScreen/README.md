@@ -36,12 +36,13 @@
 * <https://*.smartscreen.microsoft.com> URLs are used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), and Windows Defender Exploit Guard Network Protection (wdnsfltr.exe).
 
 ## WDATP query
+
 ```kusto
 NetworkCommunicationEvents
 | where RemoteUrl matches regex @'.*urs\.microsoft\.com.*|.*smartscreen\.microsoft\.com.*'
-| where InitiatingProcessFileName != "powershell.exe" 
+| where InitiatingProcessFileName != "powershell.exe"
 | summarize count() by RemoteUrl,RemotePort
-| order by count_ desc 
+| order by count_ desc
 ```
 
 ## References
