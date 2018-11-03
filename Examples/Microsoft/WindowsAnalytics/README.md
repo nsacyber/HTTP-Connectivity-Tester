@@ -52,6 +52,7 @@ Windows Analytics Upgrade Readiness
 | <https://v10.events.data.microsoft.com> | <https://v10.events.data.microsoft.com> | Connected User Experience and Diagnostic component endpoint for use with Windows 10 1803 and later. |
 | <https://v10.vortex-win.data.microsoft.com> | <https://v10.vortex-win.data.microsoft.com> | Connected User Experience and Diagnostic component endpoint for Windows 10 1709 and earlier. |
 | <https://vortex.data.microsoft.com> | <https://v10.vortex-win.data.microsoft.com> | Connected User Experience and Diagnostic component endpoint for operating systems older than Windows 10. |
+| <https://v10c.events.data.microsoft.com> | <https://v10c.events.data.microsoft.com> | Connected User Experience and Diagnostic component endpoint for use with Windows 10 releases that have the September 20/26 2018 updates installed: KB4457127 (1607), KB4457141 (1703), KB4457136 (1709), KB4458469 (1803). |
 | <https://settings-win.data.microsoft.com> | <https://settings-win.data.microsoft.com> | Enables the compatibility update to send data to Microsoft. |
 | <https://adl.windows.com> | <https://adl.windows.com> | Allows the compatibility update to receive the latest compatibility data from Microsoft. |
 
