@@ -31,6 +31,7 @@ ReadMe files
     * [Windows Defender SmartScreen](./../Examples/Microsoft/WindowsDefenderSmartScreen/README.md)
     * [Windows Telemetry](./../Examples/Microsoft/WindowsTelemetry/README.md)
     * [Windows Update](./../Examples/Microsoft/WindowsUpdate/README.md)
+    * [Azure AD](./../Examples/Microsoft/AzureADPasswordReset/README.md)
   * [Mozilla](./../Examples/Mozilla/README.md)
     * [Firefox](./../Examples/Mozilla/Firefox/README.md)
       * [Firefox Updates]
