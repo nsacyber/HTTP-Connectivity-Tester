@@ -140,6 +140,7 @@ The table below documents the currently implemented connectivity tests in the [E
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender SmartScreen](./Examples/Microsoft/WindowsDefenderSmartScreen/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Telemetry](./Examples/Microsoft/WindowsTelemetry/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Update](./Examples/Microsoft/WindowsUpdate/) |
+| [Microsoft](./Examples/Microsoft/) | [Azure AD Self Service Password Reset](./Examples/Microsoft/AzureADPasswordReset/) |
 | [Mozilla](./Examples/Mozilla) | [Firefox updates](./Examples/Mozilla/Firefox/) |
 
 ## Documentation
