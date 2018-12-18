@@ -127,12 +127,13 @@ The [Connectivity object](./docs/Connectivity%20Object.md) can be saved to a JSO
 ## Connectivity tests
 
 The table below documents the currently implemented connectivity tests in the [Examples folder](./Examples/).
-
+| [Azure Active Directory](./AzureActiveDirectory/) Self Service Password Reset | [AADSSPRConnectivity.psm1](./AADSSPRConnectivity.psm1) |
 | Vendor | Product / Service |
 | -- | -- |
 | [Adobe](./Examples/Adobe/) | [Adobe Reader Manager updates](./Examples/Adobe/ARMUpdate/) |
 | [Apple](./Examples/Apple/) | [macOS updates](./Examples/Apple/MacOSUpdate/) |
 | [Google](./Examples/Google/) | [Chrome updates](./Examples/Google/ChromeBrowser/) |
+| [Microsoft](./Examples/Microsoft/) | [Azure Active Directory](./Examples/Microsoft/AzureActiveDirectory/) [Self Service Password Reset](./Examples/Microsoft/AzureActiveDirectory/AADSSPRConnectivity.psm1) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Update Compliance](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Analytics Upgrade Readiness](./Examples/Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Examples/Microsoft/) | [Windows Defender Advanced Threat Protection](./Examples/Microsoft/WindowsDefenderAdvancedThreatProtection/) |

@@ -2,6 +2,7 @@
 
 | Product / Service | File |
 | -- | -- |
+| [Azure Active Directory](./AzureActiveDirectory/) Self Service Password Reset | [AADSSPRConnectivity.psm1](./AADSSPRConnectivity.psm1) |
 | [Windows Analytics Update Compliance](./WindowsAnalytics/) | [WindowsAnalyticsUpdateComplianceConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpdateComplianceConnectivity.psm1) |
 | [Windows Analytics Upgrade Readiness](./WindowsAnalytics/) | [WindowsAnalyticsUpgradeReadinessConnectivity.psm1](./WindowsAnalytics/WindowsAnalyticsUpgradeReadinessConnectivity.psm1) |
 | [Windows Defender Advanced Threat Protection](./WindowsDefenderAdvancedThreatProtection/) | [WDATPConnectivity.psm1](./WindowsDefenderAdvancedThreatProtection/WDATPConnectivity.psm1) |

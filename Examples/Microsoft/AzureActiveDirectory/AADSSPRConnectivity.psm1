@@ -3,13 +3,13 @@ Set-StrictMode -Version 4
 Import-Module -Name HttpConnectivityTester -Force
 
 # 1. import this file:
-# Import-Module .\AzADSSPRConnectivity.psm1
+# Import-Module .\AADSSPRConnectivity.psm1
 
 # 2. run one of the following:
-# $connectivity = Get-AzADSSPRConnectivity
-# $connectivity = Get-AzADSSPRConnectivity -Verbose
-# $connectivity = Get-AzADSSPRConnectivity -PerformBlueCoatLookup
-# $connectivity = Get-AzADSSPRConnectivity -Verbose -PerformBlueCoatLookup
+# $connectivity = Get-AADSSPRConnectivity
+# $connectivity = Get-AADSSPRConnectivity -Verbose
+# $connectivity = Get-AADSSPRConnectivity -PerformBlueCoatLookup
+# $connectivity = Get-AADSSPRConnectivity -Verbose -PerformBlueCoatLookup
 
 # 3. filter results:
 # $connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus
@@ -17,16 +17,16 @@ Import-Module -Name HttpConnectivityTester -Force
 # 4. save results to a file:
 # Save-HttpConnectivity -Objects $connectivity -FileName ('AzADSSPRConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))
 
-Function Get-AzADSSPRConnectivity() {
+Function Get-AADSSPRConnectivity() {
     <#
     .SYNOPSIS
-    Gets connectivity information for Azure Active Directory Self Service Password Reset
+    Gets connectivity information for Azure Active Directory Self Service Password Reset.
 
     .DESCRIPTION
-    Gets connectivity information for Azure Active Directory Self Service Password Reset. 
+    Gets connectivity information for Azure Active Directory Self Service Password Reset.
 
     When enabling the Self-Service Password Reset button on the Windows logon screen, for Windows 10 clients
-    that are behind a proxy server or firewall, HTTPS traffice (443) to to passwordreset.microsoftonline.com 
+    that are behind a proxy server or firewall, HTTPS traffice (443) to passwordreset.microsoftonline.com
     and ajax.aspnetcdn.com should be allowed.
 
 
@@ -34,16 +34,16 @@ Function Get-AzADSSPRConnectivity() {
     Use Symantec BlueCoat SiteReview to lookup what SiteReview category the URL is in.
 
     .EXAMPLE
-    Get-AzADSSPRConnectivity
+    Get-AADSSPRConnectivity
 
     .EXAMPLE
-    Get-AzADSSPRConnectivity -Verbose
+    Get-AADSSPRConnectivity -Verbose
 
     .EXAMPLE
-    Get-AzADSSPRConnectivity -PerformBlueCoatLookup
+    Get-AADSSPRConnectivity -PerformBlueCoatLookup
 
     .EXAMPLE
-    Get-AzADSSPRConnectivity -Verbose -PerformBlueCoatLookup
+    Get-AADSSPRConnectivity -Verbose -PerformBlueCoatLookup
     #>
     [CmdletBinding()]
     [OutputType([System.Collections.Generic.List[pscustomobject]])]
@@ -63,7 +63,7 @@ Function Get-AzADSSPRConnectivity() {
 
     $data.Add(@{ TestUrl = 'https://passwordreset.microsoftonline.com'; ExpectedStatusCode = 200; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose})
     $data.Add(@{ TestUrl = 'https://ajax.aspnetcdn.com'; ExpectedStatusCode = 200; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose})
-    
+
     $results = New-Object System.Collections.Generic.List[pscustomobject]
 
     $data | ForEach-Object {

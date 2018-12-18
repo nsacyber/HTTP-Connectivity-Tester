@@ -2,7 +2,7 @@
 
 ## Usage
 
-Windows Analytics Update Compliance
+### Windows Analytics Update Compliance
 
 1. Import this file: `Import-Module .\WindowsAnalyticsUpdateComplianceConnectivity.psm1`
 1. Run one of the following:
@@ -13,7 +13,7 @@ Windows Analytics Update Compliance
 1. Filter results: `$connectivity | Format-List -Property Blocked,TestUrl,UnblockUrl,DnsAliases,IpAddresses,Description,Resolved,ActualStatusCode,ExpectedStatusCode,UnexpectedStatus`
 1. Save results to a file: `Save-HttpConnectivity -Results $connectivity -FileName ('WindowsAnalyticsUpdateComplianceConnectivity_{0:yyyyMMdd_HHmmss}' -f (Get-Date))`
 
-Windows Analytics Upgrade Readiness
+### Windows Analytics Upgrade Readiness
 
 1. Import this file: `Import-Module .\WindowsAnalyticsUpgradeReadinessConnectivity.psm1`
 1. Run one of the following:
@@ -26,7 +26,7 @@ Windows Analytics Upgrade Readiness
 
 ## Tested URLs
 
-Windows Analytics Update Compliance
+### Windows Analytics Update Compliance
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
@@ -45,7 +45,7 @@ Windows Analytics Update Compliance
 | <https://weus2watcab01.blob.core.windows.net> | <https://weus2watcab01.blob.core.windows.net> | Windows Error Reporting (WER) required for Device Health and Update Compliance AV reports in Windows 10 1809 and later. Not used by Upgrade Readiness. Western US data center #1. |
 | <https://weus2watcab02.blob.core.windows.net> | <https://weus2watcab02.blob.core.windows.net> | Windows Error Reporting (WER) required for Device Health and Update Compliance AV reports in Windows 10 1809 and later. Not used by Upgrade Readiness. Western US data center #2. |
 
-Windows Analytics Upgrade Readiness
+### Windows Analytics Upgrade Readiness
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |

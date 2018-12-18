@@ -7,6 +7,7 @@ The table below documents the currently implemented connectivity tests.
 | [Adobe](./Adobe/) | [Adobe Reader Manager updates](./Adobe/ARMUpdate/) |
 | [Apple](./Apple/) | [macOS updates](./Apple/MacOSUpdate/) |
 | [Google](./Google/) | [Chrome updates](./Google/ChromeBrowser/) |
+| [Microsoft](./Microsoft/) | [Azure Active Directory](./Microsoft/AzureActiveDirectory/) |
 | [Microsoft](./Microsoft/) | [Windows Analytics Update Compliance](./Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Microsoft/) | [Windows Analytics Upgrade Readiness](./Microsoft/WindowsAnalytics/) |
 | [Microsoft](./Microsoft/) | [Windows Defender Advanced Threat Protection](./Microsoft/WindowsDefenderAdvancedThreatProtection/) |
