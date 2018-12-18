@@ -66,7 +66,7 @@ Function Get-BlueCoatSiteReview() {
 
         [Parameter(Mandatory=$false, HelpMessage='The user agent.')]
         [ValidateNotNullOrEmpty()]
-        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36',
+        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
 
         [Parameter(Mandatory=$false, HelpMessage='Disable throttling.')]
         [switch]$NoThrottle
@@ -327,6 +327,121 @@ Function Get-CertificateErrorMessage() {
     return $details
 }
 
+Function Get-MicrosoftDownloadLink() {
+    <#
+    .SYNOPSIS
+    Gets the real direct download link from a Microsoft download link.
+
+    .DESCRIPTION
+    Gets the real direct download link from a Microsoft download link.
+
+    .EXAMPLE
+    Get-MicrosoftDownloadLink -Url 'https://www.microsoft.com/en-us/download/confirmation.aspx?id=41653'
+    #>
+    [CmdletBinding()]
+    [OutputType([void])]
+    Param (
+        [Parameter(Mandatory=$true, HelpMessage='Microsoft download link')]
+        [ValidateNotNullOrEmpty()]
+        [System.Uri]$Url,
+
+        [Parameter(Mandatory=$false, HelpMessage='The user agent.')]
+        [ValidateNotNullOrEmpty()]
+        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+    )
+
+    $uri = $Url
+
+    $params = @{
+        Uri = $uri;
+        Method = 'GET';
+        ProxyUseDefaultCredentials = (([string]$proxyUri) -ne $uri);
+        UseBasicParsing = $true;
+        UserAgent = $UserAgent;    
+        ContentType = 'text/plain';
+        Verbose = $false;
+    }
+
+    $ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
+
+    $proxyUri = [System.Net.WebRequest]::GetSystemWebProxy().GetProxy($uri)
+
+    if(([string]$proxyUri) -ne $uri) {
+        $response = Invoke-WebRequest @params -Proxy $proxyUri
+    } else {
+        $response = Invoke-WebRequest @params
+    }
+
+    $statusCode = $response.StatusCode 
+
+    if ($statusCode -eq 200) {
+        $bytes = $response.Content
+    } else {
+        throw "Request failed with status code $statusCode"
+    }
+
+    $link = ''
+
+    $anchor = ($response.Links | Where-Object { $_.class -eq 'mscom-link failoverLink' })
+
+    if($anchor -ne $null) {
+        $link = $anchor.href
+    }
+
+    return $link
+}
+
+Function Get-AzureRange() {
+    [CmdletBinding()]
+    Param(
+        [System.Collections.Hashtable]$Ranges,
+        [string]$Address
+    )
+
+    $range = [pscustomobject]@{
+        Range = '';
+        Name = '';
+    }
+
+    $Ranges.Keys | ForEach-Object { 
+        if(Test-IpInRange -IpAddress $Address -CidrNotation $_) {
+            $range = [pscustomobject]@{
+                Range = $_;
+                Name = $Ranges[$_];
+            }
+            return
+        }
+    }
+
+    return $range
+}
+
+
+Function Invoke-LoadAzureRange() {
+    [CmdletBinding()]
+    [OutputType([void])]
+    Param (
+        [Parameter(Mandatory=$true, HelpMessage='The path to download the file to')]
+        [ValidateNotNullOrEmpty()]
+        [string]$Path
+    )
+
+    $azureAddresses = @{}
+
+    $xml = [xml](Get-Content -Path $Path)
+
+    $xml.AzurePublicIpAddresses.Region | ForEach-Object {
+       $regionName = $_.Name
+       $regionIp = $_.IpRange
+
+       $_.IpRange | ForEach-Object {
+           $azureAddresses.Add($_.Subnet,$regionName)
+       }
+    }
+
+    return $azureAddresses
+}
+
 Function Get-HttpConnectivity() {
     <#
     .SYNOPSIS
@@ -351,7 +466,7 @@ Function Get-HttpConnectivity() {
     Get-HttpConnectivity -TestUrl http://www.site.com -Description 'A site that does something'
 
     .EXAMPLE
-    Get-HttpConnectivity -TestUrl http://www.site.com -UserAgent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36''
+    Get-HttpConnectivity -TestUrl http://www.site.com -UserAgent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
 
     .EXAMPLE
     Get-HttpConnectivity -TestUrl http://www.site.com -IgnoreCertificateValidationErrors
@@ -385,7 +500,7 @@ Function Get-HttpConnectivity() {
 
         [Parameter(Mandatory=$false, HelpMessage='The HTTP user agent. Defaults to the Chrome browser user agent.')]
         [ValidateNotNullOrEmpty()]
-        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36',
+        [string]$UserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
 
         [Parameter(Mandatory=$false, HelpMessage="Whether to ignore certificate validation errors so they don't affect the connectivity test. Some HTTPS endpoints are not meant to be accessed by a browser so the endpoint will not validate against browser security requirements.")]
         [switch]$IgnoreCertificateValidationErrors,
@@ -519,6 +634,8 @@ Function Get-HttpConnectivity() {
             Write-Verbose -Message $_
         }
     }
+    
+    # Network = @{ IpAddresses = [string[]]$address; DnsAliases = [string[]]$alias; Ranges = @{} }
 
     $connectivity = [pscustomobject]@{
         TestUrl = $testUri;
