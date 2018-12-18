@@ -14,4 +14,5 @@ The table below documents the currently implemented connectivity tests.
 | [Microsoft](./Microsoft/) | [Windows Defender SmartScreen](./Microsoft/WindowsDefenderSmartScreen/) |
 | [Microsoft](./Microsoft/) | [Windows Telemetry](./Microsoft/WindowsTelemetry/) |
 | [Microsoft](./Microsoft/) | [Windows Update](./Microsoft/WindowsUpdate/) |
+| [Microsoft](./Microsoft/) | [Azure AD Self Service Password Reset](./Microsoft/AzureADPasswordReset/) |
 | [Mozilla](./Mozilla) | [Firefox updates](./Mozilla/Firefox/) |
