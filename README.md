@@ -127,7 +127,7 @@ The [Connectivity object](./docs/Connectivity%20Object.md) can be saved to a JSO
 ## Connectivity tests
 
 The table below documents the currently implemented connectivity tests in the [Examples folder](./Examples/).
-| [Azure Active Directory](./AzureActiveDirectory/) Self Service Password Reset | [AADSSPRConnectivity.psm1](./AADSSPRConnectivity.psm1) |
+
 | Vendor | Product / Service |
 | -- | -- |
 | [Adobe](./Examples/Adobe/) | [Adobe Reader Manager updates](./Examples/Adobe/ARMUpdate/) |
