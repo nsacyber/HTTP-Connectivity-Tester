@@ -17,7 +17,6 @@
 | -- | -- | -- |
 | <http://windowsupdate.microsoft.com> | <http://windowsupdate.microsoft.com> | |
 | <https://windowsupdate.microsoft.com> | <https://windowsupdate.microsoft.com> | |
-| | | |
 | <https://geo-prod.do.dsp.mp.microsoft.com> | <https://*.do.dsp.mp.microsoft.com> | |
 | <http://download.windowsupdate.com> | <http://download.windowsupdate.com> | |
 | <http://au.download.windowsupdate.com> | <http://*.au.download.windowsupdate.com> | |
