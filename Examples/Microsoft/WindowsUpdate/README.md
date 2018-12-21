@@ -35,5 +35,5 @@
 ## References
 
 * [Manage Windows 10 connection endpoints - Windows Update](https://docs.microsoft.com/en-us/windows/privacy/manage-windows-endpoints#windows-update)
-* [Can't download updates from Windows Update from behind a firewall or proxy server](https://support.microsoft.com/en-us/help/3084568/can-t-download-updates-from-windows-update-from-behind-a-firewall-or-p)
-* [How to Configure a Firewall for Software Updates](https://technet.microsoft.com/en-us/library/bb693717.aspx)
+* [Windows Update troubleshooting - Issues related to HTTP/Proxy](https://docs.microsoft.com/en-us/windows/deployment/update/windows-update-troubleshooting#issues-related-to-httpproxy)
+* [How to Configure a Firewall for Software Updates](https://docs.microsoft.com/en-us/previous-versions/system-center/configuration-manager-2007/bb693717(v=technet.10))

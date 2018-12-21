@@ -45,5 +45,5 @@ NetworkCommunicationEvents
 
 ## References
 
-* [Configure and validate network connections for Windows Defender Antivirus - Allow connections to the Windows Defender Antivirus cloud](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus#allow-connections-to-the-windows-defender-antivirus-cloud)
+* [Configure and validate network connections for Windows Defender Antivirus - Allow connections to the Windows Defender Antivirus cloud service](https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/configure-network-connections-windows-defender-antivirus#allow-connections-to-the-windows-defender-antivirus-cloud-service)
 * [Manage Windows 10 connection endpoints - Windows Defender Antivirus](https://docs.microsoft.com/en-us/windows/privacy/manage-windows-endpoints#windows-defender)
