@@ -214,7 +214,7 @@ Function Get-IPAddress() {
     return ,$addresses
 }
 
-Function Get-IPAlias() {
+Function Get-DnsAlias() {
     <#
     .SYNOPSIS
     Gets DNS alias for a URL.
@@ -223,7 +223,7 @@ Function Get-IPAlias() {
     Gets DNS alias for a URL.
 
     .EXAMPLE
-    Get-IPAlias -Url http://www.site.com
+    Get-DnsAlias -Url http://www.site.com
     #>
     [CmdletBinding()]
     [OutputType([string[]])]
@@ -616,7 +616,7 @@ Function Get-HttpConnectivity() {
     }
 
     $address = Get-IPAddress -Url $testUri -Verbose:$false
-    $alias = Get-IPAlias -Url $testUri -Verbose:$false
+    $alias = Get-DnsAlias -Url $testUri -Verbose:$false
     $resolved = (@($address)).Length -ge 1 -or (@($alias)).Length -ge 1
     $actualStatusCode = [int]$statusCode
     $isBlocked = $statusCode -eq 0 -and $resolved
