@@ -116,7 +116,8 @@ Function Get-BlueCoatSiteReview() {
         ContentType = 'application/json';
         Body = (@{url = $uri; captcha = ''} | ConvertTo-Json);
         Headers = @{Referer = 'https://sitereview.bluecoat.com'} ;
-        Verbose = $false
+        Verbose = $false ;
+        TimeoutSec = 15
     }
 
     if (([string]$proxyUri) -ne $uri) {
@@ -360,6 +361,7 @@ Function Get-MicrosoftDownloadLink() {
         UserAgent = $UserAgent;    
         ContentType = 'text/plain';
         Verbose = $false;
+        TimeoutSec = 15
     }
 
     $ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
@@ -566,6 +568,7 @@ Function Get-HttpConnectivity() {
     $request.UserAgent = $UserAgent;
     $request.Method = $Method
     $request.ServerCertificateValidationCallback = $RemoteCertificateValidationCallback
+    $request.Timeout = 15 * 1000
 
     $statusCode = 0
     $statusMessage = ''
