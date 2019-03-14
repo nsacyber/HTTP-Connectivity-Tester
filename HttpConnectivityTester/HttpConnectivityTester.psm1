@@ -573,51 +573,54 @@ Function Get-HttpConnectivity() {
     $statusCode = 0
     $statusMessage = ''
     $response = $null
-
-    try {
-        $response = $request.GetResponse()
-        $httpResponse = $response -as [Net.HttpWebResponse]
-
-        $statusCode = $httpResponse.StatusCode
-        $statusMessage = $httpResponse.StatusDescription
-    } catch [System.Net.WebException] {
-        # useful WINHTTP error message code values and descriptions. will be in the exception
-        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa383770(v=vs.85).aspx
-        # https://msdn.microsoft.com/en-us/library/windows/desktop/aa384110(v=vs.85).aspx
-
-        $statusMessage = Get-ErrorMessage -ErrorRecord $_
-
-        try {
-            $statusCode = [int]$_.Exception.Response.StatusCode # StatusCode property results in a PropertyNotFoundException exception when the URL is blocked upstream
-        } catch [System.Management.Automation.PropertyNotFoundException] {
-            Write-Verbose -Message ('Unable to access {0} due to {1}' -f $testUri,$statusMessage)
-        }
-    } finally {
-        if ($null -ne $response) {
-            $response.Close()
-        }
-    }
-
-    $hasServerCertificateError = if ($null -eq $script:ServerCertificateError) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
-
-    $serverCertificateErrorMessage = ''
-
-    if ($testUri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
-        $serverCertificateErrorMessage = Get-CertificateErrorMessage -Url $testUri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
-    }
-
-    $serverCertificateObject = [pscustomobject]@{
-        Certificate = $script:ServerCertificate | Select-Object -Property * -ExcludeProperty RawData; # RawData property makes JSON files to large when calling Save-HttpConnectivity
-        Chain = $script:ServerCertificateChain;
-        Error = $script:ServerCertificateError;
-        ErrorMessage = $serverCertificateErrorMessage;
-        HasError = $hasServerCertificateError;
-        IgnoreError = $IgnoreCertificateValidationErrors;
-    }
-
+    
     $address = Get-IPAddress -Url $testUri -Verbose:$false
     $alias = Get-DnsAlias -Url $testUri -Verbose:$false
     $resolved = (@($address)).Length -ge 1 -or (@($alias)).Length -ge 1
+
+    if ($resolved) {   
+        try {
+            $response = $request.GetResponse()
+            $httpResponse = $response -as [Net.HttpWebResponse]
+
+            $statusCode = $httpResponse.StatusCode
+            $statusMessage = $httpResponse.StatusDescription
+        } catch [System.Net.WebException] {
+            # useful WINHTTP error message code values and descriptions. will be in the exception
+            # https://msdn.microsoft.com/en-us/library/windows/desktop/aa383770(v=vs.85).aspx
+            # https://msdn.microsoft.com/en-us/library/windows/desktop/aa384110(v=vs.85).aspx
+
+            $statusMessage = Get-ErrorMessage -ErrorRecord $_
+
+            try {
+                $statusCode = [int]$_.Exception.Response.StatusCode # StatusCode property results in a PropertyNotFoundException exception when the URL is blocked upstream
+            } catch [System.Management.Automation.PropertyNotFoundException] {
+                Write-Verbose -Message ('Unable to access {0} due to {1}' -f $testUri,$statusMessage)
+            }
+        } finally {
+            if ($null -ne $response) {
+                $response.Close()
+            }
+        }
+
+        $hasServerCertificateError = if ($null -eq $script:ServerCertificateError) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
+
+        $serverCertificateErrorMessage = ''
+
+        if ($testUri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
+            $serverCertificateErrorMessage = Get-CertificateErrorMessage -Url $testUri -Certificate $script:ServerCertificate -Chain $script:ServerCertificateChain -PolicyError $script:ServerCertificateError
+        }
+
+        $serverCertificateObject = [pscustomobject]@{
+            Certificate = $script:ServerCertificate | Select-Object -Property * -ExcludeProperty RawData; # RawData property makes JSON files to large when calling Save-HttpConnectivity
+            Chain = $script:ServerCertificateChain;
+            Error = $script:ServerCertificateError;
+            ErrorMessage = $serverCertificateErrorMessage;
+            HasError = $hasServerCertificateError;
+            IgnoreError = $IgnoreCertificateValidationErrors;
+        }
+    }
+
     $actualStatusCode = [int]$statusCode
     $isBlocked = $statusCode -eq 0 -and $resolved
     $urlType = if ($UnblockUrl.Contains('*')) { 'Pattern' } else { 'Literal' }
