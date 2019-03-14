@@ -27,6 +27,7 @@
 | <https://t.nf.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe) |
 | <https://t.urs.microsoft.com> | <https://*.urs.microsoft.com> | SmartScreen URL used by Internet Explorer (iexplore.exe), Edge (MicrosoftEdge.exe) |
 | <https://unitedstates.smartscreen.microsoft.com> | <https://unitedstates.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe) and Windows Defender SmartScreen (smartscreen.exe) |
+| <https://unitedstates.smartscreen-prod.microsoft.com> | <https://unitedstates.smartscreen-prod.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe) and Windows Defender SmartScreen (smartscreen.exe) |
 | <https://urs.microsoft.com> | <https://urs.microsoft.com> | SmartScreen URL used by Internet Explorer (iexplore.exe) |
 | <https://urs.smartscreen.microsoft.com> | <https://*.smartscreen.microsoft.com> | SmartScreen URL used by Windows Defender Antivirus Network Inspection Service (NisSrv.exe), Windows Defender SmartScreen (smartscreen.exe), Windows Defender Exploit Guard Network Protection (wdnsfltr.exe) |
 
@@ -39,8 +40,9 @@
 
 ```kusto
 NetworkCommunicationEvents
-| where RemoteUrl matches regex @'.*urs\.microsoft\.com.*|.*smartscreen\.microsoft\.com.*'
-| where InitiatingProcessFileName != "powershell.exe"
+| where RemoteUrl matches regex @'.*urs\.microsoft\.com.*|.*smartscreen.*\.microsoft\.com.*'
+| where RemoteUrl != ''
+| where InitiatingProcessFileName != "powershell.exe" 
 | summarize count() by RemoteUrl,RemotePort
 | order by count_ desc
 ```
