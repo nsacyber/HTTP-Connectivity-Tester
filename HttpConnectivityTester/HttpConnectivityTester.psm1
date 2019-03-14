@@ -518,7 +518,7 @@ Function Get-HttpConnectivity() {
     if ($TestUrl.OriginalString.ToLower().StartsWith('http://') -or $TestUrl.OriginalString.ToLower().StartsWith('https://')) {
         $testUri = $TestUrl
     } else {
-        $testUri = [Uri]('http://{0}' -f $testUri.OriginalString)
+        $testUri = [Uri]('http://{0}' -f $TestUrl.OriginalString)
     }
 
     if($parameters.ContainsKey('UrlPattern')) {
@@ -573,6 +573,15 @@ Function Get-HttpConnectivity() {
     $statusCode = 0
     $statusMessage = ''
     $response = $null
+    
+    $serverCertificateObject = [pscustomobject]@{
+        Certificate = $null;
+        Chain = $null;
+        Error = $null;
+        ErrorMessage = '';
+        HasError = $false;
+        IgnoreError = $false;
+    }
     
     $address = Get-IPAddress -Url $testUri -Verbose:$false
     $alias = Get-DnsAlias -Url $testUri -Verbose:$false
