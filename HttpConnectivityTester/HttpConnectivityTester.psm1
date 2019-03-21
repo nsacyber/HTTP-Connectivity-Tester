@@ -283,7 +283,7 @@ Function Get-CertificateErrorMessage() {
             'RemoteCertificateChainErrors' {
 
                 if ($Chain.ChainElements.Count -gt 0 -and $Chain.ChainStatus.Count -gt 0) {
-                    if ($Chain.ChainElements.Count -gt 0 -or $Chain.ChainStatus.Count -gt 0) {
+                    if ($Chain.ChainElements.Count -gt 1 -or $Chain.ChainStatus.Count -gt 1) {
                         Write-Verbose -Message ('Multiple remote certificate chain elements exist. ChainElement Count: {0} ChainStatus Count: {1}' -f $Chain.ChainElements.Count,$Chain.ChainStatus.Count)
                     }
 
@@ -614,6 +614,14 @@ Function Get-HttpConnectivity() {
 
         $hasServerCertificateError = if ($null -eq $script:ServerCertificateError) { $false } else { $script:ServerCertificateError -ne [Net.Security.SslPolicyErrors]::None }
 
+        $hasServerCertificateValidationError = $false
+        
+        $serverCertificateValidationErrorMessage = '' 
+
+        if ($null -ne $script:ServerCertificate) {
+            $hasServerCertificateValidationError = -not(Test-Certificate -Cert $script:ServerCertificate -Policy SSL -ErrorVariable serverCertificateValidationErrorMessage -ErrorAction SilentlyContinue)
+        }
+        
         $serverCertificateErrorMessage = ''
 
         if ($testUri.Scheme.ToLower() -eq 'https' -and $hasServerCertificateError) {
@@ -627,6 +635,8 @@ Function Get-HttpConnectivity() {
             ErrorMessage = $serverCertificateErrorMessage;
             HasError = $hasServerCertificateError;
             IgnoreError = $IgnoreCertificateValidationErrors;
+            HasValidationError = $hasServerCertificateValidationError;
+            ValidationErrorMessage = if ($hasServerCertificateValidationError) { $serverCertificateValidationErrorMessage } else { '' }
         }
     }
 
@@ -637,7 +647,7 @@ Function Get-HttpConnectivity() {
     $isUnexpectedStatus = !($statusCode -in @(200,400,403,404,500,501,503,504))
     $simpleStatusMessage = if ($isUnexpectedStatus) { $statusMessage } else { '' }
 
-    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Url Type: {5}{6}Description: {7}{8}Resolved: {9}{10}IP Addresses: {11}{12}DNS Aliases: {13}{14}Actual Status Code: {15}{16}Expected Status Code: {17}{18}Is Unexpected Status Code: {19}{20}Status Message: {21}{22}Blocked: {23}{24}Certificate Error: {25}{26}Certificate Error Message: {27}{28}Ignore Certificate Validation Errors: {29}{30}{31}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$urlType,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$isUnexpectedStatus,$newLine,$simpleStatusMessage,$newLine,$isBlocked,$newLine,$serverCertificateObject.HasError,$newLine,$serverCertificateObject.ErrorMessage,$newLine,$serverCertificateObject.IgnoreError,$newLine,$newLine)
+    $connectivitySummary = ('{0}Test Url: {1}{2}Url to Unblock: {3}{4}Url Type: {5}{6}Description: {7}{8}Resolved: {9}{10}IP Addresses: {11}{12}DNS Aliases: {13}{14}Actual Status Code: {15}{16}Expected Status Code: {17}{18}Is Unexpected Status Code: {19}{20}Status Message: {21}{22}Blocked: {23}{24}Certificate Error: {25}{26}Certificate Error Message: {27}{28}Ignore Certificate Validation Errors: {29}{30}Certificate Validation Error: {31}{32}Certificate Validation Error Message: {33}{34}{35}' -f $newLine,$testUri,$newLine,$UnblockUrl,$newLine,$urlType,$newLine,$Description,$newLine,$resolved,$newLine,($address -join ', '),$newLine,($alias -join ', '),$newLine,$actualStatusCode,$newLine,$ExpectedStatusCode,$newLine,$isUnexpectedStatus,$newLine,$simpleStatusMessage,$newLine,$isBlocked,$newLine,$serverCertificateObject.HasError,$newLine,$serverCertificateObject.ErrorMessage,$newLine,$serverCertificateObject.IgnoreError,$newLine,$serverCertificateObject.HasValidationError,$newLine,$serverCertificateObject.ValidationErrorMessage,$newLine,$newLine)
     Write-Verbose -Message $connectivitySummary
 
     $bluecoat = $null

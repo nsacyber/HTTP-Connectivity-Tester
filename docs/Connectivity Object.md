@@ -24,6 +24,8 @@ The [Get-HttpConnectivity](./Get-HttpConnectivity.md) cmdlet returns a Connectiv
 | ServerCertificate.ErrorMessage | String | The error message with the X509 certificate or certificate chain. |
 | ServerCertificate.HasError | Boolean | Whether there is a TLS error associated with the X509 certificate or certificate chain. |
 | ServerCertificate.IgnoreError | Boolean | Whether to ignore the TLS error during the connectivity test. |
+| ServerCertificate.HasValidationError | Boolean | Whether there is a TLS validation error associated with the X509 certificate or certificate chain. |
+| ServerCertificate.ValidationErrorMessage | String | The validation error message with the X509 certificate or certificate chain. |
 | BlueCoat | System.Management.Automation.PSCustomObject | |
 | BlueCoat.SubmittedUri | System.Uri | The submitted URL as returned by the BlueCoat REST API. |
 | BlueCoat.ReturnedUri | System.Uri | The returned URL as returned by the BlueCoat REST API. |
