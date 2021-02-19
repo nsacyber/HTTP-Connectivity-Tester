@@ -1,0 +1,15 @@
+Changes:
+
+Original Filenames:
+1) README.md
+2) WDATPConnectivity.psm1
+
+
+We are making changes to that file, and keeping the name.
+We are making copies of it and renaming the copies as in-person version control.
+
+Below we are just listing the original line that was changed.
+We are keeping the original line in the file, for now, and just commenting it out.
+
+Changes:
+1)         $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove

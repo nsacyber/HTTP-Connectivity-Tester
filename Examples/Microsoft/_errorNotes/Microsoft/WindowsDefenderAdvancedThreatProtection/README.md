@@ -35,7 +35,7 @@ URLs for WDATP built-in support (Windows 10 1607+, Windows Server 1803, and Wind
 | <http://crl.microsoft.com> | <http://crl.microsoft.com> | Microsoft Certificate Revocation List responder URL. |
 | <http://ctldl.windowsupdate.com> | <http://ctldl.windowsupdate.com> | Microsoft Certificate Trust List download URL. |
 | <https://events.data.microsoft.com> | <https://events.data.microsoft.com> | WDATP event channel. |
-| <https://us.vortex-win.data.microsoft.com/ping> | <https://us.vortex-win.data.microsoft.com> | WDATP data channel. |
+| <https://us.vortex-win.data.microsoft.com/collect/v1> | <https://us.vortex-win.data.microsoft.com> | WDATP data channel. |
 | <https://us-v20.events.data.microsoft.com> | <https://us-v20.events.data.microsoft.com> | WDATP event channel for 1803+. |
 | <https://winatp-gw-eus.microsoft.com/test> | <https://winatp-gw-eus.microsoft.com> | WDATP heartbeat/C&C channel. Eastern US data center. |
 | <https://winatp-gw-cus.microsoft.com/test> | <https://winatp-gw-cus.microsoft.com> | WDATP heartbeat/C&C channel. Central US data center. |
@@ -62,9 +62,9 @@ URLs for accessing the WDATP dashboard called the Windows Defender Security Cent
 | <https://onboardingpackagescusprd.blob.core.windows.net> | <https://*.blob.core.windows.net> | Azure Blob storage. Eastern US data center. |
 | <https://onboardingpackageseusprd.blob.core.windows.net> | <https://*.blob.core.windows.net> | Azure Blob storage. Central US data center. |
 | <https://securitycenter.windows.com> | <https://securitycenter.windows.com> | Windows Defender Security Center. |
-| <https://login.windows.net/common/oauth2/> | <https://login.windows.net> | Azure AD authentication. |
+| <https://login.windows.net> | <https://login.windows.net> | Azure AD authentication. |
 | <https://secure.aadcdn.microsoftonline-p.com> | <https://*.microsoftonline-p.com> | Azure AD Connect / Azure MFA / Azure ADFS. |
-| <https://login.microsoftonline.com/common/oauth2/> | <https://login.microsoftonline.com> | Azure AD authentication |
+| <https://login.microsoftonline.com> | <https://login.microsoftonline.com> | Azure AD authentication |
 | <https://winatpmanagement-us.securitycenter.windows.com> | <https://*.securitycenter.windows.com> | |
 | <https://threatintel-eus.securitycenter.windows.com> | <https://*.securitycenter.windows.com> | Threat Intel. Eastern US data center. |
 | <https://threatintel-cus.securitycenter.windows.com> | <https://*.securitycenter.windows.com> | Threat Intel. Central US data center. |

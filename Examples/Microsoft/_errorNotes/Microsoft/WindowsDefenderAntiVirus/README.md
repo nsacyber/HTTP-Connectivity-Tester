@@ -15,8 +15,8 @@
 
 | Test URL | URL to Unblock | Description |
 | -- | -- | -- |
-| <https://wdcp.microsoft.com> | <https://.*wdcp.microsoft.com> | Windows Defender Antivirus cloud-delivered protection service, also referred to as Microsoft Active Protection Service (MAPS). Used by Windows Defender Antivirus to provide cloud-delivered protection. |
-| <https://wdcpalt.microsoft.com> | <https://*.wdcpalt.microsoft.com> | Windows Defender Antivirus cloud-delivered protection service, also referred to as Microsoft Active Protection Service (MAPS). Used by Windows Defender Antivirus to provide cloud-delivered protection. |
+| <https://wdcp.microsoft.com> | <https://wdcp.microsoft.com> | Windows Defender Antivirus cloud-delivered protection service, also referred to as Microsoft Active Protection Service (MAPS). Used by Windows Defender Antivirus to provide cloud-delivered protection. |
+| <https://wdcpalt.microsoft.com> | <https://wdcpalt.microsoft.com> | Windows Defender Antivirus cloud-delivered protection service, also referred to as Microsoft Active Protection Service (MAPS). Used by Windows Defender Antivirus to provide cloud-delivered protection. |
 | <https://update.microsoft.com> | <https://*.update.microsoft.com> | Microsoft Update Service (MU). Signature and product updates. |
 | <https://download.microsoft.com> | <https://*.download.microsoft.com> | Alternate location for Windows Defender Antivirus definition updates if the installed definitions fall out of date (7 or more days behind). |
 | <https://onboardingpackageseusprd.blob.core.windows.net> | <https://*.blob.core.windows.net> | Malware submission storage. Upload location for files submitted to Microsoft via the Submission form or automatic sample submission. |
@@ -26,8 +26,8 @@
 | <http://www.microsoft.com/pki/certs> | <http://www.microsoft.com/pki> | |
 | <https://msdl.microsoft.com/download/symbols> | <https://msdl.microsoft.com/download/symbols> | Microsoft Symbol Store. Used by Windows Defender Antivirus to restore certain critical files during remediation flows. |
 | <https://vortex-win.data.microsoft.com> | <https://vortex-win.data.microsoft.com> | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
-| <https://settings-win.data.microsoft.com/qos> | <https://settings-win.data.microsoft.com/qos> | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
-| #<https://definitionupdates.microsoft.com> | <https://definitionupdates.microsoft.com> | Windows Defender Antivirus definition updates for Windows 10 1709+ |
+| <https://settings-win.data.microsoft.com> | <https://settings-win.data.microsoft.com> | Used by Windows to send client diagnostic data, Windows Defender Antivirus uses this for product quality monitoring purposes. |
+| <https://definitionupdates.microsoft.com> | <https://definitionupdates.microsoft.com> | Windows Defender Antivirus definition updates for Windows 10 1709+ |
 | <https://unitedstates.cp.wd.microsoft.com> | <https://unitedstates.cp.wd.microsoft.com> | Geo-affinity URL for wdcp.microsoft.com and wdcpalt.microsoft.com as of 06/26/2018 with WDAV 4.18.1806.18062+. |
 | <https://adldefinitionupdates-wu.azurewebsites.net> | <https://adldefinitionupdates-wu.azurewebsites.net> | Alternative to https://adl.windows.com which allows the compatibility update to receive the latest compatibility data from Microsoft. |
 | <http://ctldl.windowsupdate.com> | <http://ctldl.windowsupdate.com> | Microsoft Certificate Trust List download URL. |

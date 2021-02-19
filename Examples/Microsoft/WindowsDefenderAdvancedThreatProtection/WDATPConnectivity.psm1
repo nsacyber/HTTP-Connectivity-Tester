@@ -89,55 +89,183 @@ Function Get-WDATPConnectivity() {
     $data = New-Object System.Collections.Generic.List[System.Collections.Hashtable]
 
     if ($UrlType.ToLower() -in @('all','endpoint')) {
+        #==============================
         # https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-atp/configure-proxy-internet-windows-defender-advanced-threat-protection#enable-access-to-windows-defender-atp-service-urls-in-the-proxy-server
-
+        #==============================
+        
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'http://crl.microsoft.com'; ExpectedStatusCode = 400; Description='Microsoft Certificate Revocation List responder URL'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###200/200###01/25/2021###_
         $data.Add(@{ TestUrl = 'http://ctldl.windowsupdate.com'; Description='Microsoft Certificate Trust List download URL'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###404/404###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://events.data.microsoft.com'; ExpectedStatusCode = 404; Description='WDATP event channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
-        $data.Add(@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; ExpectedStatusCode = 404; Description='WDATP event channel for 1803+'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # 1803+
-        $data.Add(@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; Description='WDATP heartbeat/C&C channel. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        $data.Add(@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; Description='WDATP heartbeat/C&C channel. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #==============================
+        #405/400###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove
+        #404/400###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove    
+        #404/400###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove    
+        #404/400###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/check'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove    
+        #404/400###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/test'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove    
+        ###200/400###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/ping'; ExpectedStatusCode = 400; Description='WDATP data channel'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might correspond to https://us.vortex-win.data.microsoft.com/health/keepalive so might be able to remove    
+        #==============================
 
-        $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #==============================
+        ###404/404###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://us-v20.events.data.microsoft.com'; ExpectedStatusCode = 404; Description='Microsoft Defender for Endpoint EDR Cyber Data '; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # 1803+
+        ###200/404###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://us-v20.events.data.microsoft.com/ping'; ExpectedStatusCode = 404; Description='Microsoft Defender for Endpoint EDR Cyber Data '; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # 1803+
+        #==============================
 
-        # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 07/05/2018:
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://winatp-gw-eus.microsoft.com/test'; Description='Microsoft Defender for Endpoint Command and Control. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://winatp-gw-cus.microsoft.com/test'; Description='Microsoft Defender for Endpoint Command and Control. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #==============================
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/keepalive'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/health/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200$##01/25/2021###_#data.Add(@{ TestUrl = 'https://v10c.events.data.microsoft.com/health/keepalive'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://v10c.events.data.microsoft.com/health/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://v10c.events.data.microsoft.com/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://v10.events.data.microsoft.com/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #405/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/collect/v1'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #400/400#>>>#400/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://v10.vortex-win.data.microsoft.com/collect/v1'; Description='WDATP data channel.'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://us.vortex-win.data.microsoft.com/ping'; Description='Microsoft Defender for Endpoint EDR Cyber Data .'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # might be repeat status for https://us.vortex-win.data.microsoft.com/collect/v1
+        #==============================
+
+        #-------- Commented Out START------------------------------------------------------------------------------------------------------------
+        # WDATPConnectivityAnalyzer https://go.microsoft.com/fwlink/p/?linkid=823683 endpoints.txt file as of 01/25/2021:
         # https://winatp-gw-cus.microsoft.com/test
         # https://winatp-gw-eus.microsoft.com/test
         # https://winatp-gw-weu.microsoft.com/test
         # https://winatp-gw-neu.microsoft.com/test
         # https://winatp-gw-uks.microsoft.com/test
         # https://winatp-gw-ukw.microsoft.com/test
-        # https://eu.vortex-win.data.microsoft.com/health/keepalive
-        # https://us.vortex-win.data.microsoft.com/health/keepalive
-        # https://uk.vortex-win.data.microsoft.com/health/keepalive
-        # https://events.data.microsoft.com
-        # https://us-v20.events.data.microsoft.com
-        # https://eu-v20.events.data.microsoft.com
-        # https://uk-v20.events.data.microsoft.com
-        # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab    NoPinning
-    }
+        # https://winatp-gw-usgv.microsoft.com/test
+        # https://winatp-gw-usgt.microsoft.com/test
+        # https://eu.vortex-win.data.microsoft.com/ping
+        # https://us.vortex-win.data.microsoft.com/ping
+        # https://uk.vortex-win.data.microsoft.com/ping
+        # https://events.data.microsoft.com/ping
+        # https://settings-win.data.microsoft.com/qos
+        # https://eu-v20.events.data.microsoft.com/ping
+        # https://uk-v20.events.data.microsoft.com/ping
+        # https://us-v20.events.data.microsoft.com/ping
+        # https://us4-v20.events.data.microsoft.com/ping
+        # https://us5-v20.events.data.microsoft.com/ping
+        # http://ctldl.windowsupdate.com/msdownload/update/v3/static/trustedr/en/disallowedcertstl.cab	NoPinning
+    }#--------------------------
 
     if ($UrlType.ToLower() -in @('all','securitycenter')) {
+        
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://onboardingpackagescusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
+        
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://onboardingpackageseusprd.blob.core.windows.net/'; UrlPattern = 'https://*.blob.core.windows.net'; ExpectedStatusCode = 400; Description='Azure Blob storage. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # onboarding package download URL, there are other sub domains for other resources
-        $data.Add(@{ TestUrl = 'https://securitycenter.windows.com'; Description='Windows Defeder Security Center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        $data.Add(@{ TestUrl = 'https://login.windows.net/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://securitycenter.windows.com'; Description='Windows Defender Security Center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #==============================
+        #-->https://login.windows.net --> redirects to login.microsoftonline.com....
+        #-->https://login.windows.net --> still pulls a 200 from VirusTotal
+        #000/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/'; UrlPattern = 'https://login.windows.net/*';Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/test'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/ping'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/qos'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.us/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/common'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.windows.net/*'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://login.windows.net/common/oauth2/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #==============================
+
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://secure.aadcdn.microsoftonline-p.com'; UrlPattern = 'https://*.microsoftonline-p.com'; ExpectedStatusCode = 400; Description='Azure AD Connect / Azure MFA / Azure ADFS'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        $data.Add(@{ TestUrl = 'https://login.microsoftonline.com'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #==============================
+        #000/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.microsoftonline.com'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/200###01/25/2021###_$data.Add(@{ TestUrl = 'https://login.microsoftonline.com/us/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://login.microsoftonline.com/common/oauth2/'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #==============================
+
+        ###200/200###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://login.microsoftonline.us'; Description='Azure AD authentication'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###404/404###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://winatpmanagement-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #Does get 000/404 sometimes
+        ###404/404###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://threatintel-eus.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; Description='Threat Intel. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #Does get 000/404 sometimes
+        ###404/404###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://threatintel-cus.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; Description='Threat Intel. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        $data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        #==============================
+        #--- Original: https://automatediracs-eus-prd.securitycenter.windows.com ---
+        # Listed on mdatp-urls, but even virustotal.com does not detect this URL
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #-->https://automatediracs-eus-prd.securitycenter.windows.com --> This URL is active on newest Microsoft mdatp-url spreadsheet, BUT - my machine-internet is 'Missing required root certificate for Symantec Blue Coat
+        #-->Cant do anything with URL on the unsecured Remote testing machine. Do not get the same Symantec error on RDP as we did in Empire.
+        #200/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #-->https://securitycenter.windows.com is expected 200, but I can't tell if it applys to ...automatediracs....
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://*prd.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://*eus-prd.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://*automatediracs-eus-prd.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com/qos'; UrlPattern = 'https://*.securitycenter.windows.com/qos'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com/common'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com/test'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com/ping'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })        
+        #000/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com/check'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        $data.Add(@{ TestUrl = 'https://automatediracs-eus-prd.securitycenter.windows.com/check'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Eastern US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #==========
+        #           ^^^ These two are the only ones that error with the Symantec Blue Coat not being installed properly. vvv
+        #==========
+        #--- Original: https://automatediracs-cus-prd.securitycenter.windows.com --> This URL is NOT active on newest Microsoft mdatp-url spreadsheet, 
+        #    BUT - my machine-internet is 'Missing required root certificate for Symantec Blue Coat'
+        #000/500###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://automatediracs-cus-prd.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/500###01/25/2021###_$data.Add(@{ TestUrl = 'https://api.securitycenter.microsoft.com/'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #404/500###01/29/2021###_$data.Add(@{ TestUrl = 'https://api.securitycenter.microsoft.com/'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 500; Description='Automated IR. Central US data center'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        #==============================
+
+        ###404/404###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://winatpservicehealth.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; Description='Service health status'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-        #$data.Add(@{ TestUrl = 'https://dc.services.visualstudio.com'; ExpectedStatusCode = 404; Description='Azure Application Insights'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # https://dc.services.visualstudio.com/v2/track
+        
+        #Does get 000/404 sometines
+        ###404/404###01/25/2021###_
+        $data.Add(@{ TestUrl = 'https://dc.services.visualstudio.com'; ExpectedStatusCode = 404; Description='Azure Application Insights'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose }) # https://dc.services.visualstudio.com/v2/track
+        
+        ###404/404###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://userrequests-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 404; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###403/403###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://winatpsecurityanalyticsapi-us.securitycenter.windows.com'; UrlPattern = 'https://*.securitycenter.windows.com'; ExpectedStatusCode = 403; Description='Secure Score security analytics'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
+        
+        ###400/400###01/25/2021###_
         $data.Add(@{ TestUrl = 'https://static2.sharepointonline.com'; UrlPattern = 'https://static2.sharepointonline.com'; ExpectedStatusCode = 400; Description='Host for Microsoft Fabric Assets containing fonts, icons, and stylesheets used by Microsoft cloud service user interfaces'; PerformBluecoatLookup=$PerformBluecoatLookup; Verbose=$isVerbose })
-    }
+    }#==============================
 
     # downlevel URL tests
     if ($parameters.ContainsKey('WorkspaceId')) {
